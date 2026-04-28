@@ -26,7 +26,9 @@
 
 **FR3.1** [Secure Note Lifecycle] The user shall be able to opt any note into secure mode via the secure toggle in the editor top-right toolbar.
 
-**FR3.2** [Secure Note Lifecycle] Enabling secure mode shall require the user to set an expiration date; a date in the past shall be rejected.
+**FR3.2** [Secure Note Lifecycle] Enabling secure mode shall require the user to set both expiration date and expiration time.
+
+**FR3.8** [Secure Note Lifecycle] The app shall reject an expiration timestamp that is in the past.
 
 **FR3.3** [Secure Note Lifecycle] When a secure note is saved, the title and content shall be encrypted on-device before any write to storage. Storage shall contain only ciphertext, nonce, and salt.
 
@@ -40,6 +42,8 @@
 
 **FR4.1** [Secure Note Expiration] The app shall check secure note expiration on every launch and periodically during active use.
 
+**FR4.6** [Secure Note Expiration] The expiration timestamp shall be interpreted in device local time at selection and stored as UTC for comparison.
+
 **FR4.2** [Secure Note Expiration] A note that expired while the app was not running shall be treated as expired on the next launch.
 
 **FR4.3** [Secure Note Expiration] When a secure note expires, it shall be removed from the active note list and moved to protected trash automatically.
@@ -47,6 +51,8 @@
 **FR4.4** [Secure Note Expiration] The app shall show an in-app banner for expiry events in the foreground, and a scheduled local notification when backgrounded or not running.
 
 **FR4.5** [Secure Note Expiration] The app shall store the last known UTC timestamp on each launch. If the current device time is earlier than that stored value, no secure note shall be treated as unexpired.
+
+**FR4.7** [Secure Note Expiration] The secure note editor shall provide explicit date and time controls so the user can choose the exact expiration moment.
 
 **FR5.1** [Protected Trash] All deleted notes (normal and secure) shall be moved to protected trash, not deleted immediately.
 
@@ -66,13 +72,9 @@
 
 **FR6.2** [Voice Capture] Recorded audio shall be stored in the app container with complete file protection.
 
-**FR6.3** [Voice Capture] The app shall transcribe recorded audio into note text without blocking the main thread.
+**FR6.3** [Voice Capture] Audio exceeding 10 minutes or 50 MB shall be rejected before storage with a message stating the applicable limit.
 
-**FR6.4** [Voice Capture] Transcription errors shall surface an explicit user-visible failure message.
-
-**FR6.5** [Voice Capture] Audio exceeding 10 minutes or 50 MB shall be rejected before storage with a message stating the applicable limit.
-
-**FR7.1** [Auto-Lock] The app shall auto-lock after no user input for longer than the configured timeout (minimum 1 minute, default 5 minutes).
+**FR7.1** [Auto-Lock] The app shall auto-lock after no user input for longer than the configured timeout (default 5 minutes).
 
 **FR7.2** [Auto-Lock] The app shall auto-lock when the OS sleeps or the app enters the background.
 
@@ -106,6 +108,34 @@
 
 **FR10.2** [Settings] All settings changes shall be validated before commit; invalid values shall be rejected with a user-visible message.
 
+**FR11.1** [Simple Plugin Support] The app shall allow the user to install a plugin from a local package file.
+
+**FR11.2** [Simple Plugin Support] On installation, the app shall validate plugin manifest structure (`pluginId`, name, version, supported app version, entry action, capabilities) before enabling the plugin.
+
+**FR11.3** [Simple Plugin Support] The app shall allow the user to enable, disable, and remove installed plugins from the plugin management UI.
+
+**FR11.4** [Simple Plugin Support] Enabled plugins shall run only through the host API exposed by `PluginService`; plugins shall not read or write repositories directly.
+
+**FR11.5** [Simple Plugin Support] The app shall support at least one plugin action type in MVP: text transformation on the current note content.
+
+**FR11.6** [Simple Plugin Support] If a plugin action succeeds, the returned result shall be applied through normal note save flow.
+
+**FR11.7** [Simple Plugin Support] If a plugin action fails, times out, or throws an error, the app shall preserve current note state, show a user-visible error, and continue running.
+
+**FR11.8** [Simple Plugin Support] The app shall persist plugin metadata including enabled state, install path/hash, last run status, and last error.
+
+**FR12.1** [Title Search] The workspace top bar shall provide a title search input that filters note list results by query text.
+
+**FR12.2** [Title Search] Normal note titles shall be searchable directly from stored title data.
+
+**FR12.3** [Title Search] Secure note titles shall remain encrypted at rest and shall not be stored as plaintext for search indexing.
+
+**FR12.4** [Title Search] Secure note titles shall be searchable only when the app is unlocked, using in-memory decrypted title matching for the active session.
+
+**FR12.5** [Title Search] When the app locks, all in-memory decrypted secure title search data shall be cleared immediately.
+
+**FR12.6** [Title Search] While the app is locked, secure notes shall be excluded from title search results.
+
 ---
 
 ## Non-Functional Requirements
@@ -116,13 +146,13 @@
 
 **NFR1.3** [Unlock Performance] Manual passphrase entry time is excluded from this measurement.
 
-**NFR2.1** [UI Responsiveness] Encryption, database I/O, transcription, and plugin execution shall run asynchronously and must not block the main UI thread.
+**NFR2.1** [UI Responsiveness] Encryption, database I/O, transcription, and plugin action execution shall run asynchronously and must not block the main UI thread.
 
 **NFR2.2** [UI Responsiveness] The app shall maintain 60 FPS responsiveness during normal use.
 
 **NFR3.1** [Secure Note Data Confidentiality] Decrypted secure note content shall never be written to disk, logs, caches, or exports.
 
-**NFR3.2** [Secure Note Data Confidentiality] Decrypted material shall be held in memory only for the duration of active editing and cleared immediately after.
+**NFR3.2** [Secure Note Data Confidentiality] Decrypted secure material, including secure note titles used for search, shall be held in memory only for the active unlocked session and cleared on lock.
 
 **NFR4.1** [Data Integrity] Secure note records shall use authenticated encryption so tampered or replayed ciphertext fails verification explicitly.
 
@@ -138,7 +168,7 @@
 
 **NFR6.2** [Rate Limiting and Audit Logging] Each lockout event shall be audit-logged.
 
-**NFR6.3** [Rate Limiting and Audit Logging] Authentication failures and plugin trust failures shall be audit-logged without exposing note content.
+**NFR6.3** [Rate Limiting and Audit Logging] Authentication failures, plugin manifest validation failures, and plugin runtime failures shall be audit-logged without exposing note content.
 
 **NFR7.1** [Telemetry Privacy] Telemetry shall be opt-in and limited to non-sensitive operational metrics.
 
