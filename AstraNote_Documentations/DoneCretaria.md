@@ -1,0 +1,14 @@
+## Done Criteria (Practical)
+- Normal notes are stored as plain text and are accessible without authentication overhead.
+- Secure notes are encrypted, require an expiration date and time, and route through protected trash on deletion or expiry.
+- Workspace supports sidebar fold/unfold without losing selection context.
+- Secure notes expire correctly and move to protected trash.
+- Lock/unlock clears and restores key-dependent access correctly.
+- Trash view lists all trashed items; secure notes show a lock badge instead of readable title.
+- Restoring a secure note from trash requires active app unlock.
+- Permanently deleting a secure note wipes ciphertext and attachments with no recovery path.
+- Failure paths return explicit user-visible errors.
+- User can install a local plugin package, enable or disable it, and run at least one supported plugin action from the app.
+- Plugin action failures do not crash the app and do not corrupt note data.
+- Title search returns matching normal note titles at any time.
+- Secure note titles are searchable only while unlocked and are never stored as plaintext in persistent storage.
