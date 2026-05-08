@@ -14,7 +14,7 @@
 
 **FR1.6** [Unlock] The consecutive biometric failure counter shall reset to zero after any successful unlock.
 
-**FR2.1** [Normal Note Lifecycle] The user shall be able to create, edit, and delete notes containing text; attachments are optional.
+**FR2.1** [Normal Note Lifecycle] The user shall be able to create, edit, and delete notes containing text; image and recording attachments are optional.
 
 **FR2.2** [Normal Note Lifecycle] Normal notes shall be stored as plain text with no encryption applied.
 
@@ -74,6 +74,12 @@
 
 **FR6.3** [Voice Capture] Audio exceeding 10 minutes or 50 MB shall be rejected before storage with a message stating the applicable limit.
 
+**FR13.1** [Image Attachment] The editor shall provide an attach image button to select and attach a local image file from the computer's file system to a note; no camera capture or remote URL sources are supported.
+
+**FR13.2** [Image Attachment] Attached images shall be stored in the app container with complete file protection, following the same security mode as the note they belong to.
+
+**FR13.3** [Image Attachment] Images exceeding 20 MB shall be rejected before storage with a message stating the limit.
+
 **FR7.1** [Auto-Lock] The app shall auto-lock after no user input for longer than the configured timeout (default 5 minutes).
 
 **FR7.2** [Auto-Lock] The app shall auto-lock when the OS sleeps or the app enters the background.
@@ -104,7 +110,7 @@
 
 **FR9.4** [Export and Import] Import shall be all-or-nothing: if storage is exhausted mid-import, the entire operation shall roll back with no partial state committed, and the user shall be informed with guidance to free storage before retrying.
 
-**FR10.1** [Settings] The app shall allow the user to configure lock timeout, telemetry opt-in, and plugin preference flags.
+**FR10.1** [Settings] The app shall allow the user to configure lock timeout, telemetry opt-in, and a global plugin enable/disable toggle; disabling the toggle shall prevent all plugins from running without removing installed plugin records.
 
 **FR10.2** [Settings] All settings changes shall be validated before commit; invalid values shall be rejected with a user-visible message.
 
@@ -135,6 +141,18 @@
 **FR12.5** [Title Search] When the app locks, all in-memory decrypted secure title search data shall be cleared immediately.
 
 **FR12.6** [Title Search] While the app is locked, secure notes shall be excluded from title search results.
+
+**FR14.1** [Subject Groups] The user shall be able to create a new subject group (folder) from the subject sidebar by providing a non-empty, unique name.
+
+**FR14.2** [Subject Groups] The user shall be able to rename an existing subject group inline; the new name shall be validated as non-empty and unique before the change is committed.
+
+**FR14.3** [Subject Groups] The user shall be able to delete a subject group; if the group contains notes, the app shall prompt for confirmation before proceeding.
+
+**FR14.4** [Subject Groups] When a subject group is deleted, its notes shall not be deleted; they shall become ungrouped (no subject assigned).
+
+**FR14.5** [Subject Groups] The user shall be able to assign a note to a subject group and move it between groups.
+
+**FR14.6** [Subject Groups] The subject sidebar shall display all subject groups and an "All Notes" filter that shows every note regardless of group.
 
 ---
 

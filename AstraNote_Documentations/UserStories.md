@@ -13,6 +13,7 @@
 - Acceptance criteria:
   - I can create and edit normal notes without enabling secure mode.
   - Normal note title and content are stored as plain text.
+  - I can optionally attach images (selected from local computer storage) or recordings to a note.
   - Note updates preserve stable note identity.
   - Failed writes rollback and keep the previous saved state.
 
@@ -89,3 +90,13 @@
   - Import accepts only compatible encrypted archives.
   - ID conflicts are resolved by assigning new IDs to imported notes.
   - Import is atomic and does not leave partial data on failure.
+
+## 12. Organize notes with subject groups
+- As a user, I want to create subject groups (folders) in the sidebar so I can organize my notes like in Notability.
+- Acceptance criteria:
+  - I can create a new subject group with a non-empty, unique name from the sidebar.
+  - I can rename a subject group inline.
+  - I can delete a subject group; if it contains notes I am prompted to confirm before deletion.
+  - Notes in a deleted group become ungrouped and are not deleted.
+  - I can assign a note to a subject group and move it between groups.
+  - The sidebar shows all subject groups plus an "All Notes" filter.

@@ -47,7 +47,11 @@
 32. Verify transcription runs asynchronously and does not block UI.
 33. Attempt recording over 10 minutes or 50 MB and verify app rejects with clear message.
 
-## 8. Simple Plugin Support
+## 7b. Image Attachment
+34a. Trigger attach image from the editor and select a local image file from the computer's file system.
+34b. Verify the image is stored with complete file protection matching the note's security mode.
+34c. Verify the attachment record stores `type` as image alongside the note ID.
+34d. Attempt to attach an image exceeding 20 MB and verify the app rejects it with a message stating the limit.
 34. Install plugin from local package and verify manifest validation occurs.
 35. Enable plugin and verify metadata records enabled state, install path/hash, and last run status.
 36. Run supported plugin action (text transform) and verify result is applied through normal save flow.
@@ -74,8 +78,18 @@
 51. Import archive with ID conflicts and verify imported notes receive new IDs.
 52. Simulate storage exhaustion during import and verify operation is atomic with no partial commit.
 
-## 12. Settings, Accessibility, and Audit
-53. Update lock timeout, telemetry opt-in, and plugin preference flags and verify invalid values are rejected.
-54. Verify core workflows support keyboard navigation and VoiceOver.
-55. Verify telemetry excludes note text and note titles.
-56. Verify audit logs include authentication failures and plugin validation/runtime failures without sensitive content.
+## 12. Subject Group Management
+53. Create a new subject group from the sidebar and verify it appears with the entered name.
+54. Attempt to create a subject group with an empty or duplicate name and verify the app rejects it with a message.
+55. Rename a subject group inline and verify the updated name is persisted.
+56. Delete an empty subject group and verify it is removed from the sidebar.
+57. Delete a subject group that contains notes; verify the app prompts for confirmation, and after confirmation the group is removed and its notes become ungrouped (still visible under "All Notes").
+58. Assign a note to a subject group and verify it appears under that group in the sidebar.
+59. Move a note from one subject group to another and verify it no longer appears in the original group.
+60. Select "All Notes" filter and verify notes from all groups and ungrouped notes are shown.
+
+## 13. Settings, Accessibility, and Audit
+61. Update lock timeout and telemetry opt-in and verify invalid values are rejected. Toggle the global plugin enable/disable setting and verify plugins are blocked from running when disabled without removing installed plugin records.
+62. Verify core workflows support keyboard navigation and VoiceOver.
+63. Verify telemetry excludes note text and note titles.
+64. Verify audit logs include authentication failures and plugin validation/runtime failures without sensitive content.
