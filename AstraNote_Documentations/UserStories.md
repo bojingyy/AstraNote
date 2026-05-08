@@ -3,6 +3,7 @@
 ## 1. Unlock and resume securely
 - As a user, I want to unlock AstraNotes with my master passphrase and optionally use biometric authentication so I can access notes quickly and safely.
 - Acceptance criteria:
+  - On first launch, before any notes are stored, I set a master passphrase for the app.
   - The app shows a passphrase screen when no unlocked session exists.
   - Entering the correct passphrase unlocks the app and loads note lists.
   - After one successful passphrase unlock, biometric unlock can be enabled for later sessions.
@@ -32,6 +33,7 @@
   - Expiration is selected in local time and stored as UTC timestamp.
   - When expiration is reached, the secure note leaves active list and moves to protected trash.
   - Foreground expiry shows in-app notice; background expiry uses local notification.
+  - If the device clock appears to have moved backward compared to the last recorded timestamp, no secure note is treated as unexpired.
 
 ## 5. Manage trash for normal and secure notes
 - As a user, I want a trash view so I can restore deleted notes or permanently remove them.
@@ -51,8 +53,8 @@
   - Secure note titles are searchable only while unlocked using in-memory decrypted matching.
   - Locking the app clears secure-title search memory immediately.
 
-## 7. Capture voice and transcribe
-- As a user, I want to record voice and convert it to text so I can write notes faster.
+## 7. Capture voice
+- As a user, I want to record voice and attach it to notes so I can capture audio alongside written content.
 - Acceptance criteria:
   - The workspace top bar includes a voice capture action.
   - Recorded audio is stored with file protection in app storage.
@@ -74,14 +76,15 @@
   - App auto-locks after timeout, OS sleep, or backgrounding.
   - Lock clears in-memory key material before access is allowed again.
   - If secure note draft is active at lock time, draft is persisted safely before lock completes.
+  - Background operations such as export or key rotation do not reset the inactivity timer.
 
 ## 10. Change passphrase safely
 - As a user, I want to change my master passphrase so I can rotate credentials without losing secure data.
 - Acceptance criteria:
   - Passphrase change re-encrypts secure notes and secure attachments.
   - Normal notes are unaffected by passphrase change.
-  - Interrupted key rotation resumes or rolls back safely on next launch.
-  - If derived key is unchanged, unnecessary re-encryption is skipped.
+  - Interrupted key rotation always attempts to complete remaining re-encryption on next launch; it only rolls back if completion itself fails, and I am informed of the outcome either way.
+  - If the new passphrase produces the same key as the current one, the app rejects the change with an error and prompts me to choose a different passphrase.
 
 ## 11. Export and import backups
 - As a user, I want to export and import protected backups so I can recover data after device issues.

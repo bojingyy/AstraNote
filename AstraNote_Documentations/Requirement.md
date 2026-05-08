@@ -96,9 +96,9 @@
 
 **FR8.3** [Passphrase Change and Key Rotation] The old key material shall be retained until every secure record is confirmed re-encrypted; only then shall the old key be removed.
 
-**FR8.4** [Passphrase Change and Key Rotation] If re-encryption is interrupted, the app shall detect the partial migration on next launch, complete or roll back using the retained old key, and inform the user before allowing normal access.
+**FR8.4** [Passphrase Change and Key Rotation] If re-encryption is interrupted, the app shall detect the partial migration on next launch and shall always attempt to complete the remaining re-encryption using the retained old and new keys. Only if the completion attempt itself fails shall the app roll back all partially migrated records to the old key and restore the previous passphrase. In either outcome, the app shall inform the user of the result before allowing normal access.
 
-**FR8.5** [Passphrase Change and Key Rotation] If the new passphrase derives an identical key to the existing one, the app shall skip re-encryption and return success without unnecessary I/O.
+**FR8.5** [Passphrase Change and Key Rotation] If the new passphrase derives an identical key to the existing one, the app shall reject the change with a user-visible error stating that the new passphrase produces the same key as the current one; the user shall be prompted to choose a different passphrase, and no re-encryption or storage write shall be performed.
 
 **FR8.6** [Passphrase Change and Key Rotation] Normal notes are unaffected by passphrase change.
 

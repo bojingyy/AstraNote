@@ -68,8 +68,8 @@
 ## 10. Passphrase Change and Key Rotation
 44. Change passphrase and verify secure notes and secure attachments are re-encrypted.
 45. Verify normal notes remain unchanged by passphrase change.
-46. Interrupt key rotation and verify next launch resumes or rolls back safely.
-47. Use passphrase that derives identical key and verify app skips unnecessary re-encryption.
+46. Interrupt key rotation and verify next launch attempts to complete remaining re-encryption; if completion succeeds, verify new passphrase is active; if completion fails, verify all records are rolled back to the old key and the previous passphrase is restored; verify user is informed of the outcome in both cases.
+47. Use passphrase that derives identical key and verify app rejects the change with a user-visible error and prompts user to choose a different passphrase.
 
 ## 11. Export / Import and Reliability
 48. Export backup and verify archive is encrypted, passphrase-protected, and schema-tagged.

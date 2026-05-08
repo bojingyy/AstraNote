@@ -33,6 +33,7 @@ Out of MVP:
 
 ### AstraUI
 - `AppState.swift`: session/view state, selected subject, selected note, pane collapse state.
+- `UnlockView.swift`: passphrase entry screen and first-launch passphrase creation screen; routes to biometric prompt when biometric unlock is enabled.
 - `NotesWorkspaceView.swift`: single composition root for note UI.
 	- `WorkspaceTopBar`: new note, search, voice capture button, secure status.
 	- `SubjectSidebarPane`: hierarchy and filters; inline controls to create, rename, and delete subject groups.
@@ -44,7 +45,7 @@ Out of MVP:
 
 ### AstraCore
 - `AppCoordinator.swift`: app lifecycle, lock/unlock routing, navigation state handoff.
-- `KeyManager.swift`: passphrase handling, derived key lifecycle, key clearing on lock.
+- `KeyManager.swift`: passphrase handling, derived key lifecycle, key clearing on lock, rate limiting and lockout enforcement on consecutive unlock failures.
 - `EncryptionService.swift`: encrypt/decrypt payload boundary.
 - `SubjectService.swift`: subject group CRUD (create, rename, delete); enforces non-empty name and prevents deletion of non-empty groups without confirmation.
 - `NoteService.swift`: note CRUD orchestration; routes to encrypted or standard storage path based on note's secure flag.
@@ -89,8 +90,9 @@ Out of MVP:
 ## 5. Primary User Flows
 
 ### 5.1 Unlock
+0. On first launch, `AppCoordinator` detects no passphrase is set and routes to `UnlockView` for passphrase creation; no note data is stored until a passphrase is established.
 1. `AppCoordinator` checks lock state.
-2. `KeyManager` validates passphrase or biometric path.
+2. `KeyManager` validates passphrase or biometric path; tracks consecutive failures and enforces rate-limited lockout after the threshold is exceeded.
 3. On success, in-memory keys are available to core services.
 4. On lock, keys are cleared and editor content is masked.
 
@@ -128,19 +130,46 @@ Out of MVP:
 4. `PluginService` executes the action through the host API with timeout and error guard.
 5. On success, `NoteService` applies the returned result through normal save flow; on failure, app shows error and keeps current note state unchanged.
 
-### 5.8 Subject Group Management Flow
+### 5.7 Subject Group Management Flow
 1. User creates a new subject group by tapping the add button in `SubjectSidebarPane` and entering a name.
 2. `SubjectService` validates the name is non-empty and unique, then persists via `SubjectRepository`.
 3. User can rename a subject group inline; `SubjectService` validates and updates the record.
 4. User can delete a subject group; `SubjectService` requires confirmation if the group contains notes, then deletes the group record; notes in that group become ungrouped (`subjectId` set to null).
 5. `AppState` updates selected subject and sidebar state after each operation.
 
-### 5.7 Title Search Flow (Normal + Secure)
+### 5.8 Title Search Flow (Normal + Secure)
 1. User types a search query in `WorkspaceTopBar`.
 2. `NoteSearchService` queries normal note titles directly from `NoteRepository`.
 3. If app is unlocked, `NoteSearchService` also matches secure note titles from in-memory decrypted title cache.
 4. If app is locked, secure note titles are excluded from search results.
 5. On lock event, `KeyManager` clears key material and `NoteSearchService` clears secure title cache.
+
+### 5.9 Auto-Lock Flow
+1. `PlatformIntegration` detects OS sleep, app backgrounding, or reports inactivity to `AppCoordinator`.
+2. `AppCoordinator` checks whether the inactivity timer has exceeded the configured timeout from `SettingsService`, or whether a platform sleep/background event has triggered immediate lock.
+3. Background operations (export, key rotation) do not count as user activity and do not reset the inactivity timer.
+4. If a secure note is actively being edited, `NoteService` encrypts and persists unsaved draft content via `EncryptionService` before the lock transition completes.
+5. `KeyManager` clears all in-memory key material.
+6. `NoteSearchService` clears the in-memory secure title cache.
+7. `AppCoordinator` routes UI to `UnlockView`; the editor pane content is masked.
+
+### 5.10 Passphrase Change / Key Rotation Flow
+1. User initiates passphrase change from `SettingsView`.
+2. `KeyManager` validates the new passphrase and derives new key material.
+3. If the new derived key is identical to the existing key, `KeyManager` returns an error to `SettingsView` informing the user that the new passphrase produces the same key as the current one and prompts them to choose a different passphrase; no re-encryption or storage write is performed.
+4. `KeyManager` retains the old key material until all re-encryption is confirmed complete.
+5. `NoteService` and `EncryptionService` iterate over all secure notes and attachments, re-encrypting each record under the new key; each write is an atomic transaction.
+6. On completion, `KeyManager` removes the old key material.
+7. If re-encryption is interrupted (crash, force quit), the retained old key allows `AppCoordinator` to detect the partial migration on next launch. The app shall always attempt to complete the remaining re-encryption first. Only if the completion attempt itself fails (e.g., a write error occurs) shall the app roll back all partially migrated records to the old key and restore the previous passphrase. In either outcome, the user is informed of the result before normal access is granted.
+8. Normal notes are not affected by this flow.
+
+### 5.11 Export / Import Flow
+1. User initiates export from `SettingsView`; `ExportImportService` assembles an encrypted archive of all note records and required metadata, tagged with the current schema version and protected by the user's passphrase.
+2. The archive is written atomically to a user-selected local path.
+3. User initiates import from `SettingsView`; `ExportImportService` validates the archive signature, schema version, and passphrase before any data is written.
+4. If the schema version is incompatible, import is rejected with an error identifying the mismatch.
+5. `ExportImportService` resolves note ID conflicts by assigning new unique identifiers to imported notes; existing local records are not overwritten.
+6. The entire import is wrapped in a single ACID transaction; if storage is exhausted or any write fails mid-import, the full operation rolls back with no partial state committed, and the user is informed with guidance to free storage before retrying.
 
 ## 6. Minimal Data Contracts
 - Subject group record: `id`, `name`, `displayOrder`, timestamps.
