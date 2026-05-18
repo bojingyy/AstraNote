@@ -31,3 +31,15 @@
 #### TestSteps.md
 - Step 46: updated to verify complete-first then roll-back-if-fail logic and that user is informed of the outcome.
 - Step 47: updated to verify app rejects identical key with a user-visible error and prompts user to choose a different passphrase.
+
+---
+
+## 2026-05-18
+
+### UML Documentation Format Update
+
+#### UML_Package
+- Updated `ClassDiagram.html` with the latest class diagram refinements.
+- Replaced legacy UML markdown/image artifacts with HTML-based UML exports for consistency in documentation consumption.
+- Added HTML diagram files for Activity, Deployment, Object, and Use Case views in `UML_Package`.
+- Removed outdated UML `.md` and `.png` files from `UML_Package` as part of the format transition.

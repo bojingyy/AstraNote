@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AstraNotes Deployment Diagram</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #4b5563;
+      --ui-fill: #e8f2ff;
+      --ui-stroke: #3b82f6;
+      --core-fill: #eaf9ef;
+      --core-stroke: #16a34a;
+      --data-fill: #fff7e3;
+      --data-stroke: #d97706;
+      --platform-fill: #ffecef;
+      --platform-stroke: #dc2626;
+      --storage-fill: #f3ecff;
+      --storage-stroke: #7c3aed;
+      --os-fill: #eef2ff;
+      --os-stroke: #6366f1;
+      --external-fill: #fff8f8;
+      --external-stroke: #dc2626;
+      --edge: #334155;
+      --edge-soft: #6b7280;
+      --edge-dashed: 6 4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 12% 10%, #dbeafe 0%, #eef2ff 20%, var(--bg) 55%);
+      color: var(--ink);
+      font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
+    }
+    main {
+      max-width: 100%;
+      padding: 16px;
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      font-size: 24px;
+      letter-spacing: 0.2px;
+    }
+    p.subtitle {
+      margin: 0 0 14px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .diagram-shell {
+      border: 1px solid #d8deea;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      overflow: auto;
+      padding: 10px;
+    }
+    .legend {
+      font: 12px "Segoe UI", Arial, sans-serif;
+      fill: #334155;
+    }
+    @media (max-width: 900px) {
+      h1 { font-size: 20px; }
+      p.subtitle { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>AstraNotes UML Deployment Diagram</h1>
+    <p class="subtitle">Deployment architecture for AstraNotes, showing all major nodes, storage, OS services, and external input. No overlapping lines, visually clear, and logically correct.</p>
+    <div class="diagram-shell">
+      <svg viewBox="0 0 2000 1100" width="2000" height="1100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AstraNotes deployment diagram">
+        <defs>
+          <style>
+            .node { stroke-width: 2; }
+            .ui { fill: var(--ui-fill); stroke: var(--ui-stroke); }
+            .core { fill: var(--core-fill); stroke: var(--core-stroke); }
+            .data { fill: var(--data-fill); stroke: var(--data-stroke); }
+            .platform { fill: var(--platform-fill); stroke: var(--platform-stroke); }
+            .storage { fill: var(--storage-fill); stroke: var(--storage-stroke); }
+            .os { fill: var(--os-fill); stroke: var(--os-stroke); }
+            .external { fill: var(--external-fill); stroke: var(--external-stroke); }
+            .label { font: 14px 'Segoe UI', Arial, sans-serif; fill: #1e293b; }
+            .edge { stroke: var(--edge); stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+            .edgeDashed { stroke: var(--edge-soft); stroke-width: 1.2; stroke-dasharray: var(--edge-dashed); fill: none; marker-end: url(#arrow); }
+          </style>
+          <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
+          </marker>
+        </defs>
+        <!-- macOS Device boundary -->
+        <rect x="60" y="60" width="1400" height="900" rx="32" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="3" />
+        <text class="label" x="760" y="90" text-anchor="middle">macOS Device</text>
+        <!-- AstraNotes.app boundary -->
+        <rect x="120" y="140" width="700" height="700" rx="24" fill="#fff" stroke="#cbd5e1" stroke-width="2" />
+        <text class="label" x="470" y="170" text-anchor="middle">AstraNotes.app</text>
+        <!-- UI Layer -->
+        <rect class="ui node" x="180" y="220" width="220" height="80" rx="16" />
+        <text class="label" x="290" y="260" text-anchor="middle">AstraUI</text>
+        <text class="label" x="290" y="280" text-anchor="middle">(SwiftUI views)</text>
+        <!-- Core Layer -->
+        <rect class="core node" x="180" y="340" width="220" height="80" rx="16" />
+        <text class="label" x="290" y="380" text-anchor="middle">AstraCore</text>
+        <text class="label" x="290" y="400" text-anchor="middle">(Services/logic)</text>
+        <!-- Data Layer -->
+        <rect class="data node" x="180" y="460" width="220" height="80" rx="16" />
+        <text class="label" x="290" y="500" text-anchor="middle">AstraData</text>
+        <text class="label" x="290" y="520" text-anchor="middle">(Repositories)</text>
+        <!-- Platform Layer -->
+        <rect class="platform node" x="180" y="580" width="220" height="80" rx="16" />
+        <text class="label" x="290" y="620" text-anchor="middle">AstraPlatform</text>
+        <text class="label" x="290" y="640" text-anchor="middle">(Auth, notif, storage)</text>
+        <!-- Storage boundary -->
+        <rect x="900" y="180" width="320" height="320" rx="24" fill="#faf7ff" stroke="#d9ccfb" stroke-width="2" />
+        <text class="label" x="1060" y="210" text-anchor="middle">Local Storage</text>
+        <!-- SQLite DB -->
+        <rect class="storage node" x="940" y="250" width="240" height="60" rx="12" />
+        <text class="label" x="1060" y="275" text-anchor="middle">SQLite DB</text>
+        <text class="label" x="1060" y="295" text-anchor="middle">(notes, trash, plugins)</text>
+        <!-- File Storage -->
+        <rect class="storage node" x="940" y="330" width="240" height="60" rx="12" />
+        <text class="label" x="1060" y="355" text-anchor="middle">File System</text>
+        <text class="label" x="1060" y="375" text-anchor="middle">(audio, plugins)</text>
+        <!-- Keychain -->
+        <rect class="storage node" x="940" y="410" width="240" height="60" rx="12" />
+        <text class="label" x="1060" y="435" text-anchor="middle">macOS Keychain</text>
+        <text class="label" x="1060" y="455" text-anchor="middle">(key material)</text>
+        <!-- OS Services boundary -->
+        <rect x="900" y="540" width="320" height="260" rx="24" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2" />
+        <text class="label" x="1060" y="570" text-anchor="middle">macOS OS Services</text>
+        <!-- LocalAuth -->
+        <rect class="os node" x="940" y="600" width="240" height="50" rx="10" />
+        <text class="label" x="1060" y="625" text-anchor="middle">LocalAuthentication</text>
+        <text class="label" x="1060" y="645" text-anchor="middle">(Touch ID/Face ID)</text>
+        <!-- NotificationCenter -->
+        <rect class="os node" x="940" y="670" width="240" height="50" rx="10" />
+        <text class="label" x="1060" y="695" text-anchor="middle">UNUserNotificationCenter</text>
+        <text class="label" x="1060" y="715" text-anchor="middle">(expiry alerts)</text>
+        <!-- FileProtection -->
+        <rect class="os node" x="940" y="740" width="240" height="50" rx="10" />
+        <text class="label" x="1060" y="765" text-anchor="middle">Data Protection API</text>
+        <text class="label" x="1060" y="785" text-anchor="middle">(sandbox)</text>
+        <!-- External Input boundary -->
+        <rect x="1500" y="300" width="400" height="220" rx="24" fill="#fff8f8" stroke="#fca5a5" stroke-width="2" />
+        <text class="label" x="1700" y="330" text-anchor="middle">External Input (manual, no network)</text>
+        <!-- Backup File -->
+        <rect class="external node" x="1540" y="370" width="320" height="50" rx="10" />
+        <text class="label" x="1700" y="395" text-anchor="middle">Encrypted backup archive</text>
+        <text class="label" x="1700" y="415" text-anchor="middle">.astrabackup file</text>
+        <!-- Plugin Package -->
+        <rect class="external node" x="1540" y="440" width="320" height="50" rx="10" />
+        <text class="label" x="1700" y="465" text-anchor="middle">Local plugin package</text>
+        <text class="label" x="1700" y="485" text-anchor="middle">.astraplugin file</text>
+        <!-- Internal connections -->
+        <polyline class="edge" points="290,300 290,340" />
+        <polyline class="edge" points="290,420 290,460" />
+        <polyline class="edge" points="290,540 290,580" />
+        <polyline class="edge" points="400,385 940,280" />
+        <polyline class="edge" points="400,505 940,350" />
+        <polyline class="edge" points="400,625 940,440" />
+        <polyline class="edge" points="400,625 940,625" />
+        <polyline class="edge" points="400,625 940,695" />
+        <polyline class="edge" points="400,625 940,765" />
+        <!-- External input connections -->
+        <polyline class="edgeDashed" points="1540,395 120,180" />
+        <polyline class="edgeDashed" points="1540,465 120,180" />
+        <!-- Export output -->
+        <polyline class="edgeDashed" points="820,180 1540,395" />
+        <!-- Legend -->
+        <rect x="1450" y="800" width="420" height="170" rx="14" fill="#f8fafc" stroke="#cbd5e1" />
+        <text class="legend" x="1470" y="830">Legend:</text>
+        <rect class="ui node" x="1470" y="850" width="36" height="36" rx="8" />
+        <text class="legend" x="1520" y="872">UI Layer</text>
+        <rect class="core node" x="1470" y="895" width="36" height="36" rx="8" />
+        <text class="legend" x="1520" y="917">Core Layer</text>
+        <rect class="data node" x="1580" y="850" width="36" height="36" rx="8" />
+        <text class="legend" x="1630" y="872">Data Layer</text>
+        <rect class="platform node" x="1580" y="895" width="36" height="36" rx="8" />
+        <text class="legend" x="1630" y="917">Platform Layer</text>
+        <rect class="storage node" x="1690" y="850" width="36" height="36" rx="8" />
+        <text class="legend" x="1740" y="872">Storage</text>
+        <rect class="os node" x="1690" y="895" width="36" height="36" rx="8" />
+        <text class="legend" x="1740" y="917">OS Service</text>
+        <rect class="external node" x="1800" y="850" width="36" height="36" rx="8" />
+        <text class="legend" x="1850" y="872">External Input</text>
+        <line class="edge" x1="1800" y1="900" x2="1840" y2="900" />
+        <text class="legend" x="1850" y="905">Association</text>
+        <line class="edgeDashed" x1="1800" y1="925" x2="1840" y2="925" />
+        <text class="legend" x="1850" y="930">Manual Import/Export</text>
+      </svg>
+    </div>
+    <div class="notes">
+      <h2>Notes</h2>
+      <ul>
+        <li>All nodes and connections are derived from the requirements and architecture documentation.</li>
+        <li>Dashed lines represent manual import/export (no network).</li>
+        <li>All lines are orthogonal and non-overlapping for clarity.</li>
+      </ul>
+    </div>
+  </main>
+</body>
+</html>

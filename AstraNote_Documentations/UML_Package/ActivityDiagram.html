@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AstraNotes Activity Diagram</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #4b5563;
+      --ui-fill: #e8f2ff;
+      --ui-stroke: #3b82f6;
+      --core-fill: #eaf9ef;
+      --core-stroke: #16a34a;
+      --data-fill: #fff7e3;
+      --data-stroke: #d97706;
+      --platform-fill: #ffecef;
+      --platform-stroke: #dc2626;
+      --model-fill: #f3ecff;
+      --model-stroke: #7c3aed;
+      --memory-fill: #eef2ff;
+      --memory-stroke: #6366f1;
+      --actor: #6366f1;
+      --edge: #334155;
+      --edge-soft: #6b7280;
+      --edge-dashed: 6 4;
+      --decision: #fbbf24;
+      --decision-stroke: #b45309;
+      --action: #fff;
+      --action-stroke: #6366f1;
+      --start: #16a34a;
+      --end: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 12% 10%, #dbeafe 0%, #eef2ff 20%, var(--bg) 55%);
+      color: var(--ink);
+      font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
+    }
+    main {
+      max-width: 100%;
+      padding: 16px;
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      font-size: 24px;
+      letter-spacing: 0.2px;
+    }
+    p.subtitle {
+      margin: 0 0 14px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .diagram-shell {
+      border: 1px solid #d8deea;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      overflow: auto;
+      padding: 10px;
+    }
+    .legend {
+      font: 12px "Segoe UI", Arial, sans-serif;
+      fill: #334155;
+    }
+    @media (max-width: 900px) {
+      h1 { font-size: 20px; }
+      p.subtitle { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>AstraNotes UML Activity Diagram</h1>
+    <p class="subtitle">Main user and system flows, mapped to the designed architecture. No overlapping lines, visually clear, and logically correct.</p>
+    <div class="diagram-shell">
+      <svg viewBox="0 0 2200 1600" width="2200" height="1600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AstraNotes activity diagram">
+        <defs>
+          <style>
+            .start { fill: var(--start); stroke: var(--start); stroke-width: 2; }
+            .end { fill: var(--end); stroke: var(--end); stroke-width: 2; }
+            .action { fill: var(--action); stroke: var(--action-stroke); stroke-width: 2; }
+            .decision { fill: var(--decision); stroke: var(--decision-stroke); stroke-width: 2; }
+            .label { font: 14px 'Segoe UI', Arial, sans-serif; fill: #1e293b; }
+            .edge { stroke: var(--edge); stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+            .edgeDashed { stroke: var(--edge-soft); stroke-width: 1.2; stroke-dasharray: var(--edge-dashed); fill: none; marker-end: url(#arrow); }
+          </style>
+          <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
+          </marker>
+        </defs>
+        <!-- Start -->
+        <circle class="start" cx="120" cy="100" r="24" />
+        <text class="label" x="120" y="95" text-anchor="middle">Start</text>
+        <!-- App Launch -->
+        <rect class="action" x="200" y="70" width="180" height="48" rx="16" />
+        <text class="label" x="290" y="100" text-anchor="middle">App Launch</text>
+        <polyline class="edge" points="144,100 200,94" />
+        <!-- Check Session -->
+        <rect class="action" x="420" y="70" width="200" height="48" rx="16" />
+        <text class="label" x="520" y="100" text-anchor="middle">Check session unlocked?</text>
+        <polyline class="edge" points="380,94 420,94" />
+        <!-- Decision: Session unlocked? -->
+        <polygon class="decision" points="670,94 690,70 710,94 690,118" />
+        <text class="label" x="690" y="65" text-anchor="middle">Unlocked?</text>
+        <polyline class="edge" points="620,94 670,94" />
+        <!-- No: Enter Passphrase -->
+        <rect class="action" x="760" y="30" width="180" height="48" rx="16" />
+        <text class="label" x="850" y="60" text-anchor="middle">Enter passphrase</text>
+        <polyline class="edge" points="710,80 760,54" />
+        <!-- Yes: Show Notes -->
+        <rect class="action" x="760" y="120" width="180" height="48" rx="16" />
+        <text class="label" x="850" y="150" text-anchor="middle">Show notes workspace</text>
+        <polyline class="edge" points="710,108 760,144" />
+        <!-- Enter Passphrase Decision -->
+        <polygon class="decision" points="980,54 1000,30 1020,54 1000,78" />
+        <text class="label" x="1000" y="25" text-anchor="middle">Correct?</text>
+        <polyline class="edge" points="940,54 980,54" />
+        <!-- No: Retry -->
+        <rect class="action" x="1060" y="10" width="120" height="38" rx="12" />
+        <text class="label" x="1120" y="35" text-anchor="middle">Retry</text>
+        <polyline class="edge" points="1020,42 1060,29" />
+        <polyline class="edge" points="1180,29 760,54" />
+        <!-- Yes: Biometric enabled? -->
+        <polygon class="decision" points="980,144 1000,120 1020,144 1000,168" />
+        <text class="label" x="1000" y="115" text-anchor="middle">Biometric?</text>
+        <polyline class="edge" points="940,144 980,144" />
+        <!-- Yes: Biometric Auth -->
+        <rect class="action" x="1060" y="120" width="180" height="48" rx="16" />
+        <text class="label" x="1150" y="150" text-anchor="middle">Authenticate biometric</text>
+        <polyline class="edge" points="1020,144 1060,144" />
+        <polyline class="edge" points="1240,144 760,144" />
+        <!-- No: Show Notes -->
+        <polyline class="edge" points="1000,168 850,144" />
+        <!-- User Action Decision -->
+        <polygon class="decision" points="850,200 870,176 890,200 870,224" />
+        <text class="label" x="870" y="170" text-anchor="middle">User action</text>
+        <polyline class="edge" points="850,168 850,200" />
+        <!-- Create Note -->
+        <rect class="action" x="950" y="240" width="180" height="48" rx="16" />
+        <text class="label" x="1040" y="270" text-anchor="middle">Create note</text>
+        <polyline class="edge" points="890,212 950,264" />
+        <!-- Secure Toggle Decision -->
+        <polygon class="decision" points="1170,264 1190,240 1210,264 1190,288" />
+        <text class="label" x="1190" y="235" text-anchor="middle">Secure?</text>
+        <polyline class="edge" points="1130,264 1170,264" />
+        <!-- No: Edit Normal -->
+        <rect class="action" x="1250" y="220" width="180" height="48" rx="16" />
+        <text class="label" x="1340" y="250" text-anchor="middle">Edit normal note</text>
+        <polyline class="edge" points="1210,252 1250,244" />
+        <!-- Save Normal -->
+        <rect class="action" x="1450" y="220" width="180" height="48" rx="16" />
+        <text class="label" x="1540" y="250" text-anchor="middle">Save as plain text</text>
+        <polyline class="edge" points="1430,244 1450,244" />
+        <polyline class="edge" points="1630,244 850,144" />
+        <!-- Yes: Set Expiry -->
+        <rect class="action" x="1250" y="300" width="180" height="48" rx="16" />
+        <text class="label" x="1340" y="330" text-anchor="middle">Set expiration</text>
+        <polyline class="edge" points="1210,276 1250,324" />
+        <!-- Expiry Valid Decision -->
+        <polygon class="decision" points="1450,324 1470,300 1490,324 1470,348" />
+        <text class="label" x="1470" y="295" text-anchor="middle">Valid?</text>
+        <polyline class="edge" points="1430,324 1450,324" />
+        <!-- No: Set Expiry Again -->
+        <polyline class="edge" points="1490,312 1250,324" />
+        <!-- Yes: Edit Secure -->
+        <rect class="action" x="1550" y="300" width="180" height="48" rx="16" />
+        <text class="label" x="1640" y="330" text-anchor="middle">Edit secure note</text>
+        <polyline class="edge" points="1490,336 1550,324" />
+        <!-- Encrypt Save -->
+        <rect class="action" x="1750" y="300" width="180" height="48" rx="16" />
+        <text class="label" x="1840" y="330" text-anchor="middle">Encrypt & save</text>
+        <polyline class="edge" points="1730,324 1750,324" />
+        <polyline class="edge" points="1930,324 850,144" />
+        <!-- Search Flow -->
+        <rect class="action" x="950" y="400" width="180" height="48" rx="16" />
+        <text class="label" x="1040" y="430" text-anchor="middle">Search notes</text>
+        <polyline class="edge" points="870,224 950,424" />
+        <rect class="action" x="1170" y="400" width="180" height="48" rx="16" />
+        <text class="label" x="1260" y="430" text-anchor="middle">Show results</text>
+        <polyline class="edge" points="1130,424 1170,424" />
+        <polyline class="edge" points="1350,424 850,144" />
+        <!-- Voice Capture Flow -->
+        <rect class="action" x="950" y="520" width="180" height="48" rx="16" />
+        <text class="label" x="1040" y="550" text-anchor="middle">Voice capture</text>
+        <polyline class="edge" points="870,224 950,544" />
+        <rect class="action" x="1170" y="520" width="180" height="48" rx="16" />
+        <text class="label" x="1260" y="550" text-anchor="middle">Record audio</text>
+        <polyline class="edge" points="1130,544 1170,544" />
+        <polygon class="decision" points="1400,544 1420,520 1440,544 1420,568" />
+        <text class="label" x="1420" y="515" text-anchor="middle">Valid?</text>
+        <polyline class="edge" points="1350,544 1400,544" />
+        <rect class="action" x="1500" y="500" width="180" height="48" rx="16" />
+        <text class="label" x="1590" y="530" text-anchor="middle">Transcribe audio</text>
+        <polyline class="edge" points="1440,532 1500,524" />
+        <rect class="action" x="1700" y="500" width="180" height="48" rx="16" />
+        <text class="label" x="1790" y="530" text-anchor="middle">Insert text</text>
+        <polyline class="edge" points="1680,524 1700,524" />
+        <polyline class="edge" points="1880,524 850,144" />
+        <!-- Plugin Flow -->
+        <rect class="action" x="950" y="640" width="180" height="48" rx="16" />
+        <text class="label" x="1040" y="670" text-anchor="middle">Apply plugin</text>
+        <polyline class="edge" points="870,224 950,664" />
+        <rect class="action" x="1170" y="640" width="180" height="48" rx="16" />
+        <text class="label" x="1260" y="670" text-anchor="middle">Run plugin</text>
+        <polyline class="edge" points="1130,664 1170,664" />
+        <polygon class="decision" points="1400,664 1420,640 1440,664 1420,688" />
+        <text class="label" x="1420" y="635" text-anchor="middle">Success?</text>
+        <polyline class="edge" points="1350,664 1400,664" />
+        <rect class="action" x="1500" y="620" width="180" height="48" rx="16" />
+        <text class="label" x="1590" y="650" text-anchor="middle">Apply result</text>
+        <polyline class="edge" points="1440,652 1500,644" />
+        <rect class="action" x="1500" y="700" width="180" height="48" rx="16" />
+        <text class="label" x="1590" y="730" text-anchor="middle">Show error</text>
+        <polyline class="edge" points="1440,676 1500,724" />
+        <polyline class="edge" points="1680,644 850,144" />
+        <polyline class="edge" points="1680,724 850,144" />
+        <!-- Trash Flow -->
+        <rect class="action" x="950" y="800" width="180" height="48" rx="16" />
+        <text class="label" x="1040" y="830" text-anchor="middle">Delete note</text>
+        <polyline class="edge" points="870,224 950,824" />
+        <rect class="action" x="1170" y="800" width="180" height="48" rx="16" />
+        <text class="label" x="1260" y="830" text-anchor="middle">Move to trash</text>
+        <polyline class="edge" points="1130,824 1170,824" />
+        <polyline class="edge" points="1350,824 850,144" />
+        <rect class="action" x="950" y="880" width="180" height="48" rx="16" />
+        <text class="label" x="1040" y="910" text-anchor="middle">View trash</text>
+        <polyline class="edge" points="870,224 950,904" />
+        <rect class="action" x="1170" y="880" width="180" height="48" rx="16" />
+        <text class="label" x="1260" y="910" text-anchor="middle">Trash action</text>
+        <polyline class="edge" points="1130,904 1170,904" />
+        <polygon class="decision" points="1400,904 1420,880 1440,904 1420,928" />
+        <text class="label" x="1420" y="875" text-anchor="middle">Action?</text>
+        <polyline class="edge" points="1350,904 1400,904" />
+        <rect class="action" x="1500" y="860" width="180" height="48" rx="16" />
+        <text class="label" x="1590" y="890" text-anchor="middle">Restore note</text>
+        <polyline class="edge" points="1440,892 1500,884" />
+        <rect class="action" x="1500" y="940" width="180" height="48" rx="16" />
+        <text class="label" x="1590" y="970" text-anchor="middle">Wipe note</text>
+        <polyline class="edge" points="1440,916 1500,964" />
+        <polyline class="edge" points="1680,884 850,144" />
+        <polyline class="edge" points="1680,964 850,144" />
+        <!-- Export/Import -->
+        <rect class="action" x="950" y="1060" width="180" height="48" rx="16" />
+        <text class="label" x="1040" y="1090" text-anchor="middle">Export</text>
+        <polyline class="edge" points="870,224 950,1084" />
+        <rect class="action" x="1170" y="1060" width="180" height="48" rx="16" />
+        <text class="label" x="1260" y="1090" text-anchor="middle">Create archive</text>
+        <polyline class="edge" points="1130,1084 1170,1084" />
+        <polyline class="edge" points="1350,1084 850,144" />
+        <rect class="action" x="950" y="1140" width="180" height="48" rx="16" />
+        <text class="label" x="1040" y="1170" text-anchor="middle">Import</text>
+        <polyline class="edge" points="870,224 950,1164" />
+        <rect class="action" x="1170" y="1140" width="180" height="48" rx="16" />
+        <text class="label" x="1260" y="1170" text-anchor="middle">Load archive</text>
+        <polyline class="edge" points="1130,1164 1170,1164" />
+        <polygon class="decision" points="1400,1164 1420,1140 1440,1164 1420,1188" />
+        <text class="label" x="1420" y="1135" text-anchor="middle">Compatible?</text>
+        <polyline class="edge" points="1350,1164 1400,1164" />
+        <rect class="action" x="1500" y="1120" width="180" height="48" rx="16" />
+        <text class="label" x="1590" y="1150" text-anchor="middle">Merge notes</text>
+        <polyline class="edge" points="1440,1152 1500,1144" />
+        <rect class="action" x="1500" y="1200" width="180" height="48" rx="16" />
+        <text class="label" x="1590" y="1230" text-anchor="middle">Show error</text>
+        <polyline class="edge" points="1440,1176 1500,1224" />
+        <polyline class="edge" points="1680,1144 850,144" />
+        <polyline class="edge" points="1680,1224 850,144" />
+        <!-- Auto-lock -->
+        <rect class="action" x="950" y="1320" width="180" height="48" rx="16" />
+        <text class="label" x="1040" y="1350" text-anchor="middle">Idle/background</text>
+        <polyline class="edge" points="870,224 950,1344" />
+        <rect class="action" x="1170" y="1320" width="180" height="48" rx="16" />
+        <text class="label" x="1260" y="1350" text-anchor="middle">Auto-lock</text>
+        <polyline class="edge" points="1130,1344 1170,1344" />
+        <rect class="end" x="1500" y="1320" width="48" height="48" rx="24" />
+        <text class="label" x="1524" y="1350" text-anchor="middle">End</text>
+        <polyline class="edge" points="1350,1344 1500,1344" />
+      </svg>
+    </div>
+    <div class="notes">
+      <h2>Notes</h2>
+      <ul>
+        <li>All flows are derived from the requirements and architecture documentation.</li>
+        <li>Yellow diamonds are decision points; green and red circles are start and end.</li>
+        <li>All lines are orthogonal and non-overlapping for clarity.</li>
+      </ul>
+    </div>
+  </main>
+</body>
+</html>

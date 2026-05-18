@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AstraNotes Use Case Diagram</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #4b5563;
+      --ui-fill: #e8f2ff;
+      --ui-stroke: #3b82f6;
+      --core-fill: #eaf9ef;
+      --core-stroke: #16a34a;
+      --data-fill: #fff7e3;
+      --data-stroke: #d97706;
+      --platform-fill: #ffecef;
+      --platform-stroke: #dc2626;
+      --model-fill: #f3ecff;
+      --model-stroke: #7c3aed;
+      --memory-fill: #eef2ff;
+      --memory-stroke: #6366f1;
+      --actor: #6366f1;
+      --usecase: #fff;
+      --usecase-stroke: #6366f1;
+      --edge: #334155;
+      --edge-soft: #6b7280;
+      --edge-dashed: 6 4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 12% 10%, #dbeafe 0%, #eef2ff 20%, var(--bg) 55%);
+      color: var(--ink);
+      font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
+    }
+    main {
+      max-width: 100%;
+      padding: 16px;
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      font-size: 24px;
+      letter-spacing: 0.2px;
+    }
+    p.subtitle {
+      margin: 0 0 14px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .diagram-shell {
+      border: 1px solid #d8deea;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      overflow: auto;
+      padding: 10px;
+    }
+    .legend {
+      font: 12px "Segoe UI", Arial, sans-serif;
+      fill: #334155;
+    }
+    @media (max-width: 900px) {
+      h1 { font-size: 20px; }
+      p.subtitle { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>AstraNotes UML Use Case Diagram</h1>
+    <p class="subtitle">Major user and system use cases, mapped to the designed architecture. No overlapping lines, visually clear, and logically correct.</p>
+    <div class="diagram-shell">
+      <svg viewBox="0 0 1800 900" width="1800" height="900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AstraNotes use case diagram">
+        <defs>
+          <style>
+            .actor { fill: var(--actor); stroke: var(--actor); stroke-width: 2; }
+            .actor-label { font: 700 16px 'Segoe UI', Arial, sans-serif; fill: #3730a3; }
+            .usecase { fill: var(--usecase); stroke: var(--usecase-stroke); stroke-width: 2; }
+            .usecase-label { font: 14px 'Segoe UI', Arial, sans-serif; fill: #1e293b; }
+            .edge { stroke: var(--edge); stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+            .edgeDashed { stroke: var(--edge-soft); stroke-width: 1.2; stroke-dasharray: var(--edge-dashed); fill: none; marker-end: url(#arrow); }
+            .include { stroke: #6366f1; stroke-width: 1.2; stroke-dasharray: 4 3; fill: none; marker-end: url(#arrow); }
+          </style>
+          <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
+          </marker>
+        </defs>
+        <!-- Actors -->
+        <ellipse class="actor" cx="120" cy="200" rx="36" ry="36" />
+        <text class="actor-label" x="120" y="205" text-anchor="middle">User</text>
+        <ellipse class="actor" cx="120" cy="700" rx="36" ry="36" />
+        <text class="actor-label" x="120" y="705" text-anchor="middle">System</text>
+        <!-- Use Cases (User) -->
+        <g>
+          <rect class="usecase" x="320" y="80" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="110" text-anchor="middle">Unlock with passphrase</text>
+          <rect class="usecase" x="320" y="150" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="180" text-anchor="middle">Unlock with biometric</text>
+          <rect class="usecase" x="320" y="220" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="250" text-anchor="middle">Create/edit normal note</text>
+          <rect class="usecase" x="320" y="290" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="320" text-anchor="middle">Enable secure mode</text>
+          <rect class="usecase" x="320" y="360" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="390" text-anchor="middle">Set expiration date/time</text>
+          <rect class="usecase" x="320" y="430" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="460" text-anchor="middle">Search notes by title</text>
+          <rect class="usecase" x="320" y="500" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="530" text-anchor="middle">Capture voice & transcribe</text>
+          <rect class="usecase" x="320" y="570" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="600" text-anchor="middle">View/restore trash</text>
+          <rect class="usecase" x="320" y="640" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="670" text-anchor="middle">Permanently delete trash</text>
+          <rect class="usecase" x="320" y="710" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="740" text-anchor="middle">Install/manage plugins</text>
+          <rect class="usecase" x="320" y="780" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="810" text-anchor="middle">Apply plugin action</text>
+          <rect class="usecase" x="600" y="80" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="710" y="110" text-anchor="middle">Change passphrase</text>
+          <rect class="usecase" x="600" y="150" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="710" y="180" text-anchor="middle">Export backup</text>
+          <rect class="usecase" x="600" y="220" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="710" y="250" text-anchor="middle">Import backup</text>
+        </g>
+        <!-- Use Cases (System) -->
+        <g>
+          <rect class="usecase" x="1050" y="120" rx="32" ry="32" width="260" height="48" />
+          <text class="usecase-label" x="1180" y="150" text-anchor="middle">Auto-lock & clear keys</text>
+          <rect class="usecase" x="1050" y="200" rx="32" ry="32" width="260" height="48" />
+          <text class="usecase-label" x="1180" y="230" text-anchor="middle">Expire & move secure note</text>
+          <rect class="usecase" x="1050" y="280" rx="32" ry="32" width="260" height="48" />
+          <text class="usecase-label" x="1180" y="310" text-anchor="middle">Schedule expiry notification</text>
+        </g>
+        <!-- Relationships: User to Use Cases -->
+        <polyline class="edge" points="156,200 320,104" />
+        <polyline class="edge" points="156,200 320,174" />
+        <polyline class="edge" points="156,200 320,244" />
+        <polyline class="edge" points="156,200 320,314" />
+        <polyline class="edge" points="156,200 320,384" />
+        <polyline class="edge" points="156,200 320,454" />
+        <polyline class="edge" points="156,200 320,524" />
+        <polyline class="edge" points="156,200 320,594" />
+        <polyline class="edge" points="156,200 320,664" />
+        <polyline class="edge" points="156,200 320,734" />
+        <polyline class="edge" points="156,200 320,804" />
+        <polyline class="edge" points="156,200 600,104" />
+        <polyline class="edge" points="156,200 600,174" />
+        <polyline class="edge" points="156,200 600,244" />
+        <!-- Relationships: System to Use Cases -->
+        <polyline class="edge" points="156,700 1050,144" />
+        <polyline class="edge" points="156,700 1050,224" />
+        <polyline class="edge" points="156,700 1050,304" />
+        <!-- Include relationships -->
+        <polyline class="include" points="430,174 430,104" />
+        <polyline class="include" points="430,314 430,384" />
+        <!-- Removed incorrect include line to 'Create/edit normal note' -->
+        <polyline class="include" points="1180,224 1180,304" />
+        <!-- Legend -->
+        <rect x="1450" y="700" width="320" height="140" rx="14" fill="#f8fafc" stroke="#cbd5e1" />
+        <text class="legend" x="1470" y="730">Legend:</text>
+        <rect class="actor" x="1470" y="750" rx="18" ry="18" width="36" height="36" />
+        <text class="legend" x="1515" y="773">Actor</text>
+        <rect class="usecase" x="1470" y="790" rx="18" ry="18" width="36" height="36" />
+        <text class="legend" x="1515" y="813">Use Case</text>
+        <line class="edge" x1="1470" y1="830" x2="1506" y2="830" />
+        <text class="legend" x="1515" y="835">Association</text>
+        <line class="include" x1="1470" y1="850" x2="1506" y2="850" />
+        <text class="legend" x="1515" y="855">«include»</text>
+      </svg>
+    </div>
+    <div class="notes">
+      <h2>Notes</h2>
+      <ul>
+        <li>All use cases are derived from the requirements and architecture documentation.</li>
+        <li>Actors: <b>User</b> (person using the app), <b>System</b> (automated app/system actions).</li>
+        <li>Dashed blue lines represent «include» relationships.</li>
+        <li>All lines are orthogonal and non-overlapping for clarity.</li>
+      </ul>
+    </div>
+  </main>
+</body>
+</html>
