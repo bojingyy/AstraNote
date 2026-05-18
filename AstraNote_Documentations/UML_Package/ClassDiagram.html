@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AstraNotes Class Diagram</title>
+  <style>
+    body {
+      margin: 16px;
+      font-family: Arial, sans-serif;
+      color: #1f2937;
+      background: #f8fafc;
+    }
+    .frame {
+      overflow-x: auto;
+      border: 1px solid #d9d9d9;
+      border-radius: 10px;
+      background: #fcfcfc;
+      padding: 8px;
+    }
+    .notes {
+      margin-top: 12px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .notes h2 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+    }
+    .notes ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <svg viewBox="0 0 2020 1380" width="2020" height="1380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AstraNotes class diagram, optimized layout">
+      <defs>
+        <style>
+          .title { font: 700 20px Arial, sans-serif; fill: #0f172a; }
+          .lane { font: 700 15px Arial, sans-serif; fill: #1f2937; }
+          .cardTitle { font: 700 14px Arial, sans-serif; fill: #0f172a; }
+          .small { font: 11px Arial, sans-serif; fill: #374151; }
+          .legend { font: 12px Arial, sans-serif; fill: #374151; }
+
+          .ui { fill: #e7f1ff; stroke: #5b8def; }
+          .core { fill: #e9fbe9; stroke: #39a96b; }
+          .data { fill: #fff7df; stroke: #e3a008; }
+          .platform { fill: #ffeaea; stroke: #dc6a6a; }
+          .model { fill: #f3edff; stroke: #8b6adf; }
+
+          .edge { stroke: #4b5563; stroke-width: 1.3; fill: none; marker-end: url(#arrow); }
+          .repoEdge { stroke: #6b7280; stroke-width: 1.2; fill: none; stroke-dasharray: 5 4; marker-end: url(#arrow); }
+        </style>
+        <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#4b5563" />
+        </marker>
+      </defs>
+
+      <text x="18" y="28" class="title">AstraNotes class diagram (second-pass layout: reduced crossings, same dependencies)</text>
+
+      <text x="20" y="60" class="lane">AstraUI</text>
+      <text x="330" y="60" class="lane">AstraCore (Main)</text>
+      <text x="650" y="60" class="lane">AstraCore (Support)</text>
+      <text x="980" y="60" class="lane">AstraData</text>
+      <text x="1320" y="60" class="lane">AstraPlatform</text>
+      <text x="1620" y="60" class="lane">Core Models</text>
+
+      <rect x="20" y="90" width="270" height="110" rx="8" class="ui" />
+      <text x="34" y="112" class="cardTitle">UnlockView</text>
+      <text x="34" y="134" class="small">+submitPassphrase()</text>
+      <text x="34" y="152" class="small">+requestBiometric()</text>
+
+      <rect x="20" y="230" width="270" height="128" rx="8" class="ui" />
+      <text x="34" y="252" class="cardTitle">NotesWorkspaceView</text>
+      <text x="34" y="274" class="small">+searchByTitle(query)</text>
+      <text x="34" y="292" class="small">+createOrUpdateNote()</text>
+      <text x="34" y="310" class="small">+assignSubject(noteId, subjectId)</text>
+
+      <rect x="20" y="382" width="270" height="110" rx="8" class="ui" />
+      <text x="34" y="404" class="cardTitle">TrashView</text>
+      <text x="34" y="426" class="small">+restore(itemId)</text>
+      <text x="34" y="444" class="small">+permanentDelete(itemId)</text>
+
+      <rect x="20" y="516" width="270" height="110" rx="8" class="ui" />
+      <text x="34" y="538" class="cardTitle">SettingsView</text>
+      <text x="34" y="560" class="small">+changeTimeout()</text>
+      <text x="34" y="578" class="small">+changePassphrase()</text>
+
+      <rect x="20" y="650" width="270" height="110" rx="8" class="ui" />
+      <text x="34" y="672" class="cardTitle">PluginStoreView</text>
+      <text x="34" y="694" class="small">+installLocalPackage()</text>
+      <text x="34" y="712" class="small">+togglePlugin(pluginId)</text>
+
+      <rect x="330" y="90" width="300" height="110" rx="8" class="core" />
+      <text x="344" y="112" class="cardTitle">AppCoordinator</text>
+      <text x="344" y="134" class="small">+routeOnLaunch()</text>
+      <text x="344" y="152" class="small">+lock()</text>
+
+      <rect x="330" y="230" width="300" height="118" rx="8" class="core" />
+      <text x="344" y="252" class="cardTitle">KeyManager</text>
+      <text x="344" y="274" class="small">+unlockWithPassphrase()</text>
+      <text x="344" y="292" class="small">+unlockWithBiometric()</text>
+      <text x="344" y="310" class="small">+clearKeys()</text>
+
+      <rect x="330" y="370" width="300" height="136" rx="8" class="core" />
+      <text x="344" y="392" class="cardTitle">NoteService</text>
+      <text x="344" y="414" class="small">+saveNote(noteDraft)</text>
+      <text x="344" y="432" class="small">+deleteNote(noteId)</text>
+      <text x="344" y="450" class="small">+persistSecureDraftOnLock()</text>
+      <text x="344" y="468" class="small">+moveBetweenSubjects()</text>
+
+      <rect x="330" y="530" width="300" height="110" rx="8" class="core" />
+      <text x="344" y="552" class="cardTitle">SecureNotePolicyService</text>
+      <text x="344" y="574" class="small">+validateExpiration()</text>
+      <text x="344" y="592" class="small">+scanAndExpireSecureNotes()</text>
+
+      <rect x="330" y="670" width="300" height="110" rx="8" class="core" />
+      <text x="344" y="692" class="cardTitle">ProtectedTrashService</text>
+      <text x="344" y="714" class="small">+moveToTrash(noteId)</text>
+      <text x="344" y="732" class="small">+restore(itemId)</text>
+
+      <rect x="330" y="810" width="300" height="110" rx="8" class="core" />
+      <text x="344" y="832" class="cardTitle">NoteSearchService</text>
+      <text x="344" y="854" class="small">+searchTitles(query)</text>
+      <text x="344" y="872" class="small">+clearSecureTitleCacheOnLock()</text>
+
+      <rect x="650" y="370" width="300" height="110" rx="8" class="core" />
+      <text x="664" y="392" class="cardTitle">EncryptionService</text>
+      <text x="664" y="414" class="small">+encrypt(plain, key)</text>
+      <text x="664" y="432" class="small">+decrypt(payload, key)</text>
+
+      <rect x="650" y="530" width="300" height="110" rx="8" class="core" />
+      <text x="664" y="552" class="cardTitle">SubjectService</text>
+      <text x="664" y="574" class="small">+createSubject(name)</text>
+      <text x="664" y="592" class="small">+renameOrDeleteSubject()</text>
+
+      <rect x="650" y="670" width="300" height="110" rx="8" class="core" />
+      <text x="664" y="692" class="cardTitle">SettingsService</text>
+      <text x="664" y="714" class="small">+validateAndSaveSettings()</text>
+      <text x="664" y="732" class="small">+changePassphraseWithRotation()</text>
+
+      <rect x="650" y="810" width="300" height="110" rx="8" class="core" />
+      <text x="664" y="832" class="cardTitle">PluginService</text>
+      <text x="664" y="854" class="small">+validateManifest()</text>
+      <text x="664" y="872" class="small">+executeActionWithTimeout()</text>
+
+      <rect x="650" y="950" width="300" height="110" rx="8" class="core" />
+      <text x="664" y="972" class="cardTitle">ExportImportService</text>
+      <text x="664" y="994" class="small">+exportEncryptedArchive()</text>
+      <text x="664" y="1012" class="small">+importAtomicWithConflictResolution()</text>
+
+      <rect x="980" y="90" width="320" height="96" rx="8" class="data" />
+      <text x="994" y="112" class="cardTitle">DatabaseProvider</text>
+      <text x="994" y="134" class="small">+transaction()</text>
+      <text x="994" y="152" class="small">+migrate()</text>
+
+      <rect x="980" y="260" width="320" height="96" rx="8" class="data" />
+      <text x="994" y="282" class="cardTitle">NoteRepository</text>
+      <text x="994" y="304" class="small">+save(Note)</text>
+      <text x="994" y="322" class="small">+findByTitle()</text>
+
+      <rect x="980" y="390" width="320" height="96" rx="8" class="data" />
+      <text x="994" y="412" class="cardTitle">AttachmentRepository</text>
+      <text x="994" y="434" class="small">+save(Attachment)</text>
+      <text x="994" y="452" class="small">+deleteByNoteId()</text>
+
+      <rect x="980" y="520" width="320" height="96" rx="8" class="data" />
+      <text x="994" y="542" class="cardTitle">SubjectRepository</text>
+      <text x="994" y="564" class="small">+save(SubjectGroup)</text>
+      <text x="994" y="582" class="small">+setSubjectNullOnDelete()</text>
+
+      <rect x="980" y="650" width="320" height="96" rx="8" class="data" />
+      <text x="994" y="672" class="cardTitle">ProtectedTrashRepository</text>
+      <text x="994" y="694" class="small">+save(TrashItem)</text>
+      <text x="994" y="712" class="small">+restore(itemId)</text>
+
+      <rect x="980" y="780" width="320" height="96" rx="8" class="data" />
+      <text x="994" y="802" class="cardTitle">SettingsRepository</text>
+      <text x="994" y="824" class="small">+save(AppSettings)</text>
+      <text x="994" y="842" class="small">+load()</text>
+
+      <rect x="980" y="910" width="320" height="96" rx="8" class="data" />
+      <text x="994" y="932" class="cardTitle">PluginMetadataRepository</text>
+      <text x="994" y="954" class="small">+save(PluginMetadata)</text>
+      <text x="994" y="972" class="small">+updateLastRunStatus()</text>
+
+      <rect x="1320" y="90" width="280" height="96" rx="8" class="platform" />
+      <text x="1334" y="112" class="cardTitle">PlatformIntegration</text>
+      <text x="1334" y="134" class="small">+onBackground()</text>
+      <text x="1334" y="152" class="small">+onSleep()</text>
+
+      <rect x="1320" y="230" width="280" height="96" rx="8" class="platform" />
+      <text x="1334" y="252" class="cardTitle">LocalAuthService</text>
+      <text x="1334" y="274" class="small">+authenticateBiometric()</text>
+      <text x="1334" y="292" class="small">+availability()</text>
+
+      <rect x="1320" y="520" width="280" height="96" rx="8" class="platform" />
+      <text x="1334" y="542" class="cardTitle">NotificationService</text>
+      <text x="1334" y="564" class="small">+notifyExpiry()</text>
+      <text x="1334" y="582" class="small">+scheduleLocalNotification()</text>
+
+      <rect x="1320" y="650" width="280" height="96" rx="8" class="platform" />
+      <text x="1334" y="672" class="cardTitle">TimeProvider</text>
+      <text x="1334" y="694" class="small">+utcNow()</text>
+      <text x="1334" y="712" class="small">+isClockRollbackDetected()</text>
+
+      <rect x="1320" y="780" width="280" height="96" rx="8" class="platform" />
+      <text x="1334" y="802" class="cardTitle">Logging</text>
+      <text x="1334" y="824" class="small">+audit(event)</text>
+      <text x="1334" y="842" class="small">+error(message)</text>
+
+      <rect x="1620" y="260" width="360" height="106" rx="8" class="model" />
+      <text x="1634" y="282" class="cardTitle">Note</text>
+      <text x="1634" y="304" class="small">+id: UUID</text>
+      <text x="1634" y="322" class="small">+subjectId: UUID? +isSecure: Bool</text>
+      <text x="1634" y="340" class="small">+expiresAtUtc: Date? +timestamps</text>
+
+      <rect x="1620" y="390" width="360" height="96" rx="8" class="model" />
+      <text x="1634" y="412" class="cardTitle">EncryptedPayload</text>
+      <text x="1634" y="434" class="small">+ciphertext: Data</text>
+      <text x="1634" y="452" class="small">+nonce: Data +salt: Data</text>
+
+      <rect x="1620" y="520" width="360" height="96" rx="8" class="model" />
+      <text x="1634" y="542" class="cardTitle">Attachment</text>
+      <text x="1634" y="564" class="small">+id: UUID +noteId: UUID</text>
+      <text x="1634" y="582" class="small">+type: image | recording +path</text>
+
+      <rect x="1620" y="650" width="360" height="96" rx="8" class="model" />
+      <text x="1634" y="672" class="cardTitle">SubjectGroup</text>
+      <text x="1634" y="694" class="small">+id: UUID +name: String</text>
+      <text x="1634" y="712" class="small">+displayOrder: Int</text>
+
+      <rect x="1620" y="780" width="360" height="96" rx="8" class="model" />
+      <text x="1634" y="802" class="cardTitle">TrashItem</text>
+      <text x="1634" y="824" class="small">+sourceNoteId: UUID +isSecure: Bool</text>
+      <text x="1634" y="842" class="small">+deletedAtUtc: Date</text>
+
+      <rect x="1620" y="910" width="360" height="96" rx="8" class="model" />
+      <text x="1634" y="932" class="cardTitle">AppSettings</text>
+      <text x="1634" y="954" class="small">+lockTimeoutSec: Int</text>
+      <text x="1634" y="972" class="small">+telemetryOptIn: Bool +pluginsEnabled</text>
+
+      <rect x="1620" y="1040" width="360" height="96" rx="8" class="model" />
+      <text x="1634" y="1062" class="cardTitle">PluginManifest</text>
+      <text x="1634" y="1084" class="small">+pluginId +name +version</text>
+      <text x="1634" y="1102" class="small">+supportedAppVersion +entryAction</text>
+
+      <rect x="1620" y="1170" width="360" height="106" rx="8" class="model" />
+      <text x="1634" y="1192" class="cardTitle">PluginMetadata</text>
+      <text x="1634" y="1214" class="small">+pluginId +enabled</text>
+      <text x="1634" y="1232" class="small">+installPathHash +lastRunStatus</text>
+      <text x="1634" y="1250" class="small">+lastError</text>
+
+      <path d="M 290 145 L 330 145" class="edge" />
+      <path d="M 290 294 L 330 438" class="edge" />
+      <path d="M 290 294 L 310 294 L 310 865 L 330 865" class="edge" />
+      <path d="M 290 437 L 330 725" class="edge" />
+      <path d="M 290 571 L 650 725" class="edge" />
+      <path d="M 290 705 L 650 865" class="edge" />
+
+      <path d="M 630 145 L 1320 278" class="edge" />
+      <path d="M 630 145 L 1320 138" class="edge" />
+      <path d="M 630 289 L 1320 278" class="edge" />
+
+      <path d="M 630 438 L 980 308" class="edge" />
+      <path d="M 630 438 L 980 438" class="edge" />
+      <path d="M 630 455 L 650 425" class="edge" />
+
+      <path d="M 630 585 L 330 725" class="edge" />
+      <path d="M 630 585 L 1320 568" class="edge" />
+      <path d="M 630 600 L 1320 698" class="edge" />
+
+      <path d="M 630 725 L 980 698" class="edge" />
+      <path d="M 630 865 L 980 308" class="edge" />
+      <path d="M 950 585 L 980 568" class="edge" />
+      <path d="M 950 725 L 980 828" class="edge" />
+      <path d="M 950 865 L 980 958" class="edge" />
+      <path d="M 950 865 L 630 438" class="edge" />
+      <path d="M 950 1005 L 980 308" class="edge" />
+      <path d="M 950 1005 L 950 425 L 650 425" class="edge" />
+
+      <path d="M 1300 308 L 1300 138" class="repoEdge" />
+      <path d="M 1300 438 L 1300 138" class="repoEdge" />
+      <path d="M 1300 568 L 1300 138" class="repoEdge" />
+      <path d="M 1300 698 L 1300 138" class="repoEdge" />
+      <path d="M 1300 828 L 1300 138" class="repoEdge" />
+      <path d="M 1300 958 L 1300 138" class="repoEdge" />
+
+      <path d="M 950 425 L 1620 438" class="edge" />
+      <path d="M 630 438 L 1620 313" class="edge" />
+      <path d="M 630 438 L 1620 568" class="edge" />
+      <path d="M 950 585 L 1620 698" class="edge" />
+      <path d="M 630 725 L 1620 828" class="edge" />
+      <path d="M 950 725 L 1620 958" class="edge" />
+      <path d="M 950 865 L 1620 1088" class="edge" />
+      <path d="M 1300 958 L 1620 1223" class="edge" />
+
+      <text x="18" y="1356" class="legend">Legend: blue=UI, green=core services, yellow=data repositories, red=platform wrappers, purple=domain models, dashed edges=repository to database dependency.</text>
+    </svg>
+  </div>
+
+  <section class="notes">
+    <h2>Relationship Notes</h2>
+    <ul>
+      <li>UI classes invoke core services only; no direct encryption or repository calls.</li>
+      <li>Core services orchestrate business rules and delegate persistence to repositories.</li>
+      <li>Repositories are transaction-backed through DatabaseProvider.</li>
+      <li>Secure note encryption/decryption boundaries stay in EncryptionService.</li>
+      <li>Secure title search is in-memory in NoteSearchService and is cleared on lock.</li>
+      <li>Plugin execution is isolated in PluginService and plugin runtime status is persisted via PluginMetadataRepository.</li>
+    </ul>
+  </section>
+</body>
+</html>
