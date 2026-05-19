@@ -1,0 +1,100 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: macos-14
+    
+    strategy:
+      matrix:
+        xcode-version: ['15.0']
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Select Xcode version
+      run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode-version }}.app/Contents/Developer || true
+    
+    - name: Show Swift version
+      run: swift --version
+    
+    - name: Build AstraNotes
+      run: swift build -v
+    
+    - name: Run AstraCore tests
+      run: swift test --package-path . --filter AstraCoreTests -v
+    
+    - name: Run AstraData tests
+      run: swift test --package-path . --filter AstraDataTests -v
+    
+    - name: Run AstraPlatform tests
+      run: swift test --package-path . --filter AstraPlatformTests -v
+    
+    - name: Run Integration tests
+      run: swift test --package-path . --filter AstraIntegrationTests -v
+    
+    - name: Run all tests with coverage
+      run: swift test --package-path . --enable-code-coverage -v
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  swiftlint:
+    runs-on: macos-14
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Install SwiftLint
+      run: |
+        brew install swiftlint
+    
+    - name: Run SwiftLint
+      run: |
+        swiftlint Sources/ Tests/ --reporter json > swiftlint-report.json || true
+        swiftlint Sources/ Tests/ --reporter xcode
+    
+    - name: Comment PR with SwiftLint results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('swiftlint-report.json', 'utf8'));
+          if (report.length > 0) {
+            let comment = '### SwiftLint Issues\n\n';
+            report.forEach(issue => {
+              comment += `- **${issue.file}:${issue.line}:${issue.character}** - ${issue.severity}: ${issue.reason}\n`;
+            });
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+          }
+
+  security-scan:
+    runs-on: macos-14
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Run Swift security checks
+      run: |
+        echo "Checking for potential security issues..."
+        grep -r "force_try\|force_cast\|force_unwrap" Sources/ Tests/ || echo "No unsafe force operations found"
+        grep -r "TODO\|FIXME\|HACK" Sources/ Tests/ | grep -i "security\|crypto\|password" || echo "No security-related TODOs found"

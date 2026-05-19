@@ -1,0 +1,34 @@
+# SwiftFormat Configuration for AstraNotes
+# Maintains consistent code style across the project
+
+# Indentation and spacing
+indent: 4
+indentcase: true
+useTabs: false
+tabWidth: 4
+linebreaks: lf
+wraparguments: preserve
+wrapparameters: preserve
+closingparen: balanced
+
+# Swift version
+swiftversion: 5.9
+
+# Rules configuration
+header: ""  # No auto-header (preserved manually)
+stripunusedargs: closure
+trimwhitespace: always
+
+# Spacing
+spaceinsideparens: false
+spaceinsidebrackets: false
+spaceaftercommas: true
+
+# Comments
+wrapcollections: auto
+
+# Disable rules that conflict with design patterns
+--exclude: Sources/AstraUI/Resources
+
+# Color output for terminal
+--color: auto

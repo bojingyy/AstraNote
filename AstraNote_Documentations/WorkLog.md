@@ -43,3 +43,43 @@
 - Replaced legacy UML markdown/image artifacts with HTML-based UML exports for consistency in documentation consumption.
 - Added HTML diagram files for Activity, Deployment, Object, and Use Case views in `UML_Package`.
 - Removed outdated UML `.md` and `.png` files from `UML_Package` as part of the format transition.
+
+### Implementation Progress Update — Phases 1 to 4
+
+#### Phase 1: Foundation and Core Crypto (Completed)
+- Implemented transactional persistence foundation in `DatabaseProvider` with commit or rollback behavior.
+- Implemented core persistence models for notes, encrypted payloads, attachments, subjects, settings, trash records, and credential state.
+- Implemented passphrase-derived key handling in `KeyManager` with PBKDF2 key derivation, in-memory key lifecycle, and lockout enforcement.
+- Implemented `EncryptionService` using AES-GCM authenticated encryption and decryption boundaries.
+- Implemented audit logging support for security-relevant events with metadata sanitization.
+
+#### Phase 2: Core Repositories and Note CRUD (Completed)
+- Implemented repositories for notes, subjects, attachments, settings, and protected trash persistence operations.
+- Implemented `NoteService` orchestration for normal and secure note save/load/delete flows with encryption routing.
+- Implemented subject management in `SubjectService` with non-empty and unique-name validation.
+- Implemented settings validation and update flow in `SettingsService`.
+- Added attachment handling rules in service layer, including size constraints and note security-mode inheritance.
+
+#### Phase 3: Secure Note Features and Trash (Completed)
+- Implemented `SecureNotePolicyService` for expiration policy checks and automated secure-note expiration sweeps.
+- Implemented rollback time guard behavior using stored last-known UTC and deferred expiration checks when device time rollback is detected.
+- Implemented protected trash behavior in `ProtectedTrashService` including secure-note lock semantics in trash.
+- Implemented restore authorization rules requiring active unlocked session for secure note restore.
+- Implemented notification service abstraction for secure-note expiration events.
+
+#### Phase 4: Session Management, Search, and Attachments (Completed)
+- Implemented `AppCoordinator` for first-launch branch routing, lock or unlock transitions, and inactivity lock decisions.
+- Implemented deferred auto-lock behavior when inactivity timeout expires during active background operation.
+- Implemented `NoteSearchService` for normal-title storage search and unlocked-session-only secure-title in-memory matching.
+- Implemented secure search cache clear on lock.
+- Added minimal functional UI wiring with `AppEnvironment`, `UnlockView`, and `NotesWorkspaceView` to exercise session and search flows.
+
+#### Test Status (Current)
+- Phase 1 and 2 validator passed: `make phase12-validate`.
+- Phase 3 and 4 validator passed: `make phase34-validate`.
+- Targeted suite results during verification:
+	- `AstraCoreTests`: 9 passed.
+	- `AstraDataTests`: 4 passed.
+	- `AstraIntegrationTests.testPhase1And2HappyPathFlow`: passed.
+	- `AstraIntegrationTests.testPhase3And4SecureExpirationTrashAndSearchFlow`: passed.
+- Project build status: `swift build` passed during verification for this milestone.

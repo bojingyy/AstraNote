@@ -1,0 +1,40 @@
+# SwiftLint Configuration for AstraNotes
+# Enforces code style and catches common Swift issues
+
+# Disabled rules
+disabled_rules:
+  - line_length  # Use warning instead (see line_length below)
+
+# Configured rules with custom values
+line_length:
+  warning: 120
+  error: 200
+
+indentation:
+  severity: error
+
+trailing_whitespace:
+  severity: error
+
+force_cast: error
+force_try: error
+force_unwrap: error
+
+nesting:
+  type_level: 3
+  function_level: 3
+
+cyclomatic_complexity:
+  warning: 15
+  error: 20
+
+# Exclude paths
+excluded:
+  - Sources/AstraUI/Resources
+  - .build
+  - build
+  - Carthage
+  - Pods
+
+# Reporter
+reporter: xcode
