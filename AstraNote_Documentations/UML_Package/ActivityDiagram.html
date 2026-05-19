@@ -75,7 +75,7 @@
 <body>
   <main>
     <h1>AstraNotes UML Activity Diagram</h1>
-    <p class="subtitle">Main user and system flows, expanded to cover secure search behavior, draft persistence, subject groups, attachments, import safety, and key rotation recovery.</p>
+    <p class="subtitle">Main user and system flows, expanded to cover biometric fallback policy, settings validation, plugin manifest checks, secure search behavior, and key rotation recovery.</p>
     <div class="diagram-shell">
       <svg viewBox="0 0 3200 2400" width="3200" height="2400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AstraNotes activity diagram">
         <defs>
@@ -104,23 +104,44 @@
         <polygon class="decision" points="680,94 700,70 720,94 700,118" />
         <text class="label" x="700" y="65" text-anchor="middle">Unlocked?</text>
         <polyline class="edge" points="630,94 680,94" />
-        <rect class="action" x="780" y="30" width="190" height="48" rx="16" />
-        <text class="label" x="875" y="60" text-anchor="middle">Enter passphrase</text>
-        <polyline class="edge" points="720,80 780,54" />
-        <polygon class="decision" points="1010,54 1030,30 1050,54 1030,78" />
-        <text class="label" x="1030" y="25" text-anchor="middle">Correct?</text>
-        <polyline class="edge" points="970,54 1010,54" />
-        <rect class="action" x="1090" y="10" width="150" height="38" rx="12" />
-        <text class="label" x="1165" y="35" text-anchor="middle">Retry unlock</text>
-        <polyline class="edge" points="1050,42 1090,29" />
-        <polyline class="edge" points="1240,29 780,54" />
-        <rect class="action" x="1090" y="70" width="210" height="48" rx="16" />
-        <text class="label" x="1195" y="100" text-anchor="middle">Offer biometric enrollment</text>
-        <polyline class="edge" points="1050,66 1090,94" />
+        <polygon class="decision" points="780,94 800,70 820,94 800,118" />
+        <text class="label" x="800" y="65" text-anchor="middle">Biometric enabled?</text>
+        <polyline class="edge" points="720,80 780,94" />
+        <rect class="action" x="900" y="20" width="190" height="48" rx="16" />
+        <text class="label" x="995" y="50" text-anchor="middle">Enter passphrase</text>
+        <polyline class="edge" points="820,82 900,44" />
+        <polygon class="decision" points="1120,44 1140,20 1160,44 1140,68" />
+        <text class="label" x="1140" y="15" text-anchor="middle">Correct?</text>
+        <polyline class="edge" points="1090,44 1120,44" />
+        <rect class="action" x="1200" y="0" width="150" height="38" rx="12" />
+        <text class="label" x="1275" y="25" text-anchor="middle">Retry unlock</text>
+        <polyline class="edge" points="1160,32 1200,19" />
+        <polyline class="edge" points="1350,19 900,44" />
+        <rect class="action" x="900" y="100" width="190" height="48" rx="16" />
+        <text class="label" x="995" y="130" text-anchor="middle">Attempt biometric unlock</text>
+        <polyline class="edge" points="820,106 900,124" />
+        <polygon class="decision" points="1120,124 1140,100 1160,124 1140,148" />
+        <text class="label" x="1140" y="95" text-anchor="middle">Biometric success?</text>
+        <polyline class="edge" points="1090,124 1120,124" />
+        <rect class="action" x="1200" y="80" width="220" height="48" rx="16" />
+        <text class="label" x="1310" y="110" text-anchor="middle">Reset biometric fail counter</text>
+        <polyline class="edge" points="1160,112 1200,104" />
+        <rect class="action" x="1200" y="160" width="220" height="48" rx="16" />
+        <text class="label" x="1310" y="190" text-anchor="middle">Increment biometric fail count</text>
+        <polyline class="edge" points="1160,136 1200,184" />
+        <polygon class="decision" points="1460,184 1480,160 1500,184 1480,208" />
+        <text class="label" x="1480" y="155" text-anchor="middle">Fails >= 3 or unavailable?</text>
+        <polyline class="edge" points="1420,184 1460,184" />
+        <polyline class="edge" points="1500,172 900,44" />
+        <polyline class="edge" points="1500,196 900,124" />
+        <rect class="action" x="1200" y="20" width="220" height="48" rx="16" />
+        <text class="label" x="1310" y="50" text-anchor="middle">Offer biometric enrollment</text>
+        <polyline class="edge" points="1160,56 1200,44" />
         <rect class="action" x="780" y="140" width="220" height="48" rx="16" />
         <text class="label" x="890" y="170" text-anchor="middle">Show notes workspace</text>
         <polyline class="edge" points="720,108 780,164" />
-        <polyline class="edge" points="1300,94 780,164" />
+        <polyline class="edge" points="1420,44 780,164" />
+        <polyline class="edge" points="1420,104 780,164" />
         <polygon class="decision" points="900,260 920,236 940,260 920,284" />
         <text class="label" x="920" y="230" text-anchor="middle">User action</text>
         <polyline class="edge" points="890,188 890,220 920,220 920,260" />
@@ -235,23 +256,36 @@
         <polyline class="edgeDashed" points="1820,1004 920,260" />
 
         <!-- Plugin flow -->
-        <rect class="action" x="1010" y="1140" width="180" height="48" rx="16" />
-        <text class="label" x="1100" y="1170" text-anchor="middle">Apply plugin</text>
-        <polyline class="edge" points="920,284 1010,1164" />
-        <rect class="action" x="1230" y="1140" width="210" height="48" rx="16" />
-        <text class="label" x="1335" y="1170" text-anchor="middle">Run via host API</text>
-        <polyline class="edge" points="1190,1164 1230,1164" />
-        <polygon class="decision" points="1480,1164 1500,1140 1520,1164 1500,1188" />
-        <text class="label" x="1500" y="1135" text-anchor="middle">Success before timeout?</text>
-        <polyline class="edge" points="1440,1164 1480,1164" />
-        <rect class="action" x="1560" y="1120" width="220" height="48" rx="16" />
-        <text class="label" x="1670" y="1150" text-anchor="middle">Apply result through save flow</text>
-        <polyline class="edge" points="1520,1152 1560,1144" />
-        <polyline class="edgeDashed" points="1780,1144 920,260" />
-        <rect class="action" x="1560" y="1200" width="250" height="48" rx="16" />
-        <text class="label" x="1685" y="1230" text-anchor="middle">Preserve note state and show error</text>
-        <polyline class="edge" points="1520,1176 1560,1224" />
-        <polyline class="edgeDashed" points="1810,1224 920,260" />
+        <rect class="action" x="1010" y="1080" width="220" height="48" rx="16" />
+        <text class="label" x="1120" y="1110" text-anchor="middle">Install plugin package</text>
+        <polyline class="edge" points="920,284 1010,1104" />
+        <rect class="action" x="1270" y="1080" width="220" height="48" rx="16" />
+        <text class="label" x="1380" y="1110" text-anchor="middle">Validate plugin manifest</text>
+        <polyline class="edge" points="1230,1104 1270,1104" />
+        <polygon class="decision" points="1530,1104 1550,1080 1570,1104 1550,1128" />
+        <text class="label" x="1550" y="1075" text-anchor="middle">Manifest valid?</text>
+        <polyline class="edge" points="1490,1104 1530,1104" />
+        <rect class="action" x="1610" y="1040" width="240" height="48" rx="16" />
+        <text class="label" x="1730" y="1070" text-anchor="middle">Show manifest validation error</text>
+        <polyline class="edge" points="1570,1092 1610,1064" />
+        <polyline class="edgeDashed" points="1850,1064 920,260" />
+        <rect class="action" x="1010" y="1160" width="300" height="48" rx="16" />
+        <text class="label" x="1160" y="1190" text-anchor="middle">Run text-transform plugin action</text>
+        <polyline class="edge" points="1570,1116 1010,1184" />
+        <rect class="action" x="1350" y="1160" width="210" height="48" rx="16" />
+        <text class="label" x="1455" y="1190" text-anchor="middle">Run via host API</text>
+        <polyline class="edge" points="1310,1184 1350,1184" />
+        <polygon class="decision" points="1600,1184 1620,1160 1640,1184 1620,1208" />
+        <text class="label" x="1620" y="1155" text-anchor="middle">Success before timeout?</text>
+        <polyline class="edge" points="1560,1184 1600,1184" />
+        <rect class="action" x="1680" y="1140" width="220" height="48" rx="16" />
+        <text class="label" x="1790" y="1170" text-anchor="middle">Apply result through save flow</text>
+        <polyline class="edge" points="1640,1172 1680,1164" />
+        <polyline class="edgeDashed" points="1900,1164 920,260" />
+        <rect class="action" x="1680" y="1220" width="250" height="48" rx="16" />
+        <text class="label" x="1805" y="1250" text-anchor="middle">Preserve note state and show error</text>
+        <polyline class="edge" points="1640,1196 1680,1244" />
+        <polyline class="edgeDashed" points="1930,1244 920,260" />
 
         <!-- Trash flow -->
         <rect class="action" x="1010" y="1340" width="180" height="48" rx="16" />
@@ -313,6 +347,13 @@
         <text class="label" x="1725" y="1650" text-anchor="middle">Ungroup notes and update sidebar</text>
         <polyline class="edge" points="1570,1644 1610,1644" />
         <polyline class="edgeDashed" points="1840,1644 920,260" />
+        <rect class="action" x="1870" y="1540" width="200" height="48" rx="16" />
+        <text class="label" x="1970" y="1570" text-anchor="middle">Select All Notes filter</text>
+        <polyline class="edge" points="1230,1604 1870,1564" />
+        <rect class="action" x="2110" y="1540" width="250" height="48" rx="16" />
+        <text class="label" x="2235" y="1570" text-anchor="middle">Show grouped + ungrouped notes</text>
+        <polyline class="edge" points="2070,1564 2110,1564" />
+        <polyline class="edgeDashed" points="2360,1564 920,260" />
 
         <!-- Export and import -->
         <rect class="action" x="1010" y="1780" width="180" height="48" rx="16" />
@@ -392,6 +433,25 @@
         <polyline class="edge" points="2310,2176 2350,2204" />
         <polyline class="edgeDashed" points="2580,2204 920,260" />
 
+        <!-- Settings flow -->
+        <rect class="action" x="1010" y="2260" width="180" height="48" rx="16" />
+        <text class="label" x="1100" y="2290" text-anchor="middle">Open settings</text>
+        <polyline class="edge" points="920,284 1010,2284" />
+        <rect class="action" x="1230" y="2260" width="290" height="48" rx="16" />
+        <text class="label" x="1375" y="2290" text-anchor="middle">Edit lock timeout, telemetry, plugin toggle</text>
+        <polyline class="edge" points="1190,2284 1230,2284" />
+        <polygon class="decision" points="1560,2284 1580,2260 1600,2284 1580,2308" />
+        <text class="label" x="1580" y="2255" text-anchor="middle">Values valid?</text>
+        <polyline class="edge" points="1520,2284 1560,2284" />
+        <rect class="action" x="1640" y="2240" width="220" height="48" rx="16" />
+        <text class="label" x="1750" y="2270" text-anchor="middle">Show validation message</text>
+        <polyline class="edge" points="1600,2272 1640,2264" />
+        <polyline class="edgeDashed" points="1860,2264 920,260" />
+        <rect class="action" x="1640" y="2320" width="220" height="48" rx="16" />
+        <text class="label" x="1750" y="2350" text-anchor="middle">Persist settings update</text>
+        <polyline class="edge" points="1600,2296 1640,2344" />
+        <polyline class="edgeDashed" points="1860,2344 920,260" />
+
         <!-- Auto-lock -->
         <rect class="action" x="2700" y="140" width="220" height="48" rx="16" />
         <text class="label" x="2810" y="170" text-anchor="middle">Idle timeout or background</text>
@@ -424,6 +484,9 @@
         <li>Search flow distinguishes locked results from unlocked in-memory secure-title matching.</li>
         <li>Auto-lock explicitly persists secure drafts before clearing keys and secure-title cache.</li>
         <li>Import and key-rotation flows now show conflict resolution, rollback behavior, and interrupted-rotation recovery.</li>
+        <li>Unlock flow now models biometric fail-count threshold fallback and unavailable-hardware fallback.</li>
+        <li>Plugin flow now models manifest validation and explicit text-transform action execution.</li>
+        <li>Settings flow now models validation and commit of lock timeout, telemetry, and plugin global toggle.</li>
         <li>Secure-note open flow now includes authenticated-decryption failure with preserved stored record.</li>
       </ul>
     </div>

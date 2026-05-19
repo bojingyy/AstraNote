@@ -87,6 +87,15 @@ Out of MVP:
 - Plugins can call only the small host API exposed by `PluginService.swift`; plugins never access repositories directly.
 - Plugin failures are contained and surfaced as user-visible errors without crashing note editing flows.
 
+## 4.1 Confidentiality Enforcement (NFR3.1 Data Flow Assertions)
+All data flow sinks for decrypted secure note content are explicitly controlled:
+- **Disk persistence**: Decrypted secure note content is NEVER written to disk. Repositories persist only ciphertext, nonce, salt, and policy metadata for secure notes. Only `EncryptionService` performs decrypt operations in memory; results are held transiently for UI display or search matching only.
+- **Logging**: `Logging.swift` sanitizes all audit logs to exclude decrypted note content, titles, and content-derived data. Authentication failures, plugin errors, and system events are logged; note payloads are never logged.
+- **Caching**: The only persistent cache containing decrypted secure data is the in-memory search cache (`NoteSearchService` secure title cache), which holds plaintext titles during active unlocked sessions only. This cache is cleared immediately on lock. No decrypted content is cached to disk or shared state.
+- **Exports**: `ExportImportService` exports an encrypted archive. The plaintext note records are encrypted before archive assembly. The export file itself is encrypted under the user's passphrase; no decrypted content appears in the export artifact.
+- **UI display**: UI views display decrypted content transiently in memory; the view hierarchy is disposed on lock, and all text fields and labels are cleared or masked before the lock transition completes.
+- **Plugin interface**: Plugins receive decrypted content only through the `PluginService` API if the user explicitly invokes a plugin action. Plugin results are treated as untrusted and passed through normal note save flow (re-encryption if the note is in secure mode).
+
 ## 5. Primary User Flows
 
 ### 5.1 Unlock

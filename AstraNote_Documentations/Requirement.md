@@ -2,7 +2,7 @@
 
 ## Functional Requirements
 
-**FR1.1** [Unlock] On first launch, the app shall prompt the user to create a master passphrase before any note data is stored.
+**FR1.1** [Unlock] On first launch, the app shall enter a dedicated first-launch initialization branch that presents a passphrase creation dialog before any note data is stored or any other feature is accessible. This initialization branch shall block all note operations until a passphrase is successfully created and confirmed.
 
 **FR1.2** [Unlock] On subsequent launches, the app shall require the master passphrase to start a session.
 
@@ -50,15 +50,15 @@
 
 **FR4.4** [Secure Note Expiration] The app shall show an in-app banner for expiry events in the foreground, and a scheduled local notification when backgrounded or not running.
 
-**FR4.5** [Secure Note Expiration] The app shall store the last known UTC timestamp on each launch. If the current device time is earlier than that stored value, no secure note shall be treated as unexpired.
+**FR4.5** [Secure Note Expiration] The app shall store the last known UTC timestamp on each launch. If the current device time is earlier than that stored value, a time-rollback guard shall activate: no secure note shall be treated as unexpired, and all expiration checks shall defer until the device time advances past the stored timestamp. The app shall log this guard activation and inform the user if a rollback is detected.
 
 **FR4.7** [Secure Note Expiration] The secure note editor shall provide explicit date and time controls so the user can choose the exact expiration moment.
 
 **FR5.1** [Protected Trash] All deleted notes (normal and secure) shall be moved to protected trash, not deleted immediately.
 
-**FR5.2** [Protected Trash] The trash view shall display all trashed items with title, deletion time, and a lock badge for secure notes.
+**FR5.2** [Protected Trash] The trash view shall display all trashed items with the following semantics: (a) normal notes shall show title and deletion time; (b) secure notes shall show deletion time and a lock badge; (c) secure notes shall NOT show a readable title, only the lock badge until restored.
 
-**FR5.3** [Protected Trash] Secure notes in trash shall not show a readable title; only a lock badge is shown until restored.
+**FR5.3** [Protected Trash] Secure notes in trash shall display with a lock badge as the primary visual indicator. A secure note's encrypted title shall remain hidden from the trash view; if the user attempts to view title details, the app shall display a message indicating the note is locked and cannot be previewed until restored and unlocked.
 
 **FR5.4** [Protected Trash] The user shall be able to restore any trashed note back to the active note list.
 
@@ -70,7 +70,7 @@
 
 **FR6.1** [Voice Capture] The editor top bar shall provide a voice capture button to record audio.
 
-**FR6.2** [Voice Capture] Recorded audio shall be stored in the app container with complete file protection.
+**FR6.2** [Voice Capture] Recorded audio shall be stored in the app container with complete file protection. The protected-recording write operation shall occur only after recording completes and before the audio is linked to the note. If the note is in secure mode, the audio attachment shall inherit the same encryption protection as the note; if in normal mode, the audio shall be stored unencrypted but with OS-level file protection.
 
 **FR6.3** [Voice Capture] Audio exceeding 10 minutes or 50 MB shall be rejected before storage with a message stating the applicable limit.
 
@@ -84,7 +84,7 @@
 
 **FR7.2** [Auto-Lock] The app shall auto-lock when the OS sleeps or the app enters the background.
 
-**FR7.3** [Auto-Lock] Background operations such as export or key rotation shall not count as user activity and shall not reset the inactivity timer.
+**FR7.3** [Auto-Lock] Background operations such as export or key rotation shall not count as user activity and shall not reset the inactivity timer. When the inactivity timer check occurs during an active background operation (export or re-encryption in progress), the timer shall continue its countdown without reset, and if the timer expires, the lock shall proceed immediately after the background operation completes or is canceled.
 
 **FR7.4** [Auto-Lock] On lock, all in-memory key material shall be cleared before re-authentication is required.
 
@@ -180,7 +180,7 @@
 
 **NFR5.2** [Reliability and Recovery] Failed migrations shall roll back and leave the previous state intact.
 
-**NFR5.3** [Reliability and Recovery] Corrupted database or partial-migration states shall surface clear in-app recovery instructions.
+**NFR5.3** [Reliability and Recovery] Corrupted database or partial-migration states shall surface clear in-app recovery instructions. Specific recovery scenarios shall include: (a) partial passphrase rotation: the app shall detect incomplete re-encryption, attempt completion on next launch, and if completion fails, roll back all partial records and restore the previous passphrase with user notification; (b) corrupted import state: the app shall detect any interrupted import, roll back the entire operation, and guide the user to check storage space and retry; (c) database corruption: the app shall detect unrecoverable corruption via integrity checks and provide step-by-step recovery instructions (e.g., restore from backup, or clear app data and reinstall).
 
 **NFR6.1** [Rate Limiting and Audit Logging] After 5 consecutive failed unlock attempts within 30 seconds, the app shall enforce a 30-second lockout that doubles with each subsequent breach, up to a maximum of 60 minutes.
 

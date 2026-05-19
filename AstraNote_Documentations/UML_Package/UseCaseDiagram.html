@@ -119,14 +119,20 @@
           <text class="usecase-label" x="430" y="810" text-anchor="middle">Permanently delete trash</text>
           <rect class="usecase" x="320" y="850" rx="32" ry="32" width="220" height="48" />
           <text class="usecase-label" x="430" y="880" text-anchor="middle">Install/manage plugins</text>
-          <rect class="usecase" x="320" y="920" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="950" text-anchor="middle">Apply plugin action</text>
+          <rect class="usecase" x="320" y="920" rx="32" ry="32" width="260" height="48" />
+          <text class="usecase-label" x="450" y="950" text-anchor="middle">Apply text-transform action</text>
           <rect class="usecase" x="600" y="80" rx="32" ry="32" width="260" height="48" />
           <text class="usecase-label" x="730" y="110" text-anchor="middle">Change passphrase & rotate keys</text>
           <rect class="usecase" x="600" y="150" rx="32" ry="32" width="220" height="48" />
           <text class="usecase-label" x="710" y="180" text-anchor="middle">Export backup</text>
           <rect class="usecase" x="600" y="220" rx="32" ry="32" width="220" height="48" />
           <text class="usecase-label" x="710" y="250" text-anchor="middle">Import backup</text>
+          <rect class="usecase" x="600" y="290" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="710" y="320" text-anchor="middle">Configure settings</text>
+          <rect class="usecase" x="600" y="360" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="710" y="390" text-anchor="middle">Select All Notes filter</text>
+          <rect class="usecase" x="600" y="430" rx="32" ry="32" width="240" height="48" />
+          <text class="usecase-label" x="720" y="460" text-anchor="middle">Validate plugin manifest</text>
         </g>
         <!-- Use Cases (System) -->
         <g>
@@ -156,6 +162,9 @@
         <polyline class="edge" points="156,200 600,104" />
         <polyline class="edge" points="156,200 600,174" />
         <polyline class="edge" points="156,200 600,244" />
+        <polyline class="edge" points="156,200 600,314" />
+        <polyline class="edge" points="156,200 600,384" />
+        <polyline class="edge" points="156,200 600,454" />
         <!-- Relationships: System to Use Cases -->
         <polyline class="edge" points="156,700 1050,144" />
         <polyline class="edge" points="156,700 1050,224" />
@@ -166,6 +175,8 @@
         <polyline class="include" points="430,314 430,384" />
         <polyline class="include" points="1180,224 1180,304" />
         <polyline class="include" points="730,104 1210,384" />
+        <polyline class="include" points="430,874 720,454" />
+        <polyline class="include" points="430,664 710,384" />
         <!-- Legend -->
         <rect x="1450" y="900" width="320" height="160" rx="14" fill="#f8fafc" stroke="#cbd5e1" />
         <text class="legend" x="1470" y="930">Legend:</text>
@@ -185,8 +196,9 @@
         <li>All use cases are derived from the requirements and architecture documentation.</li>
         <li>Actors: <b>User</b> (person using the app), <b>System</b> (automated app/system actions).</li>
         <li>Dashed blue lines represent «include» relationships.</li>
-        <li>User-visible coverage now includes image attachment and subject group management.</li>
-        <li>System coverage now includes lock-time secret clearing and interrupted key-rotation recovery.</li>
+        <li>User-visible coverage now includes image attachment, subject groups with All Notes filtering, and explicit settings configuration.</li>
+        <li>Plugin coverage now distinguishes manifest validation and text-transform action execution.</li>
+        <li>System coverage includes lock-time secret clearing and interrupted key-rotation recovery.</li>
       </ul>
     </div>
   </main>
