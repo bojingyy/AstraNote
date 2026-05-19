@@ -4,9 +4,15 @@ import AstraCore
 struct NotesWorkspaceView: View {
     let searchAction: (String) async -> [NoteSearchResult]
     let lockAction: () async -> Void
+    let loadSettingsAction: () async -> AppSettings
+    let saveSettingsAction: (AppSettings) async throws -> Void
+    let updateBiometricAction: (Bool) async throws -> Void
+    let installedPluginsAction: () async -> [InstalledPlugin]
+    let setPluginEnabledAction: (String, Bool) async throws -> Void
 
     @State private var query = ""
     @State private var results: [NoteSearchResult] = []
+    @State private var isShowingSettings = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -23,6 +29,9 @@ struct NotesWorkspaceView: View {
                         await lockAction()
                     }
                 }
+                Button("Settings") {
+                    isShowingSettings = true
+                }
             }
 
             List(results, id: \.noteId) { result in
@@ -35,5 +44,14 @@ struct NotesWorkspaceView: View {
             Spacer()
         }
         .padding()
+        .sheet(isPresented: $isShowingSettings) {
+            SettingsView(
+                loadSettingsAction: loadSettingsAction,
+                saveSettingsAction: saveSettingsAction,
+                updateBiometricAction: updateBiometricAction,
+                installedPluginsAction: installedPluginsAction,
+                setPluginEnabledAction: setPluginEnabledAction
+            )
+        }
     }
 }

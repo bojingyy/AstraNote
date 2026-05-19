@@ -14,17 +14,13 @@ public enum NoteServiceError: Error, Equatable {
 }
 
 public actor NoteService {
-    private struct SecurePayloadDTO: Codable {
-        let title: String
-        let content: String
-    }
-
     private let notes: NoteRepositoryProtocol
     private let attachments: AttachmentRepositoryProtocol
     private let subjects: SubjectRepositoryProtocol
     private let keyManager: KeyManager
     private let encryptionService: EncryptionService
     private let timeProvider: TimeProvider
+    private let storageProtection: StorageProtecting?
 
     public init(
         notes: NoteRepositoryProtocol,
@@ -32,7 +28,8 @@ public actor NoteService {
         subjects: SubjectRepositoryProtocol,
         keyManager: KeyManager,
         encryptionService: EncryptionService,
-        timeProvider: TimeProvider = SystemTimeProvider()
+        timeProvider: TimeProvider = SystemTimeProvider(),
+        storageProtection: StorageProtecting? = nil
     ) {
         self.notes = notes
         self.attachments = attachments
@@ -40,6 +37,7 @@ public actor NoteService {
         self.keyManager = keyManager
         self.encryptionService = encryptionService
         self.timeProvider = timeProvider
+        self.storageProtection = storageProtection
     }
 
     @discardableResult
@@ -80,7 +78,7 @@ public actor NoteService {
                 throw NoteServiceError.keyMaterialUnavailable
             }
 
-            let plaintext = try JSONEncoder().encode(SecurePayloadDTO(title: draft.title, content: draft.content))
+            let plaintext = try SecurePayloadCodec.encode(title: draft.title, content: draft.content)
             let encrypted = try encryptionService.encrypt(plaintext: plaintext, keyMaterial: keyMaterial)
 
             record.isSecure = true
@@ -115,7 +113,7 @@ public actor NoteService {
             }
 
             let decrypted = try encryptionService.decrypt(payload: EncryptedPayload(stored: payload), keyMaterial: keyMaterial)
-            let decoded = try JSONDecoder().decode(SecurePayloadDTO.self, from: decrypted)
+            let decoded = try SecurePayloadCodec.decode(decrypted)
 
             return NoteView(
                 id: stored.id,
@@ -178,6 +176,10 @@ public actor NoteService {
             isEncrypted: encryptedAtRest,
             createdAt: timeProvider.now()
         )
+        if let storageProtection {
+            let protectionClass: StorageProtectionClass = encryptedAtRest ? .complete : .completeUntilFirstUserAuthentication
+            try await storageProtection.protect(path: storagePath, classification: protectionClass)
+        }
         try await attachments.add(attachment)
         return attachment.id
     }

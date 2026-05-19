@@ -1,0 +1,2110 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.xctest/Contents/MacOS/AstraNotesPackageTests",
+      "packagePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes",
+      "productName" : "AstraNotesPackageTests"
+    }
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.AstraCore-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/sources",
+      "importPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/AppCoordinator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/AstraCore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Models/CoreModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Crypto/EncryptionService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Crypto/PBKDF2.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/ExportImportService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/NoteSearchService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/NoteService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/PluginService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/ProtectedTrashService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SecureNotePolicyService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SecurePayloadCodec.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Security/KeyManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SettingsService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SubjectService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraData.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatform.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AstraCore",
+      "moduleOutputPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraCore.swiftmodule",
+      "objects" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/AppCoordinator.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/AstraCore.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/CoreModels.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/EncryptionService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/PBKDF2.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/ExportImportService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/NoteSearchService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/NoteService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/PluginService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/ProtectedTrashService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/SecureNotePolicyService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/SecurePayloadCodec.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/KeyManager.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/SettingsService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/SubjectService.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/include/AstraCore-Swift.h",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "astranotes"
+      ],
+      "outputFileMapPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraCore.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/AppCoordinator.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/AstraCore.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Models/CoreModels.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Crypto/EncryptionService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Crypto/PBKDF2.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/ExportImportService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/NoteSearchService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/NoteService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/PluginService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/ProtectedTrashService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SecureNotePolicyService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SecurePayloadCodec.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Security/KeyManager.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SettingsService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SubjectService.swift"
+      ],
+      "tempsPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AstraCoreTests-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCoreTests.build/sources",
+      "importPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraCoreTests/AstraCoreTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraData.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatform.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCoreTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AstraCoreTests",
+      "moduleOutputPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraCoreTests.swiftmodule",
+      "objects" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCoreTests.build/AstraCoreTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "astranotes"
+      ],
+      "outputFileMapPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCoreTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraCoreTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraCoreTests/AstraCoreTests.swift"
+      ],
+      "tempsPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCoreTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AstraData-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/sources",
+      "importPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/AstraData.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Database/DatabaseProvider.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Models/PersistenceModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/AttachmentRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/NoteRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginBundleRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginMetadataRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/ProtectedTrashRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SettingsRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SubjectRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatform.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AstraData",
+      "moduleOutputPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraData.swiftmodule",
+      "objects" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AstraData.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/DatabaseProvider.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PersistenceModels.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AttachmentRepository.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/NoteRepository.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginBundleRepository.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginMetadataRepository.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/ProtectedTrashRepository.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SettingsRepository.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SubjectRepository.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/include/AstraData-Swift.h",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "astranotes"
+      ],
+      "outputFileMapPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraData.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/AstraData.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Database/DatabaseProvider.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Models/PersistenceModels.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/AttachmentRepository.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/NoteRepository.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginBundleRepository.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginMetadataRepository.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/ProtectedTrashRepository.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SettingsRepository.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SubjectRepository.swift"
+      ],
+      "tempsPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AstraDataTests-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraDataTests.build/sources",
+      "importPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraDataTests/AstraDataTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraData.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatform.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraDataTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AstraDataTests",
+      "moduleOutputPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraDataTests.swiftmodule",
+      "objects" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraDataTests.build/AstraDataTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "astranotes"
+      ],
+      "outputFileMapPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraDataTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraDataTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraDataTests/AstraDataTests.swift"
+      ],
+      "tempsPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraDataTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AstraIntegrationTests-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraIntegrationTests.build/sources",
+      "importPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraIntegrationTests/AstraIntegrationTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraData.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatform.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraIntegrationTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AstraIntegrationTests",
+      "moduleOutputPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraIntegrationTests.swiftmodule",
+      "objects" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraIntegrationTests.build/AstraIntegrationTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "astranotes"
+      ],
+      "outputFileMapPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraIntegrationTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraIntegrationTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraIntegrationTests/AstraIntegrationTests.swift"
+      ],
+      "tempsPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraIntegrationTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AstraNotesPackageTests-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.build/sources",
+      "importPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatformTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraIntegrationTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraDataTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraCoreTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AstraNotesPackageTests",
+      "moduleOutputPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraNotesPackageTests.swiftmodule",
+      "objects" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.build/include/AstraNotesPackageTests-Swift.h",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "astranotes"
+      ],
+      "outputFileMapPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraNotesPackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AstraPlatform-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/sources",
+      "importPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AstraPlatform.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AuditLogger.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/LocalAuthService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/NotificationService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/PlatformIntegration.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/StorageProtection.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/TimeProvider.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AstraPlatform",
+      "moduleOutputPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatform.swiftmodule",
+      "objects" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AstraPlatform.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AuditLogger.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/LocalAuthService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/NotificationService.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/PlatformIntegration.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/StorageProtection.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/TimeProvider.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/include/AstraPlatform-Swift.h",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "astranotes"
+      ],
+      "outputFileMapPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatform.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AstraPlatform.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AuditLogger.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/LocalAuthService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/NotificationService.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/PlatformIntegration.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/StorageProtection.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/TimeProvider.swift"
+      ],
+      "tempsPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AstraPlatformTests-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatformTests.build/sources",
+      "importPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraPlatformTests/AstraPlatformTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatform.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatformTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AstraPlatformTests",
+      "moduleOutputPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatformTests.swiftmodule",
+      "objects" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatformTests.build/AstraPlatformTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "astranotes"
+      ],
+      "outputFileMapPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatformTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatformTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraPlatformTests/AstraPlatformTests.swift"
+      ],
+      "tempsPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatformTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.AstraUI-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/sources",
+      "importPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/AppEnvironment.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/AstraNotesApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/NotesWorkspaceView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/PluginStoreView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/SettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/UnlockView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraData.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraPlatform.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "AstraUI",
+      "moduleOutputPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraUI.swiftmodule",
+      "objects" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/AppEnvironment.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/AstraNotesApp.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/ContentView.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/NotesWorkspaceView.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/PluginStoreView.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/SettingsView.swift.o",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/UnlockView.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "AstraUI_main",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "astranotes"
+      ],
+      "outputFileMapPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules/AstraUI.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/AppEnvironment.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/AstraNotesApp.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/ContentView.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/NotesWorkspaceView.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/PluginStoreView.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/SettingsView.swift",
+        "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/UnlockView.swift"
+      ],
+      "tempsPath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "AstraCore" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AstraCore",
+      "-package-name",
+      "astranotes",
+      "-c",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/AppCoordinator.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/AstraCore.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Models/CoreModels.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Crypto/EncryptionService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Crypto/PBKDF2.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/ExportImportService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/NoteSearchService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/NoteService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/PluginService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/ProtectedTrashService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SecureNotePolicyService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SecurePayloadCodec.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Security/KeyManager.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SettingsService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SubjectService.swift",
+      "-I",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/include/AstraCore-Swift.h",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "astranotes",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AstraCoreTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AstraCoreTests",
+      "-package-name",
+      "astranotes",
+      "-c",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraCoreTests/AstraCoreTests.swift",
+      "-I",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "astranotes",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AstraData" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AstraData",
+      "-package-name",
+      "astranotes",
+      "-c",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/AstraData.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Database/DatabaseProvider.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Models/PersistenceModels.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/AttachmentRepository.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/NoteRepository.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginBundleRepository.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginMetadataRepository.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/ProtectedTrashRepository.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SettingsRepository.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SubjectRepository.swift",
+      "-I",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/include/AstraData-Swift.h",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "astranotes",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AstraDataTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AstraDataTests",
+      "-package-name",
+      "astranotes",
+      "-c",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraDataTests/AstraDataTests.swift",
+      "-I",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "astranotes",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AstraIntegrationTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AstraIntegrationTests",
+      "-package-name",
+      "astranotes",
+      "-c",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraIntegrationTests/AstraIntegrationTests.swift",
+      "-I",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "astranotes",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AstraNotesPackageTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AstraNotesPackageTests",
+      "-package-name",
+      "astranotes",
+      "-c",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.derived/runner.swift",
+      "-I",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.build/include/AstraNotesPackageTests-Swift.h",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "astranotes",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AstraPlatform" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AstraPlatform",
+      "-package-name",
+      "astranotes",
+      "-c",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AstraPlatform.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AuditLogger.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/LocalAuthService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/NotificationService.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/PlatformIntegration.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/StorageProtection.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/TimeProvider.swift",
+      "-I",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/include/AstraPlatform-Swift.h",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "astranotes",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AstraPlatformTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AstraPlatformTests",
+      "-package-name",
+      "astranotes",
+      "-c",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraPlatformTests/AstraPlatformTests.swift",
+      "-I",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "astranotes",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "AstraUI" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AstraUI",
+      "-package-name",
+      "astranotes",
+      "-c",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/AppEnvironment.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/AstraNotesApp.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/ContentView.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/NotesWorkspaceView.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/PluginStoreView.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/SettingsView.swift",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/UnlockView.swift",
+      "-I",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "AstraUI_main",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "astranotes",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "AstraCore" : [
+      "AstraData",
+      "AstraPlatform"
+    ],
+    "AstraCoreTests" : [
+      "AstraCore",
+      "AstraData",
+      "AstraPlatform"
+    ],
+    "AstraData" : [
+      "AstraPlatform"
+    ],
+    "AstraDataTests" : [
+      "AstraData",
+      "AstraPlatform"
+    ],
+    "AstraIntegrationTests" : [
+      "AstraCore",
+      "AstraData",
+      "AstraPlatform"
+    ],
+    "AstraNotesPackageTests" : [
+      "AstraCoreTests",
+      "AstraDataTests",
+      "AstraIntegrationTests",
+      "AstraCore",
+      "AstraData",
+      "AstraPlatformTests",
+      "AstraPlatform"
+    ],
+    "AstraPlatform" : [
+
+    ],
+    "AstraPlatformTests" : [
+      "AstraPlatform"
+    ],
+    "AstraUI" : [
+      "AstraCore",
+      "AstraData",
+      "AstraPlatform"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/AppCoordinator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/AstraCore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Models/CoreModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Crypto/EncryptionService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Crypto/PBKDF2.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/ExportImportService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/NoteSearchService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/NoteService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/PluginService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/ProtectedTrashService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SecureNotePolicyService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SecurePayloadCodec.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/Security/KeyManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SettingsService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraCore/Services/SubjectService.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCore.build/sources"
+    },
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCoreTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraCoreTests/AstraCoreTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraCoreTests.build/sources"
+    },
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/AstraData.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Database/DatabaseProvider.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Models/PersistenceModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/AttachmentRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/NoteRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginBundleRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginMetadataRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/ProtectedTrashRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SettingsRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SubjectRepository.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/sources"
+    },
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraDataTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraDataTests/AstraDataTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraDataTests.build/sources"
+    },
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraIntegrationTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraIntegrationTests/AstraIntegrationTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraIntegrationTests.build/sources"
+    },
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraNotesPackageTests.build/sources"
+    },
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AstraPlatform.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AuditLogger.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/LocalAuthService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/NotificationService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/PlatformIntegration.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/StorageProtection.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/TimeProvider.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/sources"
+    },
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatformTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Tests/AstraPlatformTests/AstraPlatformTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatformTests.build/sources"
+    },
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/AppEnvironment.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/AstraNotesApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/NotesWorkspaceView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/PluginStoreView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/SettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraUI/UnlockView.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraUI.build/sources"
+    },
+    "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

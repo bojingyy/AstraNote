@@ -16,15 +16,32 @@ public actor SettingsService {
         AppSettings(stored: await repository.getSettings())
     }
 
-    public func update(lockTimeoutSeconds: Int, telemetryEnabled: Bool, pluginsEnabled: Bool) async throws {
+    public func update(
+        lockTimeoutSeconds: Int,
+        telemetryEnabled: Bool,
+        pluginsEnabled: Bool,
+        biometricUnlockEnabled: Bool? = nil
+    ) async throws {
         guard (30...3600).contains(lockTimeoutSeconds) else {
             throw SettingsServiceError.invalidLockTimeout
         }
+        let current = await repository.getSettings()
         let settings = StoredSettingsRecord(
             lockTimeoutSeconds: lockTimeoutSeconds,
             telemetryEnabled: telemetryEnabled,
-            pluginsEnabled: pluginsEnabled
+            pluginsEnabled: pluginsEnabled,
+            biometricUnlockEnabled: biometricUnlockEnabled ?? current.biometricUnlockEnabled
         )
         try await repository.updateSettings(settings)
+    }
+
+    public func setBiometricUnlockEnabled(_ enabled: Bool) async throws {
+        let current = await repository.getSettings()
+        try await update(
+            lockTimeoutSeconds: current.lockTimeoutSeconds,
+            telemetryEnabled: current.telemetryEnabled,
+            pluginsEnabled: current.pluginsEnabled,
+            biometricUnlockEnabled: enabled
+        )
     }
 }

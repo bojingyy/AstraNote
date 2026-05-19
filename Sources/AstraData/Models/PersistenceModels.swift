@@ -99,11 +99,18 @@ public struct StoredSettingsRecord: Codable, Sendable, Equatable {
     public var lockTimeoutSeconds: Int
     public var telemetryEnabled: Bool
     public var pluginsEnabled: Bool
+    public var biometricUnlockEnabled: Bool
 
-    public init(lockTimeoutSeconds: Int = 300, telemetryEnabled: Bool = false, pluginsEnabled: Bool = true) {
+    public init(
+        lockTimeoutSeconds: Int = 300,
+        telemetryEnabled: Bool = false,
+        pluginsEnabled: Bool = true,
+        biometricUnlockEnabled: Bool = false
+    ) {
         self.lockTimeoutSeconds = lockTimeoutSeconds
         self.telemetryEnabled = telemetryEnabled
         self.pluginsEnabled = pluginsEnabled
+        self.biometricUnlockEnabled = biometricUnlockEnabled
     }
 }
 
@@ -133,14 +140,60 @@ public struct StoredCredentialState: Codable, Sendable, Equatable {
     }
 }
 
+public struct StoredCredentialRotationState: Codable, Sendable, Equatable {
+    public let startedAt: Date
+
+    public init(startedAt: Date) {
+        self.startedAt = startedAt
+    }
+}
+
+public struct StoredPluginMetadataRecord: Codable, Sendable, Equatable {
+    public let pluginId: String
+    public var displayName: String
+    public var version: String
+    public var capabilities: [String]
+    public var isEnabled: Bool
+    public let installedAt: Date
+
+    public init(
+        pluginId: String,
+        displayName: String,
+        version: String,
+        capabilities: [String],
+        isEnabled: Bool,
+        installedAt: Date
+    ) {
+        self.pluginId = pluginId
+        self.displayName = displayName
+        self.version = version
+        self.capabilities = capabilities
+        self.isEnabled = isEnabled
+        self.installedAt = installedAt
+    }
+}
+
+public struct StoredPluginBundleRecord: Codable, Sendable, Equatable {
+    public let pluginId: String
+    public let bundleData: Data
+
+    public init(pluginId: String, bundleData: Data) {
+        self.pluginId = pluginId
+        self.bundleData = bundleData
+    }
+}
+
 public struct DatabaseState: Codable, Sendable {
     public var schemaVersion: Int
     public var notes: [UUID: StoredNoteRecord]
     public var attachments: [UUID: StoredAttachmentRecord]
     public var subjects: [UUID: StoredSubjectRecord]
     public var trash: [UUID: StoredTrashRecord]
+    public var pluginMetadata: [String: StoredPluginMetadataRecord]
+    public var pluginBundles: [String: StoredPluginBundleRecord]
     public var settings: StoredSettingsRecord
     public var credentials: StoredCredentialState?
+    public var pendingCredentialRotation: StoredCredentialRotationState?
     public var lastKnownUTC: Date?
     public var rollbackGuardUntilUTC: Date?
 
@@ -150,8 +203,11 @@ public struct DatabaseState: Codable, Sendable {
         attachments: [UUID: StoredAttachmentRecord] = [:],
         subjects: [UUID: StoredSubjectRecord] = [:],
         trash: [UUID: StoredTrashRecord] = [:],
+        pluginMetadata: [String: StoredPluginMetadataRecord] = [:],
+        pluginBundles: [String: StoredPluginBundleRecord] = [:],
         settings: StoredSettingsRecord = .init(),
         credentials: StoredCredentialState? = nil,
+        pendingCredentialRotation: StoredCredentialRotationState? = nil,
         lastKnownUTC: Date? = nil,
         rollbackGuardUntilUTC: Date? = nil
     ) {
@@ -160,8 +216,11 @@ public struct DatabaseState: Codable, Sendable {
         self.attachments = attachments
         self.subjects = subjects
         self.trash = trash
+        self.pluginMetadata = pluginMetadata
+        self.pluginBundles = pluginBundles
         self.settings = settings
         self.credentials = credentials
+        self.pendingCredentialRotation = pendingCredentialRotation
         self.lastKnownUTC = lastKnownUTC
         self.rollbackGuardUntilUTC = rollbackGuardUntilUTC
     }

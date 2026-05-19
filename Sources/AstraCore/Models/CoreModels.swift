@@ -141,18 +141,103 @@ public struct AppSettings: Sendable, Equatable {
     public let lockTimeoutSeconds: Int
     public let telemetryEnabled: Bool
     public let pluginsEnabled: Bool
+    public let biometricUnlockEnabled: Bool
+
+    public init(
+        lockTimeoutSeconds: Int,
+        telemetryEnabled: Bool,
+        pluginsEnabled: Bool,
+        biometricUnlockEnabled: Bool
+    ) {
+        self.lockTimeoutSeconds = lockTimeoutSeconds
+        self.telemetryEnabled = telemetryEnabled
+        self.pluginsEnabled = pluginsEnabled
+        self.biometricUnlockEnabled = biometricUnlockEnabled
+    }
 
     init(stored: StoredSettingsRecord) {
         self.lockTimeoutSeconds = stored.lockTimeoutSeconds
         self.telemetryEnabled = stored.telemetryEnabled
         self.pluginsEnabled = stored.pluginsEnabled
+        self.biometricUnlockEnabled = stored.biometricUnlockEnabled
     }
 
     var stored: StoredSettingsRecord {
         StoredSettingsRecord(
             lockTimeoutSeconds: lockTimeoutSeconds,
             telemetryEnabled: telemetryEnabled,
-            pluginsEnabled: pluginsEnabled
+            pluginsEnabled: pluginsEnabled,
+            biometricUnlockEnabled: biometricUnlockEnabled
         )
+    }
+}
+
+public struct PluginManifest: Sendable, Equatable {
+    public let pluginId: String
+    public let displayName: String
+    public let version: String
+    public let capabilities: [String]
+
+    public init(pluginId: String, displayName: String, version: String, capabilities: [String]) {
+        self.pluginId = pluginId
+        self.displayName = displayName
+        self.version = version
+        self.capabilities = capabilities
+    }
+
+    init(stored: StoredPluginMetadataRecord) {
+        self.init(
+            pluginId: stored.pluginId,
+            displayName: stored.displayName,
+            version: stored.version,
+            capabilities: stored.capabilities
+        )
+    }
+}
+
+public struct InstalledPlugin: Sendable, Equatable {
+    public let manifest: PluginManifest
+    public let isEnabled: Bool
+    public let installedAt: Date
+
+    init(stored: StoredPluginMetadataRecord) {
+        self.manifest = PluginManifest(stored: stored)
+        self.isEnabled = stored.isEnabled
+        self.installedAt = stored.installedAt
+    }
+}
+
+public struct PluginActionRequest: Sendable, Equatable {
+    public let action: String
+    public let input: String
+
+    public init(action: String, input: String) {
+        self.action = action
+        self.input = input
+    }
+}
+
+public struct PluginActionResult: Sendable, Equatable {
+    public let output: String
+
+    public init(output: String) {
+        self.output = output
+    }
+}
+
+public enum ImportConflictResolution: Sendable {
+    case reject
+    case regenerateIncomingIdentifiers
+}
+
+public struct ImportResult: Sendable, Equatable {
+    public let importedNotes: Int
+    public let importedSubjects: Int
+    public let importedPlugins: Int
+
+    public init(importedNotes: Int, importedSubjects: Int, importedPlugins: Int) {
+        self.importedNotes = importedNotes
+        self.importedSubjects = importedSubjects
+        self.importedPlugins = importedPlugins
     }
 }

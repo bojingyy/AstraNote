@@ -1,0 +1,26 @@
+{
+  "": {
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/primary.swiftdeps"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AstraPlatform.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AstraPlatform.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AstraPlatform.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AstraPlatform~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AstraPlatform.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AstraPlatform.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/AuditLogger.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AuditLogger.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AuditLogger.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AuditLogger~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AuditLogger.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/AuditLogger.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraPlatform/TimeProvider.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/TimeProvider.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/TimeProvider.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/TimeProvider~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/TimeProvider.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraPlatform.build/TimeProvider.dia"
+  }
+}

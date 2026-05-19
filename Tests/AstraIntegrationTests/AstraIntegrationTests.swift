@@ -127,4 +127,98 @@ final class AstraIntegrationTests: XCTestCase {
         let lockedSearch = await searchService.searchTitle(query: "secure", isUnlocked: false)
         XCTAssertTrue(lockedSearch.isEmpty)
     }
+
+    @MainActor
+    func testPhase5RotationExportPluginAndBiometricFlow() async throws {
+        let database = DatabaseProvider()
+        let noteRepository = NoteRepository(database: database)
+        let attachmentRepository = AttachmentRepository(database: database)
+        let subjectRepository = SubjectRepository(database: database)
+        let settingsRepository = SettingsRepository(database: database)
+        let pluginMetadataRepository = PluginMetadataRepository(database: database)
+        let pluginBundleRepository = PluginBundleRepository(database: database)
+        let clock = MutableTimeProvider(now: Date())
+        let logger = InMemoryAuditLogger(timeProvider: clock)
+        let localAuth = InMemoryLocalAuthService()
+
+        let keyManager = KeyManager(
+            settingsRepository: settingsRepository,
+            databaseProvider: database,
+            timeProvider: clock,
+            logger: logger
+        )
+        let noteService = NoteService(
+            notes: noteRepository,
+            attachments: attachmentRepository,
+            subjects: subjectRepository,
+            keyManager: keyManager,
+            encryptionService: EncryptionService(),
+            timeProvider: clock,
+            storageProtection: InMemoryStorageProtection()
+        )
+        let searchService = NoteSearchService(noteRepository: noteRepository, noteService: noteService)
+        let settingsService = SettingsService(repository: settingsRepository)
+        let coordinator = AppCoordinator(
+            keyManager: keyManager,
+            settingsService: settingsService,
+            noteSearchService: searchService,
+            localAuthService: localAuth,
+            now: clock.now()
+        )
+        let exportImportService = ExportImportService(
+            database: database,
+            keyManager: keyManager,
+            encryptionService: EncryptionService(),
+            logger: logger
+        )
+        let pluginService = PluginService(
+            metadataRepository: pluginMetadataRepository,
+            bundleRepository: pluginBundleRepository,
+            settingsService: settingsService,
+            logger: logger
+        )
+
+        await coordinator.start(now: clock.now())
+        try await coordinator.createInitialPassphraseAndUnlock("phase5-old")
+        try await coordinator.updateBiometricUnlock(enabled: true)
+
+        let secureId = try await noteService.save(
+            draft: NoteDraft(
+                title: "Phase 5 Secure",
+                content: "integrated payload",
+                subjectId: nil,
+                secureModeEnabled: true,
+                expirationUTC: clock.now().addingTimeInterval(600)
+            )
+        )
+
+        try await pluginService.install(
+            manifest: PluginManifest(
+                pluginId: "com.astra.integration",
+                displayName: "Integration Plugin",
+                version: "1.0.0",
+                capabilities: ["annotate"]
+            ),
+            bundleData: Data("bundle".utf8)
+        )
+        await pluginService.registerHandler(pluginId: "com.astra.integration") { request in
+            PluginActionResult(output: "annotated: \(request.input)")
+        }
+
+        try await coordinator.changePassphrase(current: "phase5-old", next: "phase5-new")
+        let archive = try await exportImportService.exportArchive()
+        let importResult = try await exportImportService.importArchive(archive)
+        XCTAssertGreaterThanOrEqual(importResult.importedNotes, 1)
+
+        let pluginResult = try await pluginService.execute(
+            pluginId: "com.astra.integration",
+            request: PluginActionRequest(action: "annotate", input: "astra")
+        )
+        XCTAssertEqual(pluginResult.output, "annotated: astra")
+
+        await coordinator.lockNow()
+        try await coordinator.unlockWithBiometrics()
+        let loaded = try await noteService.load(id: secureId)
+        XCTAssertEqual(loaded.content, "integrated payload")
+    }
 }

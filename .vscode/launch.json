@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AstraNotes}",
+            "name": "Debug AstraNotes",
+            "target": "AstraNotes",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug AstraNotes"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AstraNotes}",
+            "name": "Release AstraNotes",
+            "target": "AstraNotes",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release AstraNotes"
+        }
+    ]
+}

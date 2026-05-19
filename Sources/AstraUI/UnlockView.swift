@@ -5,6 +5,7 @@ struct UnlockView: View {
     @ObservedObject var coordinator: AppCoordinator
     let createAction: (String) async throws -> Void
     let unlockAction: (String) async throws -> Void
+    let biometricUnlockAction: (() async throws -> Void)?
 
     @State private var passphrase = ""
     @State private var confirmPassphrase = ""
@@ -35,6 +36,20 @@ struct UnlockView: View {
                 }
             }
             .buttonStyle(.borderedProminent)
+
+            if coordinator.sessionState != .firstLaunchSetup, let biometricUnlockAction {
+                Button("Unlock with Biometrics") {
+                    Task {
+                        do {
+                            errorMessage = nil
+                            try await biometricUnlockAction()
+                        } catch {
+                            errorMessage = String(describing: error)
+                        }
+                    }
+                }
+                .buttonStyle(.bordered)
+            }
         }
         .padding()
         .frame(width: 420)

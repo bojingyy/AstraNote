@@ -50,7 +50,15 @@ public actor InMemoryAuditLogger: AuditLogging {
     }
 
     private func sanitize(metadata: [String: String]) -> [String: String] {
-        let blockedKeys: Set<String> = ["content", "title", "passphrase", "plaintext", "cipherKey"]
+        let blockedKeys: Set<String> = [
+            "archive",
+            "bundledata",
+            "cipherkey",
+            "content",
+            "passphrase",
+            "plaintext",
+            "title"
+        ]
         return metadata.reduce(into: [:]) { partialResult, pair in
             if blockedKeys.contains(pair.key.lowercased()) {
                 partialResult[pair.key] = "<redacted>"

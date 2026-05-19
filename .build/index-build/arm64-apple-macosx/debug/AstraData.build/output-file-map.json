@@ -1,0 +1,75 @@
+{
+  "": {
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/primary.swiftdeps"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/AstraData.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AstraData.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AstraData.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AstraData~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AstraData.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AstraData.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Database/DatabaseProvider.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/DatabaseProvider.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/DatabaseProvider.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/DatabaseProvider~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/DatabaseProvider.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/DatabaseProvider.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Models/PersistenceModels.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PersistenceModels.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PersistenceModels.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PersistenceModels~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PersistenceModels.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PersistenceModels.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/AttachmentRepository.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AttachmentRepository.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AttachmentRepository.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AttachmentRepository~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AttachmentRepository.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/AttachmentRepository.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/NoteRepository.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/NoteRepository.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/NoteRepository.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/NoteRepository~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/NoteRepository.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/NoteRepository.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginBundleRepository.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginBundleRepository.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginBundleRepository.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginBundleRepository~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginBundleRepository.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginBundleRepository.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/PluginMetadataRepository.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginMetadataRepository.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginMetadataRepository.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginMetadataRepository~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginMetadataRepository.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/PluginMetadataRepository.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/ProtectedTrashRepository.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/ProtectedTrashRepository.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/ProtectedTrashRepository.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/ProtectedTrashRepository~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/ProtectedTrashRepository.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/ProtectedTrashRepository.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SettingsRepository.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SettingsRepository.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SettingsRepository.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SettingsRepository~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SettingsRepository.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SettingsRepository.dia"
+  },
+  "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/Sources/AstraData/Repositories/SubjectRepository.swift": {
+    "dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SubjectRepository.d",
+    "object": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SubjectRepository.swift.o",
+    "swiftmodule": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SubjectRepository~partial.swiftmodule",
+    "swift-dependencies": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SubjectRepository.swiftdeps",
+    "diagnostics": "/Users/bojingyu/Desktop/SCU/classes/spring_26/CSE296_AI_Driven_Software/AstraNotes/.build/index-build/arm64-apple-macosx/debug/AstraData.build/SubjectRepository.dia"
+  }
+}

@@ -11,6 +11,14 @@ public actor DatabaseProvider {
         state.schemaVersion
     }
 
+    public func exportState() -> DatabaseState {
+        state
+    }
+
+    public func replaceState(_ newState: DatabaseState) {
+        state = newState
+    }
+
     public func read<T: Sendable>(_ operation: (DatabaseState) throws -> T) rethrows -> T {
         try operation(state)
     }

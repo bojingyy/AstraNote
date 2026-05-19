@@ -15,6 +15,9 @@ struct ContentView: View {
                     },
                     unlockAction: { passphrase in
                         try await env.coordinator.unlock(passphrase: passphrase)
+                    },
+                    biometricUnlockAction: {
+                        try await env.coordinator.unlockWithBiometrics()
                     }
                 )
             case .unlocked:
@@ -24,12 +27,33 @@ struct ContentView: View {
                     },
                     lockAction: {
                         await env.coordinator.lockNow()
+                    },
+                    loadSettingsAction: {
+                        await env.settingsService.load()
+                    },
+                    saveSettingsAction: { settings in
+                        try await env.settingsService.update(
+                            lockTimeoutSeconds: settings.lockTimeoutSeconds,
+                            telemetryEnabled: settings.telemetryEnabled,
+                            pluginsEnabled: settings.pluginsEnabled,
+                            biometricUnlockEnabled: settings.biometricUnlockEnabled
+                        )
+                    },
+                    updateBiometricAction: { isEnabled in
+                        try await env.coordinator.updateBiometricUnlock(enabled: isEnabled)
+                    },
+                    installedPluginsAction: {
+                        await env.pluginService.listInstalled()
+                    },
+                    setPluginEnabledAction: { pluginId, isEnabled in
+                        try await env.pluginService.setEnabled(pluginId: pluginId, isEnabled: isEnabled)
                     }
                 )
             }
         }
         .task {
             await env.coordinator.start()
+            env.coordinator.bind(platformIntegration: env.platformIntegration)
         }
     }
 }

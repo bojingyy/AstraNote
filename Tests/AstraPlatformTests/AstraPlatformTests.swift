@@ -23,4 +23,18 @@ final class AstraPlatformTests: XCTestCase {
         time.advance(seconds: 15)
         XCTAssertEqual(Int(time.now().timeIntervalSince(start)), 15)
     }
+
+    func testLocalAuthEnrollmentAndStorageProtection() async throws {
+        let localAuth = InMemoryLocalAuthService()
+        let storageProtection = InMemoryStorageProtection()
+        let secret = Data("secret".utf8)
+
+        await localAuth.enroll(secret: secret)
+        let recovered = try await localAuth.authenticate(reason: "test")
+        XCTAssertEqual(recovered, secret)
+
+        try await storageProtection.protect(path: "/tmp/file", classification: .complete)
+        let protection = await storageProtection.protectionClass(for: "/tmp/file")
+        XCTAssertEqual(protection, .complete)
+    }
 }

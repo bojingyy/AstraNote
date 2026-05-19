@@ -9,6 +9,7 @@ public enum KeyManagerError: Error, Equatable {
     case lockoutActive(remainingSeconds: Int)
     case invalidPassphrase
     case identicalPassphrase
+    case migrationUnavailable
 }
 
 public actor KeyManager {
@@ -21,8 +22,10 @@ public actor KeyManager {
     }
 
     private let settingsRepository: SettingsRepositoryProtocol
+    private let databaseProvider: DatabaseProvider?
     private let timeProvider: TimeProvider
     private let logger: AuditLogging
+    private let encryptionService: EncryptionService
 
     private var inMemoryKeyMaterial: KeyMaterial?
     private var failedAttempts: [Date] = []
@@ -31,12 +34,16 @@ public actor KeyManager {
 
     public init(
         settingsRepository: SettingsRepositoryProtocol,
+        databaseProvider: DatabaseProvider? = nil,
         timeProvider: TimeProvider = SystemTimeProvider(),
-        logger: AuditLogging
+        logger: AuditLogging,
+        encryptionService: EncryptionService = EncryptionService()
     ) {
         self.settingsRepository = settingsRepository
+        self.databaseProvider = databaseProvider
         self.timeProvider = timeProvider
         self.logger = logger
+        self.encryptionService = encryptionService
     }
 
     public func hasPassphrase() async -> Bool {
@@ -56,6 +63,8 @@ public actor KeyManager {
     }
 
     public func unlock(passphrase: String) async throws -> KeyMaterial {
+        await recoverPendingRotationIfNeeded()
+
         if let lockoutUntil {
             let remaining = lockoutUntil.timeIntervalSince(timeProvider.now())
             if remaining > 0 {
@@ -80,6 +89,21 @@ public actor KeyManager {
         return keyMaterial
     }
 
+    public func unlockWithRecoveredKey(_ recoveredKey: Data) async throws -> KeyMaterial {
+        await recoverPendingRotationIfNeeded()
+
+        guard let credentials = await settingsRepository.loadCredentials() else {
+            throw KeyManagerError.passphraseNotInitialized
+        }
+        guard recoveredKey == credentials.hash else {
+            throw KeyManagerError.invalidPassphrase
+        }
+
+        let keyMaterial = KeyMaterial(encryptionKey: recoveredKey)
+        inMemoryKeyMaterial = keyMaterial
+        return keyMaterial
+    }
+
     public func currentKeyMaterial() -> KeyMaterial? {
         inMemoryKeyMaterial
     }
@@ -89,6 +113,9 @@ public actor KeyManager {
     }
 
     public func changePassphrase(current: String, next: String) async throws {
+        guard let databaseProvider else {
+            throw KeyManagerError.migrationUnavailable
+        }
         guard !next.isEmpty else {
             throw KeyManagerError.invalidPassphrase
         }
@@ -102,15 +129,72 @@ public actor KeyManager {
             throw KeyManagerError.invalidPassphrase
         }
 
-        let newDerived = deriveKey(passphrase: next, salt: credentials.salt, iterations: credentials.iterations)
-        guard newDerived != oldDerived else {
+        let samePassphraseCheck = deriveKey(passphrase: next, salt: credentials.salt, iterations: credentials.iterations)
+        guard samePassphraseCheck != oldDerived else {
             throw KeyManagerError.identicalPassphrase
         }
 
-        try await settingsRepository.saveCredentials(
-            StoredCredentialState(salt: credentials.salt, hash: newDerived, iterations: credentials.iterations)
-        )
+        let newSalt = randomData(length: 16)
+        let newDerived = deriveKey(passphrase: next, salt: newSalt, iterations: credentials.iterations)
+        let now = timeProvider.now()
+
+        do {
+            try await databaseProvider.transaction { state in
+                guard let currentCredentials = state.credentials else {
+                    throw KeyManagerError.passphraseNotInitialized
+                }
+                guard currentCredentials.hash == oldDerived else {
+                    throw KeyManagerError.invalidPassphrase
+                }
+
+                let oldKeyMaterial = KeyMaterial(encryptionKey: oldDerived)
+                let newKeyMaterial = KeyMaterial(encryptionKey: newDerived)
+                state.pendingCredentialRotation = StoredCredentialRotationState(startedAt: now)
+
+                for (noteId, var note) in state.notes where note.isSecure {
+                    guard let storedPayload = note.securePayload else {
+                        continue
+                    }
+                    let decrypted = try encryptionService.decrypt(
+                        payload: EncryptedPayload(stored: storedPayload),
+                        keyMaterial: oldKeyMaterial
+                    )
+                    let reencrypted = try encryptionService.encrypt(plaintext: decrypted, keyMaterial: newKeyMaterial)
+                    note.securePayload = reencrypted.stored
+                    note.updatedAt = now
+                    state.notes[noteId] = note
+                }
+
+                state.credentials = StoredCredentialState(salt: newSalt, hash: newDerived, iterations: currentCredentials.iterations)
+                state.pendingCredentialRotation = nil
+            }
+        } catch {
+            await logger.log(level: .error, event: "passphrase_rotation_failed", metadata: [:])
+            throw error
+        }
+
         inMemoryKeyMaterial = KeyMaterial(encryptionKey: newDerived)
+        await logger.log(level: .info, event: "passphrase_rotated", metadata: [:])
+    }
+
+    private func recoverPendingRotationIfNeeded() async {
+        guard let databaseProvider else {
+            return
+        }
+
+        let pending = await databaseProvider.read { $0.pendingCredentialRotation }
+        guard pending != nil else {
+            return
+        }
+
+        do {
+            try await databaseProvider.transaction { state in
+                state.pendingCredentialRotation = nil
+            }
+            await logger.log(level: .warning, event: "passphrase_rotation_recovered", metadata: [:])
+        } catch {
+            return
+        }
     }
 
     private func registerFailedAttempt() async throws {

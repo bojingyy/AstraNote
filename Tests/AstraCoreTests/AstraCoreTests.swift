@@ -428,4 +428,301 @@ final class AstraCoreTests: XCTestCase {
         await coordinator.endBackgroundOperation()
         XCTAssertEqual(coordinator.sessionState, .locked)
     }
+
+    func testPassphraseRotationReencryptsSecureNotes() async throws {
+        let database = DatabaseProvider()
+        let noteRepository = NoteRepository(database: database)
+        let attachmentRepository = AttachmentRepository(database: database)
+        let subjectRepository = SubjectRepository(database: database)
+        let settingsRepository = SettingsRepository(database: database)
+        let time = MutableTimeProvider(now: Date())
+        let logger = InMemoryAuditLogger(timeProvider: time)
+
+        let keyManager = KeyManager(
+            settingsRepository: settingsRepository,
+            databaseProvider: database,
+            timeProvider: time,
+            logger: logger
+        )
+        let noteService = NoteService(
+            notes: noteRepository,
+            attachments: attachmentRepository,
+            subjects: subjectRepository,
+            keyManager: keyManager,
+            encryptionService: EncryptionService(),
+            timeProvider: time
+        )
+
+        try await keyManager.createInitialPassphrase("old-passphrase")
+        _ = try await keyManager.unlock(passphrase: "old-passphrase")
+        let noteId = try await noteService.save(
+            draft: NoteDraft(
+                title: "Rotating",
+                content: "phase5",
+                subjectId: nil,
+                secureModeEnabled: true,
+                expirationUTC: time.now().addingTimeInterval(120)
+            )
+        )
+
+        let payloadBefore = await noteRepository.fetch(id: noteId)?.securePayload
+
+        try await keyManager.changePassphrase(current: "old-passphrase", next: "new-passphrase")
+        await keyManager.clearInMemoryKeyMaterial()
+
+        do {
+            _ = try await keyManager.unlock(passphrase: "old-passphrase")
+            XCTFail("Expected old passphrase to fail after rotation")
+        } catch let KeyManagerError.invalidPassphrase {
+            XCTAssertTrue(true)
+        }
+
+        _ = try await keyManager.unlock(passphrase: "new-passphrase")
+        let rotated = try await noteService.load(id: noteId)
+        XCTAssertEqual(rotated.title, "Rotating")
+        XCTAssertEqual(rotated.content, "phase5")
+
+        let payloadAfter = await noteRepository.fetch(id: noteId)?.securePayload
+        XCTAssertNotEqual(payloadBefore, payloadAfter)
+    }
+
+    func testExportImportRoundTripRegeneratesConflictingIdentifiers() async throws {
+        let database = DatabaseProvider()
+        let noteRepository = NoteRepository(database: database)
+        let attachmentRepository = AttachmentRepository(database: database)
+        let subjectRepository = SubjectRepository(database: database)
+        let settingsRepository = SettingsRepository(database: database)
+        let pluginMetadataRepository = PluginMetadataRepository(database: database)
+        let pluginBundleRepository = PluginBundleRepository(database: database)
+        let time = MutableTimeProvider(now: Date())
+        let logger = InMemoryAuditLogger(timeProvider: time)
+
+        let keyManager = KeyManager(
+            settingsRepository: settingsRepository,
+            databaseProvider: database,
+            timeProvider: time,
+            logger: logger
+        )
+        let noteService = NoteService(
+            notes: noteRepository,
+            attachments: attachmentRepository,
+            subjects: subjectRepository,
+            keyManager: keyManager,
+            encryptionService: EncryptionService(),
+            timeProvider: time
+        )
+        let settingsService = SettingsService(repository: settingsRepository)
+        let pluginService = PluginService(
+            metadataRepository: pluginMetadataRepository,
+            bundleRepository: pluginBundleRepository,
+            settingsService: settingsService,
+            logger: logger
+        )
+        let exportImportService = ExportImportService(
+            database: database,
+            keyManager: keyManager,
+            encryptionService: EncryptionService(),
+            logger: logger
+        )
+
+        try await keyManager.createInitialPassphrase("export-pass")
+        _ = try await keyManager.unlock(passphrase: "export-pass")
+        _ = try await subjectRepository.create(name: "Imported Subject")
+        _ = try await noteService.save(
+            draft: NoteDraft(
+                title: "Exportable",
+                content: "payload",
+                subjectId: nil,
+                secureModeEnabled: false,
+                expirationUTC: nil
+            )
+        )
+        try await pluginService.install(
+            manifest: PluginManifest(
+                pluginId: "com.astra.upper",
+                displayName: "Upper",
+                version: "1.0.0",
+                capabilities: ["transform"]
+            ),
+            bundleData: Data("bundle".utf8)
+        )
+
+        let archive = try await exportImportService.exportArchive()
+        let importResult = try await exportImportService.importArchive(archive)
+        XCTAssertEqual(importResult.importedNotes, 1)
+        XCTAssertEqual(importResult.importedPlugins, 1)
+
+        let snapshot = await database.read { $0 }
+        XCTAssertEqual(snapshot.notes.count, 2)
+        XCTAssertEqual(snapshot.pluginMetadata.count, 2)
+    }
+
+    func testPluginServiceExecutionAndTimeoutGuards() async throws {
+        let database = DatabaseProvider()
+        let settingsRepository = SettingsRepository(database: database)
+        let settingsService = SettingsService(repository: settingsRepository)
+        let time = MutableTimeProvider(now: Date())
+        let logger = InMemoryAuditLogger(timeProvider: time)
+        let metadataRepository = PluginMetadataRepository(database: database)
+        let bundleRepository = PluginBundleRepository(database: database)
+        let pluginService = PluginService(
+            metadataRepository: metadataRepository,
+            bundleRepository: bundleRepository,
+            settingsService: settingsService,
+            logger: logger
+        )
+
+        try await pluginService.install(
+            manifest: PluginManifest(
+                pluginId: "com.astra.test",
+                displayName: "Test Plugin",
+                version: "1.0.0",
+                capabilities: ["echo"]
+            ),
+            bundleData: Data([1, 2, 3])
+        )
+        await pluginService.registerHandler(pluginId: "com.astra.test") { request in
+            PluginActionResult(output: request.input.uppercased())
+        }
+
+        let result = try await pluginService.execute(
+            pluginId: "com.astra.test",
+            request: PluginActionRequest(action: "echo", input: "astra")
+        )
+        XCTAssertEqual(result.output, "ASTRA")
+
+        try await pluginService.setEnabled(pluginId: "com.astra.test", isEnabled: false)
+        do {
+            _ = try await pluginService.execute(
+                pluginId: "com.astra.test",
+                request: PluginActionRequest(action: "echo", input: "astra")
+            )
+            XCTFail("Expected disabled plugin to reject execution")
+        } catch let PluginServiceError.pluginDisabled {
+            XCTAssertTrue(true)
+        }
+
+        try await pluginService.setEnabled(pluginId: "com.astra.test", isEnabled: true)
+        await pluginService.registerHandler(pluginId: "com.astra.test") { _ in
+            try await Task.sleep(for: .milliseconds(50))
+            return PluginActionResult(output: "slow")
+        }
+
+        do {
+            _ = try await pluginService.execute(
+                pluginId: "com.astra.test",
+                request: PluginActionRequest(action: "echo", input: "astra"),
+                timeout: .milliseconds(5)
+            )
+            XCTFail("Expected plugin timeout")
+        } catch let PluginServiceError.executionTimedOut {
+            XCTAssertTrue(true)
+        }
+    }
+
+    func testStorageProtectionTracksAttachmentProtectionClass() async throws {
+        let database = DatabaseProvider()
+        let noteRepository = NoteRepository(database: database)
+        let attachmentRepository = AttachmentRepository(database: database)
+        let subjectRepository = SubjectRepository(database: database)
+        let settingsRepository = SettingsRepository(database: database)
+        let time = MutableTimeProvider(now: Date())
+        let logger = InMemoryAuditLogger(timeProvider: time)
+        let storageProtection = InMemoryStorageProtection()
+
+        let keyManager = KeyManager(
+            settingsRepository: settingsRepository,
+            databaseProvider: database,
+            timeProvider: time,
+            logger: logger
+        )
+        let noteService = NoteService(
+            notes: noteRepository,
+            attachments: attachmentRepository,
+            subjects: subjectRepository,
+            keyManager: keyManager,
+            encryptionService: EncryptionService(),
+            timeProvider: time,
+            storageProtection: storageProtection
+        )
+
+        try await keyManager.createInitialPassphrase("protect")
+        _ = try await keyManager.unlock(passphrase: "protect")
+
+        let secureNoteId = try await noteService.save(
+            draft: NoteDraft(
+                title: "Secure",
+                content: "payload",
+                subjectId: nil,
+                secureModeEnabled: true,
+                expirationUTC: time.now().addingTimeInterval(120)
+            )
+        )
+        let normalNoteId = try await noteService.save(
+            draft: NoteDraft(
+                title: "Normal",
+                content: "payload",
+                subjectId: nil,
+                secureModeEnabled: false,
+                expirationUTC: nil
+            )
+        )
+
+        _ = try await noteService.addImageAttachment(noteId: secureNoteId, storagePath: "/tmp/secure.png", byteSize: 512)
+        _ = try await noteService.addImageAttachment(noteId: normalNoteId, storagePath: "/tmp/normal.png", byteSize: 512)
+
+        let secureProtection = await storageProtection.protectionClass(for: "/tmp/secure.png")
+        let normalProtection = await storageProtection.protectionClass(for: "/tmp/normal.png")
+        XCTAssertEqual(secureProtection, .complete)
+        XCTAssertEqual(normalProtection, .completeUntilFirstUserAuthentication)
+    }
+
+    @MainActor
+    func testAppCoordinatorSupportsBiometricUnlockAndPlatformAutoLock() async throws {
+        let database = DatabaseProvider()
+        let noteRepository = NoteRepository(database: database)
+        let attachmentRepository = AttachmentRepository(database: database)
+        let subjectRepository = SubjectRepository(database: database)
+        let settingsRepository = SettingsRepository(database: database)
+        let time = MutableTimeProvider(now: Date())
+        let logger = InMemoryAuditLogger(timeProvider: time)
+        let localAuth = InMemoryLocalAuthService()
+        let platformIntegration = InMemoryPlatformIntegration()
+
+        let keyManager = KeyManager(
+            settingsRepository: settingsRepository,
+            databaseProvider: database,
+            timeProvider: time,
+            logger: logger
+        )
+        let noteService = NoteService(
+            notes: noteRepository,
+            attachments: attachmentRepository,
+            subjects: subjectRepository,
+            keyManager: keyManager,
+            encryptionService: EncryptionService(),
+            timeProvider: time
+        )
+        let searchService = NoteSearchService(noteRepository: noteRepository, noteService: noteService)
+        let settingsService = SettingsService(repository: settingsRepository)
+        let coordinator = AppCoordinator(
+            keyManager: keyManager,
+            settingsService: settingsService,
+            noteSearchService: searchService,
+            localAuthService: localAuth,
+            now: time.now()
+        )
+
+        await coordinator.start(now: time.now())
+        try await coordinator.createInitialPassphraseAndUnlock("bio-pass")
+        try await coordinator.updateBiometricUnlock(enabled: true)
+        await coordinator.lockNow()
+        try await coordinator.unlockWithBiometrics()
+        XCTAssertEqual(coordinator.sessionState, .unlocked)
+
+        coordinator.bind(platformIntegration: platformIntegration)
+        await platformIntegration.publish(.appDidBackground)
+        try await Task.sleep(for: .milliseconds(25))
+        XCTAssertEqual(coordinator.sessionState, .locked)
+    }
 }
