@@ -71,15 +71,15 @@
 <body>
   <main>
     <h1>AstraNotes UML Use Case Diagram</h1>
-    <p class="subtitle">Major user and system use cases, mapped to the designed architecture. No overlapping lines, visually clear, and logically correct.</p>
+    <p class="subtitle">Major user and system use cases, expanded to cover subject groups, image attachment, lock-time protections, and interrupted key-rotation recovery.</p>
     <div class="diagram-shell">
-      <svg viewBox="0 0 1800 900" width="1800" height="900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AstraNotes use case diagram">
+      <svg viewBox="0 0 1800 1120" width="1800" height="1120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AstraNotes use case diagram">
         <defs>
           <style>
             .actor { fill: var(--actor); stroke: var(--actor); stroke-width: 2; }
-            .actor-label { font: 700 16px 'Segoe UI', Arial, sans-serif; fill: #3730a3; }
+            .actor-label { font: 700 15px 'Segoe UI', Arial, sans-serif; fill: #3730a3; }
             .usecase { fill: var(--usecase); stroke: var(--usecase-stroke); stroke-width: 2; }
-            .usecase-label { font: 14px 'Segoe UI', Arial, sans-serif; fill: #1e293b; }
+            .usecase-label { font: 13px 'Segoe UI', Arial, sans-serif; fill: #1e293b; }
             .edge { stroke: var(--edge); stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
             .edgeDashed { stroke: var(--edge-soft); stroke-width: 1.2; stroke-dasharray: var(--edge-dashed); fill: none; marker-end: url(#arrow); }
             .include { stroke: #6366f1; stroke-width: 1.2; stroke-dasharray: 4 3; fill: none; marker-end: url(#arrow); }
@@ -110,15 +110,19 @@
           <rect class="usecase" x="320" y="500" rx="32" ry="32" width="220" height="48" />
           <text class="usecase-label" x="430" y="530" text-anchor="middle">Capture voice & transcribe</text>
           <rect class="usecase" x="320" y="570" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="600" text-anchor="middle">View/restore trash</text>
+          <text class="usecase-label" x="430" y="600" text-anchor="middle">Attach image to note</text>
           <rect class="usecase" x="320" y="640" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="670" text-anchor="middle">Permanently delete trash</text>
+          <text class="usecase-label" x="430" y="670" text-anchor="middle">Manage subject groups</text>
           <rect class="usecase" x="320" y="710" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="740" text-anchor="middle">Install/manage plugins</text>
+          <text class="usecase-label" x="430" y="740" text-anchor="middle">View/restore trash</text>
           <rect class="usecase" x="320" y="780" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="810" text-anchor="middle">Apply plugin action</text>
-          <rect class="usecase" x="600" y="80" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="710" y="110" text-anchor="middle">Change passphrase</text>
+          <text class="usecase-label" x="430" y="810" text-anchor="middle">Permanently delete trash</text>
+          <rect class="usecase" x="320" y="850" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="880" text-anchor="middle">Install/manage plugins</text>
+          <rect class="usecase" x="320" y="920" rx="32" ry="32" width="220" height="48" />
+          <text class="usecase-label" x="430" y="950" text-anchor="middle">Apply plugin action</text>
+          <rect class="usecase" x="600" y="80" rx="32" ry="32" width="260" height="48" />
+          <text class="usecase-label" x="730" y="110" text-anchor="middle">Change passphrase & rotate keys</text>
           <rect class="usecase" x="600" y="150" rx="32" ry="32" width="220" height="48" />
           <text class="usecase-label" x="710" y="180" text-anchor="middle">Export backup</text>
           <rect class="usecase" x="600" y="220" rx="32" ry="32" width="220" height="48" />
@@ -126,12 +130,14 @@
         </g>
         <!-- Use Cases (System) -->
         <g>
-          <rect class="usecase" x="1050" y="120" rx="32" ry="32" width="260" height="48" />
-          <text class="usecase-label" x="1180" y="150" text-anchor="middle">Auto-lock & clear keys</text>
+          <rect class="usecase" x="1050" y="120" rx="32" ry="32" width="320" height="48" />
+          <text class="usecase-label" x="1210" y="150" text-anchor="middle">Auto-lock, persist draft, clear secrets</text>
           <rect class="usecase" x="1050" y="200" rx="32" ry="32" width="260" height="48" />
           <text class="usecase-label" x="1180" y="230" text-anchor="middle">Expire & move secure note</text>
           <rect class="usecase" x="1050" y="280" rx="32" ry="32" width="260" height="48" />
           <text class="usecase-label" x="1180" y="310" text-anchor="middle">Schedule expiry notification</text>
+          <rect class="usecase" x="1050" y="360" rx="32" ry="32" width="320" height="48" />
+          <text class="usecase-label" x="1210" y="390" text-anchor="middle">Recover interrupted key rotation</text>
         </g>
         <!-- Relationships: User to Use Cases -->
         <polyline class="edge" points="156,200 320,104" />
@@ -145,6 +151,8 @@
         <polyline class="edge" points="156,200 320,664" />
         <polyline class="edge" points="156,200 320,734" />
         <polyline class="edge" points="156,200 320,804" />
+        <polyline class="edge" points="156,200 320,874" />
+        <polyline class="edge" points="156,200 320,944" />
         <polyline class="edge" points="156,200 600,104" />
         <polyline class="edge" points="156,200 600,174" />
         <polyline class="edge" points="156,200 600,244" />
@@ -152,22 +160,23 @@
         <polyline class="edge" points="156,700 1050,144" />
         <polyline class="edge" points="156,700 1050,224" />
         <polyline class="edge" points="156,700 1050,304" />
+        <polyline class="edge" points="156,700 1050,384" />
         <!-- Include relationships -->
         <polyline class="include" points="430,174 430,104" />
         <polyline class="include" points="430,314 430,384" />
-        <!-- Removed incorrect include line to 'Create/edit normal note' -->
         <polyline class="include" points="1180,224 1180,304" />
+        <polyline class="include" points="730,104 1210,384" />
         <!-- Legend -->
-        <rect x="1450" y="700" width="320" height="140" rx="14" fill="#f8fafc" stroke="#cbd5e1" />
-        <text class="legend" x="1470" y="730">Legend:</text>
-        <rect class="actor" x="1470" y="750" rx="18" ry="18" width="36" height="36" />
-        <text class="legend" x="1515" y="773">Actor</text>
-        <rect class="usecase" x="1470" y="790" rx="18" ry="18" width="36" height="36" />
-        <text class="legend" x="1515" y="813">Use Case</text>
-        <line class="edge" x1="1470" y1="830" x2="1506" y2="830" />
-        <text class="legend" x="1515" y="835">Association</text>
-        <line class="include" x1="1470" y1="850" x2="1506" y2="850" />
-        <text class="legend" x="1515" y="855">«include»</text>
+        <rect x="1450" y="900" width="320" height="160" rx="14" fill="#f8fafc" stroke="#cbd5e1" />
+        <text class="legend" x="1470" y="930">Legend:</text>
+        <rect class="actor" x="1470" y="950" rx="18" ry="18" width="36" height="36" />
+        <text class="legend" x="1515" y="973">Actor</text>
+        <rect class="usecase" x="1470" y="990" rx="18" ry="18" width="36" height="36" />
+        <text class="legend" x="1515" y="1013">Use Case</text>
+        <line class="edge" x1="1470" y1="1030" x2="1506" y2="1030" />
+        <text class="legend" x="1515" y="1035">Association</text>
+        <line class="include" x1="1470" y1="1050" x2="1506" y2="1050" />
+        <text class="legend" x="1515" y="1055">«include»</text>
       </svg>
     </div>
     <div class="notes">
@@ -176,7 +185,8 @@
         <li>All use cases are derived from the requirements and architecture documentation.</li>
         <li>Actors: <b>User</b> (person using the app), <b>System</b> (automated app/system actions).</li>
         <li>Dashed blue lines represent «include» relationships.</li>
-        <li>All lines are orthogonal and non-overlapping for clarity.</li>
+        <li>User-visible coverage now includes image attachment and subject group management.</li>
+        <li>System coverage now includes lock-time secret clearing and interrupted key-rotation recovery.</li>
       </ul>
     </div>
   </main>
