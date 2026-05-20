@@ -3,10 +3,13 @@ import AstraCore
 
 struct ContentView: View {
     @StateObject private var env = AppEnvironment()
+    @State private var didInitializeCoordinator = false
+    @State private var sessionState: AppCoordinator.SessionState = .locked
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         Group {
-            switch env.coordinator.sessionState {
+            switch sessionState {
             case .firstLaunchSetup, .locked:
                 UnlockView(
                     coordinator: env.coordinator,
@@ -52,8 +55,32 @@ struct ContentView: View {
             }
         }
         .task {
+            guard !didInitializeCoordinator else {
+                return
+            }
+            didInitializeCoordinator = true
             await env.coordinator.start()
+            sessionState = env.coordinator.sessionState
             env.coordinator.bind(platformIntegration: env.platformIntegration)
+        }
+        .onReceive(env.coordinator.$sessionState) { updatedState in
+            sessionState = updatedState
+        }
+        .task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                await env.coordinator.evaluateInactivityAutoLock(now: Date())
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            Task {
+                switch newPhase {
+                case .active:
+                    env.coordinator.registerUserInteraction(now: Date())
+                default:
+                    break
+                }
+            }
         }
     }
 }

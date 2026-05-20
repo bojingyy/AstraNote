@@ -2,6 +2,11 @@ import SwiftUI
 import AstraCore
 
 struct UnlockView: View {
+    private enum FocusField: Hashable {
+        case passphrase
+        case confirmPassphrase
+    }
+
     @ObservedObject var coordinator: AppCoordinator
     let createAction: (String) async throws -> Void
     let unlockAction: (String) async throws -> Void
@@ -10,6 +15,7 @@ struct UnlockView: View {
     @State private var passphrase = ""
     @State private var confirmPassphrase = ""
     @State private var errorMessage: String?
+    @FocusState private var focusedField: FocusField?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -19,10 +25,28 @@ struct UnlockView: View {
 
             SecureField("Passphrase", text: $passphrase)
                 .textFieldStyle(.roundedBorder)
+                .autocorrectionDisabled(true)
+                .focused($focusedField, equals: .passphrase)
+                .onSubmit {
+                    if coordinator.sessionState == .firstLaunchSetup {
+                        focusedField = .confirmPassphrase
+                    } else {
+                        Task {
+                            await submit()
+                        }
+                    }
+                }
 
             if coordinator.sessionState == .firstLaunchSetup {
                 SecureField("Confirm Passphrase", text: $confirmPassphrase)
                     .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled(true)
+                    .focused($focusedField, equals: .confirmPassphrase)
+                    .onSubmit {
+                        Task {
+                            await submit()
+                        }
+                    }
             }
 
             if let errorMessage {
@@ -53,6 +77,12 @@ struct UnlockView: View {
         }
         .padding()
         .frame(width: 420)
+        .defaultFocus($focusedField, .passphrase)
+        .task(id: coordinator.sessionState) {
+            // Defer focus assignment until the view hierarchy is ready.
+            await Task.yield()
+            focusedField = .passphrase
+        }
     }
 
     private func submit() async {
@@ -70,7 +100,16 @@ struct UnlockView: View {
             passphrase = ""
             confirmPassphrase = ""
         } catch {
-            errorMessage = String(describing: error)
+            switch error {
+            case KeyManagerError.invalidPassphrase:
+                errorMessage = "Invalid passphrase. Please try again."
+            case KeyManagerError.lockoutActive(let remainingSeconds):
+                errorMessage = "Too many attempts. Try again in \(remainingSeconds) seconds."
+            case KeyManagerError.passphraseNotInitialized:
+                errorMessage = "No passphrase found. Please restart and create a passphrase."
+            default:
+                errorMessage = String(describing: error)
+            }
         }
     }
 }

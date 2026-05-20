@@ -248,7 +248,7 @@ final class AstraCoreTests: XCTestCase {
         do {
             _ = try await trashService.restore(trashId: try XCTUnwrap(item).trashId)
             XCTFail("Expected restore to require unlocked session")
-        } catch let ProtectedTrashServiceError.restoreRequiresUnlockedSession {
+        } catch ProtectedTrashServiceError.restoreRequiresUnlockedSession {
             XCTAssertTrue(true)
         }
 
@@ -358,7 +358,7 @@ final class AstraCoreTests: XCTestCase {
                 byteSize: 21 * 1024 * 1024
             )
             XCTFail("Expected image limit rejection")
-        } catch let NoteServiceError.imageAttachmentTooLarge {
+        } catch NoteServiceError.imageAttachmentTooLarge {
             XCTAssertTrue(true)
         }
 
@@ -369,7 +369,7 @@ final class AstraCoreTests: XCTestCase {
                 byteSize: 51 * 1024 * 1024
             )
             XCTFail("Expected voice limit rejection")
-        } catch let NoteServiceError.voiceAttachmentTooLarge {
+        } catch NoteServiceError.voiceAttachmentTooLarge {
             XCTAssertTrue(true)
         }
 
@@ -473,7 +473,7 @@ final class AstraCoreTests: XCTestCase {
         do {
             _ = try await keyManager.unlock(passphrase: "old-passphrase")
             XCTFail("Expected old passphrase to fail after rotation")
-        } catch let KeyManagerError.invalidPassphrase {
+        } catch KeyManagerError.invalidPassphrase {
             XCTAssertTrue(true)
         }
 
@@ -598,7 +598,7 @@ final class AstraCoreTests: XCTestCase {
                 request: PluginActionRequest(action: "echo", input: "astra")
             )
             XCTFail("Expected disabled plugin to reject execution")
-        } catch let PluginServiceError.pluginDisabled {
+        } catch PluginServiceError.pluginDisabled {
             XCTAssertTrue(true)
         }
 
@@ -615,7 +615,7 @@ final class AstraCoreTests: XCTestCase {
                 timeout: .milliseconds(5)
             )
             XCTFail("Expected plugin timeout")
-        } catch let PluginServiceError.executionTimedOut {
+        } catch PluginServiceError.executionTimedOut {
             XCTAssertTrue(true)
         }
     }

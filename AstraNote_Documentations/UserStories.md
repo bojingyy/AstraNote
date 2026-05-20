@@ -3,10 +3,10 @@
 ## 1. Unlock and resume securely
 - As a user, I want to unlock AstraNotes with my master passphrase and optionally use biometric authentication so I can access notes quickly and safely.
 - Acceptance criteria:
-  - On first launch, before any notes are stored, I set a master passphrase for the app.
+  - On first launch, before any notes are stored, I set a master passphrase for the app, and then I am able to launch the note workspace.
   - The app shows a passphrase screen when no unlocked session exists.
   - Entering the correct passphrase unlocks the app and loads note lists.
-  - After one successful passphrase unlock, biometric unlock can be enabled for later sessions.
+  - After one successful passphrase unlock, biometric unlock can be enabled for later sessions in settings.
   - Biometric unlock falls back to passphrase when unavailable, rejected, or after repeated failures.
 
 ## 2. Create and edit normal notes

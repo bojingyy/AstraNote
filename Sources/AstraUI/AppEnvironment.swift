@@ -6,7 +6,7 @@ import AstraPlatform
 
 @MainActor
 final class AppEnvironment: ObservableObject {
-    let database = DatabaseProvider()
+    let database = DatabaseProvider(persistenceURL: DatabaseProvider.defaultPersistenceURL())
     let timeProvider = SystemTimeProvider()
     let logger: InMemoryAuditLogger
     let notificationService: InMemoryNotificationService

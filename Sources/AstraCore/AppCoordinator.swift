@@ -42,6 +42,11 @@ public final class AppCoordinator: ObservableObject {
     }
 
     public func start(now: Date = Date()) async {
+        // Keep startup idempotent for the current process. If already unlocked,
+        // do not recalculate state from persisted credentials.
+        guard sessionState != .unlocked else {
+            return
+        }
         lastUserInteractionAt = now
         let hasPassphrase = await keyManager.hasPassphrase()
         sessionState = hasPassphrase ? .locked : .firstLaunchSetup
@@ -140,8 +145,9 @@ public final class AppCoordinator: ObservableObject {
         }
 
         let settings = await settingsService.load()
+        let effectiveLockTimeoutSeconds = min(max(settings.lockTimeoutSeconds, 30), 3600)
         let idleSeconds = now.timeIntervalSince(lastUserInteractionAt)
-        guard idleSeconds > TimeInterval(settings.lockTimeoutSeconds) else {
+        guard idleSeconds > TimeInterval(effectiveLockTimeoutSeconds) else {
             return
         }
 

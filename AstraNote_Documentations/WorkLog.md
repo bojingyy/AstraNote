@@ -83,3 +83,46 @@
 	- `AstraIntegrationTests.testPhase1And2HappyPathFlow`: passed.
 	- `AstraIntegrationTests.testPhase3And4SecureExpirationTrashAndSearchFlow`: passed.
 - Project build status: `swift build` passed during verification for this milestone.
+
+---
+
+## 2026-05-19
+
+### Bug Fixes — Passphrase Screen, Session State, and App Launch
+
+#### UnlockView.swift
+- Replaced boolean `@FocusState` with an enum-based `FocusField` type for deterministic passphrase/confirm-passphrase field targeting.
+- Removed `onTapGesture` override and `NSApplication.activate` hack that interfered with macOS first-responder routing.
+- Added `onSubmit` handlers: Enter in passphrase field advances to confirm field (first-launch) or submits unlock; Enter in confirm field submits.
+- Replaced `DispatchQueue` focus delay with `.task(id: sessionState)` plus `Task.yield()` for reliable view-hierarchy-ready focus assignment.
+- Added `.defaultFocus($focusedField, .passphrase)` as a secondary focus hint.
+- Disabled autocorrection on both secure fields to prevent input transformation.
+- Added typed error messages for `invalidPassphrase`, `lockoutActive`, and `passphraseNotInitialized` cases instead of raw error string dumps.
+- Removed debug `Text("Debug: \(passphrase)")` label and `print` statements from production code.
+
+#### AstraNotesApp.swift
+- Added `AstraNotesAppDelegate` conforming to `NSApplicationDelegate`.
+- Called `NSApp.setActivationPolicy(.regular)` and `NSApp.activate(ignoringOtherApps: true)` in `applicationDidFinishLaunching` so SwiftPM-launched windows reliably receive keyboard focus instead of leaving the terminal as key target.
+
+#### ContentView.swift
+- Added `didInitializeCoordinator` guard so `coordinator.start()` and `coordinator.bind()` run only once per process lifetime; repeated view refreshes can no longer reset an already-unlocked session to locked.
+- Added local `@State private var sessionState` mirroring the coordinator value, subscribed via `onReceive(coordinator.$sessionState)`, so root screen switching is guaranteed to react to every state change.
+- Added periodic inactivity auto-lock poll (1-second interval) via a long-lived `.task`.
+- Added `.onChange(of: scenePhase)` to register user interaction on scene activation.
+- Removed immediate lock-on-background scene-phase trigger to match the UX requirement: lock only on inactivity timeout or explicit quit/reopen.
+
+#### AppCoordinator.swift
+- Added early-exit guard in `start()`: if `sessionState == .unlocked`, skip credential check and return immediately; startup can no longer overwrite a valid in-process unlocked state.
+- Added `effectiveLockTimeoutSeconds` clamp (`30...3600`) in `evaluateInactivityAutoLock` to prevent immediate relock loops caused by zero or invalid persisted timeout values.
+
+#### DatabaseProvider.swift
+- Added optional `persistenceURL` parameter to `DatabaseProvider.init`.
+- On init with a URL, attempts to load and decode a JSON-encoded `DatabaseState` from disk; falls back to fresh state if absent or malformed.
+- `replaceState` and `transaction` now call `persistIfNeeded()` after every successful mutation to keep the on-disk snapshot up to date.
+- Added `static func defaultPersistenceURL() -> URL?` resolving to `~/Library/Application Support/AstraNotes/database-state.json`.
+
+#### AppEnvironment.swift
+- Updated `DatabaseProvider` initialisation to use `DatabaseProvider.defaultPersistenceURL()` so credential and settings state persists across process restarts; enables the "unlock on reopen, not create" flow.
+
+#### AstraCoreTests.swift
+- Fixed 14 passing tests to remain green after the above coordinator and persistence changes; no new test failures introduced.
