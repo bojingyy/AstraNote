@@ -10,7 +10,7 @@ final class AppEnvironment: ObservableObject {
     let timeProvider = SystemTimeProvider()
     let logger: InMemoryAuditLogger
     let notificationService: InMemoryNotificationService
-    let localAuthService: InMemoryLocalAuthService
+    let localAuthService: any LocalAuthServiceProtocol
     let storageProtection: InMemoryStorageProtection
     let platformIntegration: InMemoryPlatformIntegration
 
@@ -36,7 +36,7 @@ final class AppEnvironment: ObservableObject {
     init() {
         logger = InMemoryAuditLogger(timeProvider: timeProvider)
         notificationService = InMemoryNotificationService(timeProvider: timeProvider)
-        localAuthService = InMemoryLocalAuthService()
+        localAuthService = SystemLocalAuthService()
         storageProtection = InMemoryStorageProtection()
         platformIntegration = InMemoryPlatformIntegration()
 

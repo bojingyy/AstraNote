@@ -131,11 +131,12 @@ public final class AppCoordinator: ObservableObject {
     }
 
     public func updateBiometricUnlock(enabled: Bool) async throws {
-        try await settingsService.setBiometricUnlockEnabled(enabled)
         if enabled {
-            await refreshBiometricEnrollmentIfNeeded()
+            try await enrollCurrentKeyMaterialForBiometrics()
+            try await settingsService.setBiometricUnlockEnabled(true)
         } else {
             await localAuthService?.clearEnrollment()
+            try await settingsService.setBiometricUnlockEnabled(false)
         }
     }
 
@@ -184,6 +185,18 @@ public final class AppCoordinator: ObservableObject {
             return
         }
 
-        await localAuthService.enroll(secret: keyMaterial.encryptionKey)
+        try? await localAuthService.enroll(secret: keyMaterial.encryptionKey)
+    }
+
+    private func enrollCurrentKeyMaterialForBiometrics() async throws {
+        guard let localAuthService else {
+            throw AppCoordinatorError.biometricUnavailable
+        }
+
+        guard let keyMaterial = await keyManager.currentKeyMaterial() else {
+            throw AppCoordinatorError.biometricUnavailable
+        }
+
+        try await localAuthService.enroll(secret: keyMaterial.encryptionKey)
     }
 }

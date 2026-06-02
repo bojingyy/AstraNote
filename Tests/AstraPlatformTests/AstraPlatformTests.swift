@@ -29,7 +29,7 @@ final class AstraPlatformTests: XCTestCase {
         let storageProtection = InMemoryStorageProtection()
         let secret = Data("secret".utf8)
 
-        await localAuth.enroll(secret: secret)
+        try await localAuth.enroll(secret: secret)
         let recovered = try await localAuth.authenticate(reason: "test")
         XCTAssertEqual(recovered, secret)
 

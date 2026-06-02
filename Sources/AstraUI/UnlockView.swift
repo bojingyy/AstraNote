@@ -1,5 +1,6 @@
 import SwiftUI
 import AstraCore
+import AstraPlatform
 
 struct UnlockView: View {
     private enum FocusField: Hashable {
@@ -68,7 +69,13 @@ struct UnlockView: View {
                             errorMessage = nil
                             try await biometricUnlockAction()
                         } catch {
-                            errorMessage = String(describing: error)
+                            switch error {
+                            case LocalAuthError.userFallback, LocalAuthError.cancelled:
+                                errorMessage = nil
+                                focusedField = .passphrase
+                            default:
+                                errorMessage = String(describing: error)
+                            }
                         }
                     }
                 }
