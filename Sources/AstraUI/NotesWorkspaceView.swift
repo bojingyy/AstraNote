@@ -92,13 +92,13 @@ struct NotesWorkspaceView: View {
                     Button("New Note") {
                         clearEditorForNewNote()
                     }
-                    Button("Trash") {
+                    Button("Trash Can") {
                         Task {
                             await loadTrashItems()
                             isShowingTrash = true
                         }
                     }
-                    Button("Lock") {
+                    Button("Lock AstraNote") {
                         Task {
                             await lockAction()
                         }
@@ -115,15 +115,37 @@ struct NotesWorkspaceView: View {
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 6) {
-                        Button("All Notes") {
+                        Button {
                             selectedSubjectId = nil
+                        } label: {
+                            HStack {
+                                Text("All Notes")
+                                Spacer(minLength: 0)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 8)
+                            .background {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(selectedSubjectId == nil ? Color.accentColor.opacity(0.18) : Color.clear)
+                            }
                         }
                         .buttonStyle(.plain)
 
                         ForEach(subjects, id: \.id) { subject in
                             HStack {
-                                Button(subject.name) {
+                                Button {
                                     selectedSubjectId = subject.id
+                                } label: {
+                                    HStack {
+                                        Text(subject.name)
+                                        Spacer(minLength: 0)
+                                    }
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 8)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(selectedSubjectId == subject.id ? Color.accentColor.opacity(0.18) : Color.clear)
+                                    }
                                 }
                                 .buttonStyle(.plain)
 
@@ -172,12 +194,17 @@ struct NotesWorkspaceView: View {
                         Text(note.isSecure ? "[Secure]" : "[Normal]")
                         Text(note.title)
                     }
+                    .padding(.vertical, 2)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         Task {
                             await selectNote(note.id)
                         }
                     }
+                    .listRowBackground(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(selectedNoteId == note.id ? Color.accentColor.opacity(0.14) : Color.clear)
+                    )
                 }
             }
             .padding()
@@ -215,12 +242,16 @@ struct NotesWorkspaceView: View {
                     }
                 }
 
-                TextEditor(text: $content)
-                    .frame(minHeight: 240)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.secondary.opacity(0.4))
-                    }
+                ZStack {
+                    TextEditor(text: $content)
+                        .padding(.top, 6)
+                        .padding(.horizontal, 4)
+                }
+                .frame(minHeight: 240)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.secondary.opacity(0.4))
+                }
 
                 if let infoMessage {
                     Text(infoMessage)
@@ -314,6 +345,14 @@ struct NotesWorkspaceView: View {
                     }
                 }
                 .navigationTitle("Protected Trash")
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Close") {
+                            isShowingTrash = false
+                        }
+                        .keyboardShortcut(.cancelAction)
+                    }
+                }
             }
             .frame(minWidth: 600, minHeight: 420)
         }
