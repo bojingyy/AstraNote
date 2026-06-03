@@ -28,6 +28,39 @@ struct ContentView: View {
                     searchAction: { query in
                         await env.noteSearchService.searchTitle(query: query, isUnlocked: true)
                     },
+                    listNotesAction: {
+                        await env.noteService.listSummaries()
+                    },
+                    loadNoteAction: { noteId in
+                        try await env.noteService.load(id: noteId)
+                    },
+                    saveDraftAction: { draft in
+                        try await env.noteService.save(draft: draft)
+                    },
+                    deleteNoteAction: { noteId in
+                        try await env.noteService.delete(noteId: noteId)
+                    },
+                    listSubjectsAction: {
+                        await env.subjectService.list()
+                    },
+                    createSubjectAction: { name in
+                        try await env.subjectService.create(name: name)
+                    },
+                    deleteSubjectAction: { subjectId in
+                        try await env.subjectService.delete(id: subjectId)
+                    },
+                    listTrashAction: {
+                        await env.trashService.listTrashItems()
+                    },
+                    restoreTrashAction: { trashId in
+                        try await env.trashService.restore(trashId: trashId)
+                    },
+                    permanentlyDeleteTrashAction: { trashId in
+                        try await env.trashService.permanentlyDelete(trashId: trashId)
+                    },
+                    secureTrashPreviewAction: { trashId in
+                        try await env.trashService.secureTitlePreviewMessage(trashId: trashId)
+                    },
                     lockAction: {
                         await env.coordinator.lockNow()
                     },
