@@ -7,7 +7,7 @@
 - Keep scope strict: local only, no cloud sync, and only simple plugin support in MVP.
 
 ## 2. MVP Scope (What We Build First)
-- Unlock with passphrase; optional biometric unlock after first passphrase success.
+- First-launch passphrase creation before any note data is stored; secure-note access uses passphrase or optional biometrics at note-open time.
 - Tri-pane notes workspace:
 	- Left: foldable subject sidebar.
 	- Middle: note list/cards.
@@ -15,7 +15,7 @@
 - Create, rename, and delete subject groups (folders) in the subject sidebar.
 - Create, edit, delete, and restore notes.
 - Normal notes are stored unencrypted; attachments are optional and limited to images and recordings.
-- Secure note mode is opt-in per note: encrypts the note, requires an expiration date and time, and routes deletion through protected trash.
+- Secure note mode is opt-in per note: encrypts the note and routes deletion through protected trash.
 - Title search in workspace: normal note titles are searched from storage; secure note titles are searchable only while app is unlocked using in-memory decrypted matching.
 - Voice capture trigger in the editor top bar (record and attach flow can start simple).
 - Encrypted export/import for local backup and restore with atomic import behavior.
@@ -38,19 +38,20 @@ Out of MVP:
 	- `WorkspaceTopBar`: new note, search, voice capture button, secure status.
 	- `SubjectSidebarPane`: hierarchy and filters; inline controls to create, rename, and delete subject groups.
 	- `NoteCollectionPane`: note cards and selection.
-	- `NoteEditorPane`: main note editor pane (right side) with secure toggle, expiration date/time controls, and secure option button placed at the top-right of the editor toolbar.
+	- `NoteEditorPane`: main note editor pane (right side) with secure toggle and secure option button placed at the top-right of the editor toolbar.
+	- `WorkspaceToastOverlay`: transient pop-up notifications for workspace feedback (success/error/warning), auto-dismissing in roughly 5 seconds.
 - `TrashView.swift`: lists all trashed notes (both normal and secure); shows note title, deletion time, and lock badge for secure notes; provides Restore and Permanently Delete actions per item.
 - `SettingsView.swift`: settings forms only.
 - `PluginStoreView.swift`: simple plugin management UI (install local package, enable/disable, remove, view status).
 
 ### AstraCore
-- `AppCoordinator.swift`: app lifecycle, lock/unlock routing, navigation state handoff.
+- `AppCoordinator.swift`: app lifecycle, first-launch routing, secure key lifecycle, and navigation state handoff.
 - `KeyManager.swift`: passphrase handling, derived key lifecycle, key clearing on lock, rate limiting and lockout enforcement on consecutive unlock failures.
 - `EncryptionService.swift`: encrypt/decrypt payload boundary.
 - `SubjectService.swift`: subject group CRUD (create, rename, delete); enforces non-empty name and prevents deletion of non-empty groups without confirmation.
 - `NoteService.swift`: note CRUD orchestration; routes to encrypted or standard storage path based on note's secure flag.
 - `NoteSearchService.swift`: title search orchestration for normal and secure notes (secure titles are matched in memory only while unlocked).
-- `SecureNotePolicyService.swift`: secure-note rules (expiry checks, encryption enforcement, protected-delete decisions).
+- `SecureNotePolicyService.swift`: secure-note rules (encryption enforcement, protected-delete decisions).
 - `ProtectedTrashService.swift`: move/restore/permanent-delete logic.
 - `SettingsService.swift`: validation + updates for settings.
 - `ExportImportService.swift`: encrypted archive export/import orchestration included in MVP.
@@ -100,10 +101,10 @@ All data flow sinks for decrypted secure note content are explicitly controlled:
 
 ### 5.1 Unlock
 0. On first launch, `AppCoordinator` detects no passphrase is set and routes to `UnlockView` for passphrase creation; no note data is stored until a passphrase is established.
-1. `AppCoordinator` checks lock state.
-2. `KeyManager` validates passphrase or biometric path; tracks consecutive failures and enforces rate-limited lockout after the threshold is exceeded.
-3. On success, in-memory keys are available to core services.
-4. On lock, keys are cleared and editor content is masked.
+1. On subsequent launches, the workspace opens directly; whole-app unlock is not required.
+2. When user opens a secure note, `AppCoordinator` and `KeyManager` validate passphrase or biometric path; rate limiting and lockout rules apply.
+3. On successful secure-note authentication, in-memory keys are available to decrypt secure note payloads.
+4. On timeout/background/sleep handling, in-memory keys are cleared and secure notes require authentication again.
 
 ### 5.2 Create/Edit Note
 1. UI sends draft to `NoteService`.
@@ -113,11 +114,11 @@ All data flow sinks for decrypted secure note content are explicitly controlled:
 5. If secure is on: `EncryptionService` encrypts the payload; ciphertext is persisted via `NoteRepository` transaction.
 6. UI refreshes list and editor state from service result.
 
-### 5.3 Secure Note Expiration
-1. When user enables secure mode, an expiration date and time are required.
-2. `SecureNotePolicyService` validates and stores policy data alongside the encrypted note.
-3. On checks (active use + app launch), expired notes move via `ProtectedTrashService`.
-4. `NotificationService` informs user; the note is no longer accessible after expiration.
+### 5.3 Secure Note Retention
+1. When user enables secure mode, the note is encrypted and stored immediately.
+2. `SecureNotePolicyService` enforces secure-note protection rules and keeps time-based policy logic out of the runtime model.
+3. Secure notes remain active until the user deletes them or otherwise moves them through normal trash flow.
+4. Secure-note access still uses step-up authentication before decrypted content is shown.
 
 ### 5.4 Trash Flow (Normal Note)
 1. User deletes a normal note.
@@ -127,8 +128,8 @@ All data flow sinks for decrypted secure note content are explicitly controlled:
 5. Permanently Delete removes the record entirely.
 
 ### 5.5 Trash Flow (Secure Note)
-1. Secure note reaches its expiration or the user triggers deletion.
-2. `SecureNotePolicyService` confirms eligibility and `ProtectedTrashService` moves the encrypted record to protected trash.
+1. The user triggers deletion of a secure note.
+2. `ProtectedTrashService` moves the encrypted record to protected trash.
 3. `TrashView` shows the item with a lock badge instead of readable title (title remains encrypted).
 4. Restore requires app unlock; `KeyManager` must have active keys to decrypt the note back into the active list.
 5. Permanently Delete wipes the ciphertext and all associated attachments; the note becomes unrecoverable.
@@ -152,16 +153,16 @@ All data flow sinks for decrypted secure note content are explicitly controlled:
 2. `NoteSearchService` queries normal note titles directly from `NoteRepository`.
 3. If app is unlocked, `NoteSearchService` also matches secure note titles from in-memory decrypted title cache.
 4. If app is locked, secure note titles are excluded from search results.
-5. On lock event, `KeyManager` clears key material and `NoteSearchService` clears secure title cache.
+5. On secure-key-clear events (timeout/background/sleep), `KeyManager` clears key material and `NoteSearchService` clears secure title cache.
 
 ### 5.9 Auto-Lock Flow
 1. `PlatformIntegration` detects OS sleep, app backgrounding, or reports inactivity to `AppCoordinator`.
-2. `AppCoordinator` checks whether the inactivity timer has exceeded the configured timeout from `SettingsService`, or whether a platform sleep/background event has triggered immediate lock.
+2. `AppCoordinator` checks whether the inactivity timer has exceeded the configured timeout from `SettingsService`, or whether a platform sleep/background event has triggered immediate secure-key clear.
 3. Background operations (export, key rotation) do not count as user activity and do not reset the inactivity timer.
-4. If a secure note is actively being edited, `NoteService` encrypts and persists unsaved draft content via `EncryptionService` before the lock transition completes.
+4. If a secure note is actively being edited, `NoteService` encrypts and persists unsaved draft content via `EncryptionService` before key-clear handling completes.
 5. `KeyManager` clears all in-memory key material.
 6. `NoteSearchService` clears the in-memory secure title cache.
-7. `AppCoordinator` routes UI to `UnlockView`; the editor pane content is masked.
+7. Workspace remains accessible for non-secure content; accessing a secure note requires passphrase or biometrics.
 
 ### 5.10 Passphrase Change / Key Rotation Flow
 1. User initiates passphrase change from `SettingsView`.
@@ -184,7 +185,7 @@ All data flow sinks for decrypted secure note content are explicitly controlled:
 ## 6. Minimal Data Contracts
 - Subject group record: `id`, `name`, `displayOrder`, timestamps.
 - Normal note record: `id`, `subjectId` (nullable), `isSecure: false`, title/content as plain text, timestamps.
-- Secure note record: `id`, `subjectId` (nullable), `isSecure: true`, encrypted title/content payload, nonce, salt, timestamps, expiration timestamp (required; date + time).
+- Secure note record: `id`, `subjectId` (nullable), `isSecure: true`, encrypted title/content payload, nonce, salt, timestamps.
 - Attachment record: `id`, `noteId`, `type` (image | recording), payload stored according to the note's security mode.
 - Trash record: source note id, `isSecure`, deletion time, retention metadata; encrypted payload retained for secure notes until permanent delete.
 - Settings: lock timeout, telemetry opt-in, plugin enabled (global on/off toggle).

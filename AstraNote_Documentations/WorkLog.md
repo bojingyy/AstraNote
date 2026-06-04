@@ -61,11 +61,11 @@
 - Added attachment handling rules in service layer, including size constraints and note security-mode inheritance.
 
 #### Phase 3: Secure Note Features and Trash (Completed)
-- Implemented `SecureNotePolicyService` for expiration policy checks and automated secure-note expiration sweeps.
-- Implemented rollback time guard behavior using stored last-known UTC and deferred expiration checks when device time rollback is detected.
+- Implemented `SecureNotePolicyService` as a no-op secure-note policy boundary with no time-based expiration behavior.
+- Removed rollback-time guard behavior from the runtime model.
 - Implemented protected trash behavior in `ProtectedTrashService` including secure-note lock semantics in trash.
 - Implemented restore authorization rules requiring active unlocked session for secure note restore.
-- Implemented notification service abstraction for secure-note expiration events.
+- Implemented notification service abstraction for workspace feedback and general platform alerts.
 
 #### Phase 4: Session Management, Search, and Attachments (Completed)
 - Implemented `AppCoordinator` for first-launch branch routing, lock or unlock transitions, and inactivity lock decisions.
@@ -81,7 +81,7 @@
 	- `AstraCoreTests`: 9 passed.
 	- `AstraDataTests`: 4 passed.
 	- `AstraIntegrationTests.testPhase1And2HappyPathFlow`: passed.
-	- `AstraIntegrationTests.testPhase3And4SecureExpirationTrashAndSearchFlow`: passed.
+	- `AstraIntegrationTests.testPhase3And4SecureTrashAndSearchFlow`: passed.
 - Project build status: `swift build` passed during verification for this milestone.
 
 ---
@@ -151,3 +151,30 @@
 #### Requirement.md / Architecture.md
 - Added FR3.9 to require passphrase or biometric step-up authentication per secure-note open attempt.
 - Updated note open flow in architecture to include secure-note access authentication before load.
+
+### Security Model Update — Remove Whole-App Lock, Keep Secure-Note Re-Auth
+
+#### Product/UX Behavior
+- Removed whole-app lock as a user-facing workflow for returning users.
+- Kept first-launch passphrase creation as mandatory bootstrap for new users.
+- Retained secure-note step-up authentication (passphrase or biometrics) per secure-note access attempt.
+
+#### AppCoordinator.swift / ContentView.swift / NotesWorkspaceView.swift
+- Updated startup routing so existing users land directly in workspace instead of global unlock screen.
+- Removed explicit workspace lock control from top actions.
+- Kept secure-key clear behavior for timeout/background/sleep events without redirecting to full unlock UI.
+
+#### Requirement.md / Architecture.md
+- Updated Unlock and Auto-Lock related requirements to reflect secure-key timeout behavior rather than whole-app lock transitions.
+- Updated architecture unlock and timeout flows to describe per-secure-note authentication with workspace remaining available for normal notes.
+
+### UI Notification Redesign — Transient Pop-Up Messages
+
+#### NotesWorkspaceView.swift
+- Replaced inline info/error message text under the editor input area with floating pop-up notifications.
+- Added workspace toast overlay for user feedback (success/error) with automatic dismiss after approximately 5 seconds.
+- Routed workspace operation outcomes (save/delete/subject operations/trash actions/secure-access failures) to toast presentation.
+
+#### Requirement.md / Architecture.md
+- Updated requirement language to define transient pop-up notification windows (about 5 seconds) for foreground feedback.
+- Updated architecture module map and secure-note retention flow to document toast-based foreground notification behavior.

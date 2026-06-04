@@ -34,7 +34,7 @@ public actor ProtectedTrashRepository: ProtectedTrashRepositoryProtocol {
                     plainTitle: note.plainTitle,
                     plainContent: note.plainContent,
                     securePayload: note.securePayload,
-                    expirationUTC: note.expirationUTC,
+                    expirationUTC: nil,
                     createdAt: note.createdAt,
                     updatedAt: Date()
                 )

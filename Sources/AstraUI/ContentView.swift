@@ -10,7 +10,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             switch sessionState {
-            case .firstLaunchSetup, .locked:
+            case .firstLaunchSetup:
                 UnlockView(
                     coordinator: env.coordinator,
                     createAction: { passphrase in
@@ -23,18 +23,15 @@ struct ContentView: View {
                         try await env.coordinator.unlockWithBiometrics()
                     }
                 )
-            case .unlocked:
+            case .locked, .unlocked:
                 NotesWorkspaceView(
                     searchAction: { query in
-                        _ = try? await env.secureNotePolicyService.sweepExpiredSecureNotes(isForeground: true)
                         return await env.noteSearchService.searchTitle(query: query, isUnlocked: true)
                     },
                     listNotesAction: {
-                        _ = try? await env.secureNotePolicyService.sweepExpiredSecureNotes(isForeground: true)
                         return await env.noteService.listSummaries()
                     },
                     loadNoteAction: { noteId in
-                        _ = try? await env.secureNotePolicyService.sweepExpiredSecureNotes(isForeground: true)
                         return try await env.noteService.load(id: noteId)
                     },
                     saveDraftAction: { draft in
@@ -69,9 +66,6 @@ struct ContentView: View {
                     },
                     secureNoteBiometricAuthAction: {
                         try await env.coordinator.reauthenticateForSecureNoteWithBiometrics()
-                    },
-                    lockAction: {
-                        await env.coordinator.lockNow()
                     },
                     loadSettingsAction: {
                         await env.settingsService.load()

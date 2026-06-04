@@ -15,87 +15,30 @@ public struct ExpirationSweepResult: Sendable, Equatable {
 }
 
 public actor SecureNotePolicyService {
-    private let noteRepository: NoteRepositoryProtocol
     private let noteService: NoteService
-    private let settingsRepository: SettingsRepositoryProtocol
-    private let notificationService: NotificationServiceProtocol
     private let logger: AuditLogging
-    private let timeProvider: TimeProvider
 
     public init(
-        noteRepository: NoteRepositoryProtocol,
         noteService: NoteService,
-        settingsRepository: SettingsRepositoryProtocol,
-        notificationService: NotificationServiceProtocol,
         logger: AuditLogging,
         timeProvider: TimeProvider = SystemTimeProvider()
     ) {
-        self.noteRepository = noteRepository
         self.noteService = noteService
-        self.settingsRepository = settingsRepository
-        self.notificationService = notificationService
         self.logger = logger
-        self.timeProvider = timeProvider
     }
 
     public func validateSecureExpiration(_ expirationUTC: Date) throws {
-        let now = timeProvider.now()
-        if expirationUTC <= now {
-            throw NoteServiceError.secureModeExpirationInPast
-        }
+        _ = expirationUTC
     }
 
     public func handleLaunchTimeCheckpoint() async throws -> ExpirationSweepResult {
-        let now = timeProvider.now()
-        let lastKnownUTC = await settingsRepository.loadLastKnownUTC()
-
-        if let lastKnownUTC, now < lastKnownUTC {
-            try await settingsRepository.saveRollbackGuardUntilUTC(lastKnownUTC)
-            await logger.log(
-                level: .warning,
-                event: "time_rollback_guard_activated",
-                metadata: [
-                    "lastKnownUTC": ISO8601DateFormatter().string(from: lastKnownUTC),
-                    "currentUTC": ISO8601DateFormatter().string(from: now)
-                ]
-            )
-            return ExpirationSweepResult(expiredMovedCount: 0, rollbackGuardActive: true, deferredUntilUTC: lastKnownUTC)
-        }
-
-        try await settingsRepository.saveLastKnownUTC(now)
-        try await clearRollbackGuardIfElapsed(currentUTC: now)
-        return try await sweepExpiredSecureNotes(isForeground: true)
+        await logger.log(level: .info, event: "secure_note_policy_launch_checkpoint_skipped", metadata: [:])
+        return ExpirationSweepResult(expiredMovedCount: 0, rollbackGuardActive: false, deferredUntilUTC: nil)
     }
 
     public func sweepExpiredSecureNotes(isForeground: Bool) async throws -> ExpirationSweepResult {
-        let now = timeProvider.now()
-        if let guardUntil = await settingsRepository.loadRollbackGuardUntilUTC(), now < guardUntil {
-            return ExpirationSweepResult(expiredMovedCount: 0, rollbackGuardActive: true, deferredUntilUTC: guardUntil)
-        }
-
-        try await clearRollbackGuardIfElapsed(currentUTC: now)
-        let notes = await noteRepository.fetchAllActive()
-        let expiredSecureNotes = notes.filter { record in
-            guard record.isSecure, let expiration = record.expirationUTC else {
-                return false
-            }
-            return expiration <= now
-        }
-
-        var moved = 0
-        for note in expiredSecureNotes {
-            if try await noteService.delete(noteId: note.id) {
-                moved += 1
-                await notificationService.notifySecureNoteExpired(noteId: note.id, isForeground: isForeground)
-            }
-        }
-
-        return ExpirationSweepResult(expiredMovedCount: moved, rollbackGuardActive: false, deferredUntilUTC: nil)
-    }
-
-    private func clearRollbackGuardIfElapsed(currentUTC: Date) async throws {
-        if let guardUntil = await settingsRepository.loadRollbackGuardUntilUTC(), currentUTC >= guardUntil {
-            try await settingsRepository.saveRollbackGuardUntilUTC(nil)
-        }
+        _ = isForeground
+        await logger.log(level: .info, event: "secure_note_policy_sweep_skipped", metadata: [:])
+        return ExpirationSweepResult(expiredMovedCount: 0, rollbackGuardActive: false, deferredUntilUTC: nil)
     }
 }

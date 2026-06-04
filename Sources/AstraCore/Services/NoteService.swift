@@ -4,8 +4,6 @@ import AstraPlatform
 
 public enum NoteServiceError: Error, Equatable {
     case titleRequired
-    case secureModeRequiresExpiration
-    case secureModeExpirationInPast
     case keyMaterialUnavailable
     case recordNotFound
     case invalidSecurePayload
@@ -62,18 +60,11 @@ public actor NoteService {
             plainTitle: nil,
             plainContent: nil,
             securePayload: nil,
-            expirationUTC: nil,
             createdAt: existing?.createdAt ?? now,
             updatedAt: now
         )
 
         if draft.secureModeEnabled {
-            guard let expirationUTC = draft.expirationUTC else {
-                throw NoteServiceError.secureModeRequiresExpiration
-            }
-            guard expirationUTC > now else {
-                throw NoteServiceError.secureModeExpirationInPast
-            }
             guard let keyMaterial = await keyManager.currentKeyMaterial() else {
                 throw NoteServiceError.keyMaterialUnavailable
             }
@@ -82,13 +73,11 @@ public actor NoteService {
             let encrypted = try encryptionService.encrypt(plaintext: plaintext, keyMaterial: keyMaterial)
 
             record.isSecure = true
-            record.expirationUTC = expirationUTC
             record.securePayload = encrypted.stored
             record.plainTitle = nil
             record.plainContent = nil
         } else {
             record.isSecure = false
-            record.expirationUTC = nil
             record.securePayload = nil
             record.plainTitle = draft.title
             record.plainContent = draft.content
@@ -106,7 +95,6 @@ public actor NoteService {
         if stored.isSecure {
             guard
                 let payload = stored.securePayload,
-                let expirationUTC = stored.expirationUTC,
                 let keyMaterial = await keyManager.currentKeyMaterial()
             else {
                 throw NoteServiceError.invalidSecurePayload
@@ -121,7 +109,6 @@ public actor NoteService {
                 content: decoded.content,
                 subjectId: stored.subjectId,
                 isSecure: true,
-                expirationUTC: expirationUTC,
                 createdAt: stored.createdAt,
                 updatedAt: stored.updatedAt
             )
@@ -133,7 +120,6 @@ public actor NoteService {
             content: stored.plainContent ?? "",
             subjectId: stored.subjectId,
             isSecure: false,
-            expirationUTC: nil,
             createdAt: stored.createdAt,
             updatedAt: stored.updatedAt
         )

@@ -98,7 +98,7 @@ final class AstraCoreTests: XCTestCase {
         XCTAssertEqual(loadedSecure.content, "Encrypted")
     }
 
-    func testSecureNotePolicyMovesExpiredSecureNotes() async throws {
+    func testSecureNotePolicyDoesNotExpireSecureNotes() async throws {
         let database = DatabaseProvider()
         let noteRepository = NoteRepository(database: database)
         let attachmentRepository = AttachmentRepository(database: database)
@@ -118,10 +118,7 @@ final class AstraCoreTests: XCTestCase {
             timeProvider: time
         )
         let policy = SecureNotePolicyService(
-            noteRepository: noteRepository,
             noteService: noteService,
-            settingsRepository: settingsRepository,
-            notificationService: notifications,
             logger: logger,
             timeProvider: time
         )
@@ -141,20 +138,20 @@ final class AstraCoreTests: XCTestCase {
         let fetchedNoteCore = await noteRepository.fetch(id: secureId)
         XCTAssertNotNil(fetchedNoteCore)
 
-        _ = try await policy.handleLaunchTimeCheckpoint()
-        time.advance(seconds: 10)
+        let launchResult = try await policy.handleLaunchTimeCheckpoint()
+        XCTAssertEqual(launchResult.expiredMovedCount, 0)
 
+        time.advance(seconds: 10)
         let sweep = try await policy.sweepExpiredSecureNotes(isForeground: true)
-        XCTAssertEqual(sweep.expiredMovedCount, 1)
-        let fetchedDeletedNote = await noteRepository.fetch(id: secureId)
-        XCTAssertTrue(fetchedDeletedNote == nil)
+        XCTAssertEqual(sweep.expiredMovedCount, 0)
+        let fetchedStillActiveNote = await noteRepository.fetch(id: secureId)
+        XCTAssertNotNil(fetchedStillActiveNote)
 
         let events = await notifications.history()
-        XCTAssertEqual(events.count, 1)
-        XCTAssertEqual(events.first?.noteId, secureId)
+        XCTAssertTrue(events.isEmpty)
     }
 
-    func testRollbackGuardDefersExpirationChecks() async throws {
+    func testLaunchCheckpointNoLongerAppliesRollbackGuard() async throws {
         let database = DatabaseProvider()
         let noteRepository = NoteRepository(database: database)
         let attachmentRepository = AttachmentRepository(database: database)
@@ -163,7 +160,6 @@ final class AstraCoreTests: XCTestCase {
         let now = Date()
         let time = MutableTimeProvider(now: now)
         let logger = InMemoryAuditLogger(timeProvider: time)
-        let notifications = InMemoryNotificationService(timeProvider: time)
 
         let keyManager = KeyManager(settingsRepository: settingsRepository, timeProvider: time, logger: logger)
         let noteService = NoteService(
@@ -175,10 +171,7 @@ final class AstraCoreTests: XCTestCase {
             timeProvider: time
         )
         let policy = SecureNotePolicyService(
-            noteRepository: noteRepository,
             noteService: noteService,
-            settingsRepository: settingsRepository,
-            notificationService: notifications,
             logger: logger,
             timeProvider: time
         )
@@ -196,13 +189,13 @@ final class AstraCoreTests: XCTestCase {
             )
         )
 
-        try await settingsRepository.saveLastKnownUTC(now.addingTimeInterval(3600))
         let launchResult = try await policy.handleLaunchTimeCheckpoint()
-        XCTAssertTrue(launchResult.rollbackGuardActive)
+        XCTAssertFalse(launchResult.rollbackGuardActive)
+        XCTAssertEqual(launchResult.expiredMovedCount, 0)
 
         time.advance(seconds: 10)
         let sweep = try await policy.sweepExpiredSecureNotes(isForeground: true)
-        XCTAssertTrue(sweep.rollbackGuardActive)
+        XCTAssertFalse(sweep.rollbackGuardActive)
         XCTAssertEqual(sweep.expiredMovedCount, 0)
     }
 
@@ -426,7 +419,9 @@ final class AstraCoreTests: XCTestCase {
         XCTAssertEqual(coordinator.sessionState, .unlocked)
 
         await coordinator.endBackgroundOperation()
-        XCTAssertEqual(coordinator.sessionState, .locked)
+        XCTAssertEqual(coordinator.sessionState, .unlocked)
+        let keyAfterDeferredTimeout = await keyManager.currentKeyMaterial()
+        XCTAssertNil(keyAfterDeferredTimeout)
     }
 
     func testPassphraseRotationReencryptsSecureNotes() async throws {
@@ -717,12 +712,17 @@ final class AstraCoreTests: XCTestCase {
         try await coordinator.createInitialPassphraseAndUnlock("bio-pass")
         try await coordinator.updateBiometricUnlock(enabled: true)
         await coordinator.lockNow()
+        XCTAssertEqual(coordinator.sessionState, .unlocked)
+        let keyAfterManualLock = await keyManager.currentKeyMaterial()
+        XCTAssertNil(keyAfterManualLock)
         try await coordinator.unlockWithBiometrics()
         XCTAssertEqual(coordinator.sessionState, .unlocked)
 
         coordinator.bind(platformIntegration: platformIntegration)
         await platformIntegration.publish(.appDidBackground)
         try await Task.sleep(for: .milliseconds(25))
-        XCTAssertEqual(coordinator.sessionState, .locked)
+        XCTAssertEqual(coordinator.sessionState, .unlocked)
+        let keyAfterBackgroundEvent = await keyManager.currentKeyMaterial()
+        XCTAssertNil(keyAfterBackgroundEvent)
     }
 }

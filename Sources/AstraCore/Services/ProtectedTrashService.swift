@@ -8,6 +8,22 @@ public struct TrashItemView: Sendable, Equatable {
     public let displayTitle: String?
     public let deletionTime: Date
     public let lockBadgeVisible: Bool
+
+    public init(
+        trashId: UUID,
+        sourceNoteId: UUID,
+        isSecure: Bool,
+        displayTitle: String?,
+        deletionTime: Date,
+        lockBadgeVisible: Bool
+    ) {
+        self.trashId = trashId
+        self.sourceNoteId = sourceNoteId
+        self.isSecure = isSecure
+        self.displayTitle = displayTitle
+        self.deletionTime = deletionTime
+        self.lockBadgeVisible = lockBadgeVisible
+    }
 }
 
 public enum ProtectedTrashServiceError: Error, Equatable {

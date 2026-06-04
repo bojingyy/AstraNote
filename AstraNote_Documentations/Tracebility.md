@@ -30,20 +30,14 @@ Legend:
 | FR2.4 | Fully Traced | A, ACT, C, D | Atomic save and rollback semantics are represented. |
 | FR2.5 | Fully Traced | A, ACT, C, D | Single-transaction move with rollback path is explicit. |
 | FR3.1 | Fully Traced | A, U, ACT, C | Secure mode toggle is modeled. |
-| FR3.2 | Fully Traced | A, U, ACT | Secure mode requires date and time in behavior. |
-| FR3.8 | Fully Traced | A, ACT | Past-expiration rejection branch is explicit. |
+| FR3.2 | Fully Traced | A, U, ACT | Secure mode saves immediately without any time-based policy fields. |
 | FR3.3 | Fully Traced | A, ACT, C, D | Encrypt-before-write path is explicit. |
 | FR3.4 | Fully Traced | A, C, O | Stable secure-note ID is represented by persistent note identity model. |
 | FR3.5 | Fully Traced | A, ACT, C, D | Atomic secure-write semantics are modeled. |
 | FR3.6 | Fully Traced | A, ACT, C, D | Decrypt verification failure branch preserves record and shows error. |
 | FR3.7 | Fully Traced | A, ACT, C, D | Secure delete routes encrypted note and attachments to trash in one flow. |
-| FR4.1 | Fully Traced | A, U, ACT, C | Expiration checks are represented in policy and system behaviors. |
-| FR4.2 | Fully Traced | A, U, C, O | Expire-on-next-launch behavior is structurally and behaviorally aligned. |
-| FR4.3 | Fully Traced | A, U, ACT, C | Expired secure notes move out of active list into trash. |
-| FR4.4 | Fully Traced | A, U, C, D | Foreground and background notification mechanisms are represented. |
-| FR4.5 | Fully Traced | R, A, C, D | Time-rollback guard path is now explicitly modeled in requirements with clear behavioral semantics (activate guard, defer expiration checks, log and inform user) and referenced in architecture. |
-| FR4.6 | Fully Traced | A, C, O | Local-time selection with UTC persistence is represented in architecture and models. |
-| FR4.7 | Fully Traced | A, U, ACT | Explicit date/time controls are represented in secure-note flow. |
+| FR4.1 | Fully Traced | A, U, ACT, C | Secure notes remain active until deleted; no automatic expiration path exists. |
+| FR4.2 | Fully Traced | A, U, C, O | Secure-note load and save flows preserve retention without time-based policy checks. |
 | FR5.1 | Fully Traced | A, U, ACT, C | All deletes flow through protected trash. |
 | FR5.2 | Fully Traced | R, A, U, C, O | Trash listing behavior semantics are now explicitly detailed in requirements: normal notes show title+deletion-time; secure notes show deletion-time+lock-badge only. |
 | FR5.3 | Fully Traced | R, A, C, O | Lock-badge behavior and hidden title semantics are now explicitly modeled in requirements with user-visible locked preview message in architecture (section 5.5). |

@@ -61,7 +61,7 @@ final class AstraIntegrationTests: XCTestCase {
         XCTAssertEqual(state.trash.count, 1)
     }
 
-    func testPhase3And4SecureExpirationTrashAndSearchFlow() async throws {
+    func testPhase3And4SecureTrashAndSearchFlow() async throws {
         let database = DatabaseProvider()
         let noteRepository = NoteRepository(database: database)
         let attachmentRepository = AttachmentRepository(database: database)
@@ -70,7 +70,6 @@ final class AstraIntegrationTests: XCTestCase {
         let trashRepository = ProtectedTrashRepository(database: database)
         let clock = MutableTimeProvider(now: Date())
         let logger = InMemoryAuditLogger(timeProvider: clock)
-        let notificationService = InMemoryNotificationService(timeProvider: clock)
 
         let keyManager = KeyManager(settingsRepository: settingsRepository, timeProvider: clock, logger: logger)
         let noteService = NoteService(
@@ -82,10 +81,7 @@ final class AstraIntegrationTests: XCTestCase {
             timeProvider: clock
         )
         let policyService = SecureNotePolicyService(
-            noteRepository: noteRepository,
             noteService: noteService,
-            settingsRepository: settingsRepository,
-            notificationService: notificationService,
             logger: logger,
             timeProvider: clock
         )
@@ -95,7 +91,7 @@ final class AstraIntegrationTests: XCTestCase {
         try await keyManager.createInitialPassphrase("phase34")
         _ = try await keyManager.unlock(passphrase: "phase34")
 
-        _ = try await noteService.save(
+        let secureId = try await noteService.save(
             draft: NoteDraft(
                 title: "Secure Search Title",
                 content: "payload",
@@ -109,21 +105,19 @@ final class AstraIntegrationTests: XCTestCase {
         XCTAssertEqual(unlockedSearch.count, 1)
         XCTAssertTrue(unlockedSearch[0].isSecure)
 
-        _ = try await policyService.handleLaunchTimeCheckpoint()
+        let launchResult = try await policyService.handleLaunchTimeCheckpoint()
+        XCTAssertEqual(launchResult.expiredMovedCount, 0)
+
         clock.advance(seconds: 30)
         let sweep = try await policyService.sweepExpiredSecureNotes(isForeground: true)
-        XCTAssertEqual(sweep.expiredMovedCount, 1)
+        XCTAssertEqual(sweep.expiredMovedCount, 0)
+
+        let activeSecureNote = await noteRepository.fetch(id: secureId)
+        XCTAssertNotNil(activeSecureNote)
 
         let trashItems = await trashService.listTrashItems()
-        XCTAssertEqual(trashItems.count, 1)
-        XCTAssertTrue(trashItems[0].lockBadgeVisible)
-        XCTAssertNil(trashItems[0].displayTitle)
+        XCTAssertTrue(trashItems.isEmpty)
 
-        let securePreview = try await trashService.secureTitlePreviewMessage(trashId: trashItems[0].trashId)
-        XCTAssertEqual(securePreview, "This secure note is locked and cannot be previewed until restored and unlocked.")
-
-        await keyManager.clearInMemoryKeyMaterial()
-        await searchService.clearSecureCacheOnLock()
         let lockedSearch = await searchService.searchTitle(query: "secure", isUnlocked: false)
         XCTAssertTrue(lockedSearch.isEmpty)
     }

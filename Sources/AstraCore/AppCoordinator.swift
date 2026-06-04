@@ -42,14 +42,13 @@ public final class AppCoordinator: ObservableObject {
     }
 
     public func start(now: Date = Date()) async {
-        // Keep startup idempotent for the current process. If already unlocked,
-        // do not recalculate state from persisted credentials.
-        guard sessionState != .unlocked else {
+        // Keep startup idempotent for the current process.
+        guard sessionState != .firstLaunchSetup else {
             return
         }
         lastUserInteractionAt = now
         let hasPassphrase = await keyManager.hasPassphrase()
-        sessionState = hasPassphrase ? .locked : .firstLaunchSetup
+        sessionState = hasPassphrase ? .unlocked : .firstLaunchSetup
     }
 
     public func createInitialPassphraseAndUnlock(_ passphrase: String) async throws {
@@ -110,7 +109,6 @@ public final class AppCoordinator: ObservableObject {
     public func lockNow() async {
         await keyManager.clearInMemoryKeyMaterial()
         await noteSearchService.clearSecureCacheOnLock()
-        sessionState = .locked
     }
 
     public func handleImmediateLockEvent() async {
@@ -161,7 +159,7 @@ public final class AppCoordinator: ObservableObject {
     }
 
     public func evaluateInactivityAutoLock(now: Date = Date()) async {
-        guard sessionState == .unlocked else {
+        guard sessionState != .firstLaunchSetup else {
             return
         }
 

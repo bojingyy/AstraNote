@@ -42,23 +42,22 @@ All 5 phases build incrementally toward complete MVP with early integration test
 ---
 
 ### Phase 3: Secure Note Features and Trash (Weeks 6-8)
-**Goal**: Implement secure mode, expiration policy, and trash flow.
+**Goal**: Implement secure mode and trash flow.
 
 **Priority Components**:
-- `SecureNotePolicyService.swift`: Expiration validation, local-time-to-UTC conversion, expiration checks on launch and periodic intervals, time-rollback guard (FR4.1-4.7, FR4.5).
+- `SecureNotePolicyService.swift`: Secure-note protection rules and delete/restore coordination without time-based expiration.
 - `ProtectedTrashRepository.swift`: Trash record schema (source note, isSecure, deletion time).
 - `ProtectedTrashService.swift`: Move/restore/permanent-delete logic with ACID transactions (FR5.1-5.7).
-- `NotificationService.swift`: Local expiration notifications (FR4.4).
-- `TimeProvider.swift`: UTC source + last-known-time storage for rollback detection (FR4.5).
-- UI: Secure toggle, date/time picker, trash view (display semantics for lock badges, hidden titles).
-- Test: Expiration checks, time rollback guard, trash display and restore.
+- `NotificationService.swift`: Local app notifications for general workspace feedback.
+- `TimeProvider.swift`: UTC source for app timestamps.
+- UI: Secure toggle, trash view (display semantics for lock badges, hidden titles).
+- Test: Secure note storage, trash display, and restore.
 
-**Testing**: Expiration timing (app open/closed), lock badge display, restore permissions (unlock requirement), permanent delete irreversibility.
+**Testing**: Lock badge display, restore permissions (unlock requirement), permanent delete irreversibility.
 
 **Deliverables**:
-- Secure notes with expiration and encryption.
+- Secure notes with encryption.
 - Protected trash with correct display semantics (FR5.2, FR5.3).
-- Time-rollback protection (FR4.5).
 
 ---
 
@@ -107,7 +106,7 @@ All 5 phases build incrementally toward complete MVP with early integration test
 - Internationalization infrastructure (English-first, localization extensibility; NFR9.1-9.2).
 
 **Testing**:
-- Full integration: Unlock → create/edit/delete → expiration → trash → restore → key rotation → export/import.
+- Full integration: Unlock → create/edit/delete → trash → restore → key rotation → export/import.
 - Plugin failure modes (timeout, exception, state preservation).
 - Accessibility (keyboard-only, VoiceOver navigation).
 - Confidentiality boundary verification (logs, caches, exports inspection).
@@ -166,6 +165,6 @@ All 5 phases build incrementally toward complete MVP with early integration test
 
 1. **Phase 1 → 2**: Crypto unit tests pass; transaction rollback verified.
 2. **Phase 2 → 3**: All CRUD operations atomic; stable note IDs preserved.
-3. **Phase 3 → 4**: Expiration checks working; trash display correct; time-rollback guard active.
+3. **Phase 3 → 4**: Secure note storage working; trash display correct; secure-note access confirmed.
 4. **Phase 4 → 5**: Unlock performance ≤1s (1k notes); title search correct; attachments stored correctly.
 5. **Phase 5 → Deploy**: Full regression pass; ≥95% code coverage; all NFR benchmarks met; no decrypted content leakage detected.

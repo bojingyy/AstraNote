@@ -68,12 +68,8 @@ final class AppEnvironment: ObservableObject {
         trashService = ProtectedTrashService(trashRepository: trashRepository, keyManager: keyManager)
         noteSearchService = NoteSearchService(noteRepository: noteRepository, noteService: noteService)
         secureNotePolicyService = SecureNotePolicyService(
-            noteRepository: noteRepository,
             noteService: noteService,
-            settingsRepository: settingsRepository,
-            notificationService: notificationService,
-            logger: logger,
-            timeProvider: timeProvider
+            logger: logger
         )
         exportImportService = ExportImportService(
             database: database,

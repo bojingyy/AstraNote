@@ -65,53 +65,43 @@ Test cases are organized by epic/feature with positive, negative, and edge case 
 
 ---
 
-## 4. Secure Note Lifecycle (FR3.1-3.8, NFR3.1-3.2, NFR4.1-4.2)
+## 4. Secure Note Lifecycle (FR3.1-3.7, FR3.9, NFR3.1-3.2, NFR4.1-4.2)
 
-### 4.1 Enable Secure Mode and Expiration
-**Test 4.1**: Toggle secure mode → expiration date/time controls appear (FR3.1, FR3.2).
-**Test 4.2**: Attempt save without expiration → blocked with prompt (FR3.2).
-**Test 4.3**: Set expiration in past → rejection with message (FR3.8).
-**Test 4.4**: Set valid future expiration → save proceeds (FR3.2).
-**Test 4.5**: Local timezone → UTC conversion verified (FR4.6).
+### 4.1 Enable Secure Mode
+**Test 4.1**: Toggle secure mode → secure controls appear without expiration fields (FR3.1, FR3.2).
+**Test 4.2**: Save secure note → note encrypts immediately without time-based validation (FR3.2, FR3.3).
+**Test 4.3**: Secure note access still requires step-up authentication before open (FR3.9).
 
 ### 4.2 Encryption and Storage
-**Test 4.6**: Save secure note, inspect database → ciphertext only, no plaintext (FR3.3).
-**Test 4.7**: Ciphertext record includes nonce and salt (FR3.3).
-**Test 4.8**: Secure note has stable ID across edits (FR3.4).
-**Test 4.9**: Edit and save → atomic write, previous ciphertext preserved on failure (FR3.5, NFR5.1).
-**Test 4.10**: Decrypted content never in logs, caches (except in-memory search), exports (NFR3.1).
-**Test 4.11**: Decrypted titles held in memory only during unlocked session, cleared on lock (NFR3.2).
+**Test 4.4**: Save secure note, inspect database → ciphertext only, no plaintext (FR3.3).
+**Test 4.5**: Ciphertext record includes nonce and salt (FR3.3).
+**Test 4.6**: Secure note has stable ID across edits (FR3.4).
+**Test 4.7**: Edit and save → atomic write, previous ciphertext preserved on failure (FR3.5, NFR5.1).
+**Test 4.8**: Decrypted content never in logs, caches (except in-memory search), exports (NFR3.1).
+**Test 4.9**: Decrypted titles held in memory only during unlocked session, cleared on lock (NFR3.2).
 
 ### 4.3 Decryption Failure and Integrity
-**Test 4.12**: Corrupt secure ciphertext → view fails, error shown, record preserved (FR3.6, NFR4.2).
-**Test 4.13**: Authenticated encryption (AES-GCM) → tampered ciphertext fails verification (NFR4.1).
-**Test 4.14**: Decrypt with wrong key → auth failure, record preserved (NFR4.1, NFR4.2).
+**Test 4.10**: Corrupt secure ciphertext → view fails, error shown, record preserved (FR3.6, NFR4.2).
+**Test 4.11**: Authenticated encryption (AES-GCM) → tampered ciphertext fails verification (NFR4.1).
+**Test 4.12**: Decrypt with wrong key → auth failure, record preserved (NFR4.1, NFR4.2).
 
 ### 4.4 Secure Note Deletion
-**Test 4.15**: Delete secure note → encrypted record/attachments move to trash, single transaction (FR3.7, NFR5.1).
-**Test 4.16**: Permanently delete from trash → ciphertext/attachments wiped, unrecoverable (FR5.7).
+**Test 4.13**: Delete secure note → encrypted record/attachments move to trash, single transaction (FR3.7, NFR5.1).
+**Test 4.14**: Permanently delete from trash → ciphertext/attachments wiped, unrecoverable (FR5.7).
 
 ---
 
-## 5. Secure Note Expiration (FR4.1-4.7, FR4.5)
+## 5. Secure Note Retention (FR4.1-4.2)
 
-### 5.1 Expiration Checks
-**Test 5.1**: Create secure note with 1-minute expiration (FR4.1).
-**Test 5.2**: Keep app open until expiration → note moves to trash, UI updates, banner shown (FR4.3, FR4.4).
-**Test 5.3**: Close app before expiration, restart after → note in trash on launch (FR4.2, FR4.3).
-**Test 5.4**: Multiple notes, different expirations → periodic checks move them in order (FR4.1).
-**Test 5.5**: Backgrounded app → local notification scheduled for expiry (FR4.4).
+### 5.1 Retention Checks
+**Test 5.1**: Create secure note and leave app open → note remains active with no automatic trash move.
+**Test 5.2**: Close and relaunch app → secure note stays in active list on launch.
+**Test 5.3**: Multiple secure notes remain active until deleted.
+**Test 5.4**: Secure-note runtime policies never emit expiry notifications.
 
-### 5.2 Time Rollback Guard (FR4.5)
-**Test 5.6**: Roll back device time 2 hours → app detects and activates time-rollback guard.
-**Test 5.7**: With guard active → no secure note treated as unexpired (FR4.5).
-**Test 5.8**: Expiration checks deferred until device time advances past stored timestamp (FR4.5).
-**Test 5.9**: App logs rollback event and informs user (FR4.5).
-**Test 5.10**: Advance device time forward → guard deactivates, expiration checks resume.
-
-### 5.3 Explicit Date/Time Controls
-**Test 5.11**: Editor shows date and time picker controls (FR4.7).
-**Test 5.12**: Adjust to specific moment → exact expiration applied (FR4.7).
+### 5.2 Device Time Changes
+**Test 5.5**: Roll back device time → secure notes remain active and no policy action is triggered.
+**Test 5.6**: Advance device time forward → secure-note availability is unchanged because no time-based policy runs.
 
 ---
 
@@ -443,10 +433,10 @@ Test cases are organized by epic/feature with positive, negative, and edge case 
 ---
 
 ## Test Execution Strategy
-- **Automation**: Unlock, CRUD, expiration, import/export, key rotation, basic plugin flows.
+- **Automation**: Unlock, CRUD, import/export, key rotation, basic plugin flows.
 - **Manual**: Accessibility, VoiceOver, plugin failure modes, UI responsiveness, edge cases.
 - **Performance**: Representative hardware (Apple Silicon M-series, Intel i5/i7 6th gen+), target datasets.
-- **Integration**: Feature interactions (secure + attachment + expiration + auto-lock + key rotation).
+- **Integration**: Feature interactions (secure + attachment + auto-lock + key rotation).
 - **Regression**: After each change, re-run unlock, CRUD, core security flows.
 
 **Metrics**: ≥95% code coverage (core services), all NFR benchmarks met, no decrypted content leakage, all ACID transactions validated.

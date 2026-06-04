@@ -64,13 +64,12 @@ All criteria aligned with Requirement.md, Architecture.md, and Traceability matr
 
 ---
 
-## 3. Secure Note Lifecycle and Expiration (Phase 3)
+## 3. Secure Note Lifecycle (Phase 3)
 
-**Secure Mode (FR3.1-3.8)**:
+**Secure Mode (FR3.1-3.7, FR3.9)**:
 - [x] User can toggle secure mode from editor toolbar (FR3.1).
-- [x] Enabling secure mode requires setting both expiration date and time before save (FR3.2).
-- [x] App rejects expiration timestamp in past with message "expiration must be in future" (FR3.8).
-- [x] Valid future expiration accepted (FR3.2).
+- [x] Enabling secure mode does not require any expiration fields before save (FR3.2).
+- [x] Secure notes are encrypted immediately when saved (FR3.2, FR3.3).
 - [x] When secure note saved, title and content encrypted on-device before storage write (FR3.3).
 - [x] Database stores only ciphertext, nonce, and salt for secure notes (no plaintext; FR3.3).
 - [x] Secure note has stable ID across edits (FR3.4).
@@ -79,21 +78,11 @@ All criteria aligned with Requirement.md, Architecture.md, and Traceability matr
 - [x] Deleting secure note moves encrypted record and attachments to trash in single transaction (FR3.7, NFR5.1).
 - [x] Test cases 4.1-4.16 pass (secure note lifecycle).
 
-**Expiration and Time Management (FR4.1-4.7, FR4.5)**:
-- [x] App checks secure note expiration on every launch (FR4.1).
-- [x] App periodically checks during active use (FR4.1).
-- [x] Expiration timestamp interpreted in device local time at selection, stored as UTC for comparison (FR4.6).
-- [x] Note expired while app closed treated as expired on next launch (FR4.2, FR4.3).
-- [x] When secure note expires, removed from active list and moved to protected trash automatically (FR4.3, FR4.4).
-- [x] In-app banner shown for foreground expiry events (FR4.4).
-- [x] Local notification scheduled for backgrounded/closed app expiry (FR4.4).
-- [x] Secure note editor provides explicit date and time controls for exact expiration selection (FR4.7).
-- [x] **Time-Rollback Guard (FR4.5)**: App stores last-known UTC timestamp on each launch.
-- [x] **Time-Rollback Guard (FR4.5)**: If device time earlier than stored value, time-rollback guard activates.
-- [x] **Time-Rollback Guard (FR4.5)**: With guard active, no secure note treated as unexpired; all expiration checks deferred.
-- [x] **Time-Rollback Guard (FR4.5)**: Guard deactivates when device time advances past stored timestamp.
-- [x] **Time-Rollback Guard (FR4.5)**: Guard activation logged and user informed of rollback detection.
-- [x] Test cases 5.1-5.12 pass (expiration checks and time-rollback guard).
+**Secure Retention (FR4.1-4.2)**:
+- [x] Secure notes remain in the active list until deleted (FR4.1).
+- [x] Secure-note save and load flows preserve retention without any time-based policy checks (FR4.2).
+- [x] Secure notes do not emit expiration notifications or time-rollback behavior.
+- [x] Test cases 5.1-5.6 pass (secure-note retention).
 
 **Data Integrity (NFR4.1-4.2)**:
 - [x] Secure notes use authenticated encryption (AES-GCM) (NFR4.1).
@@ -366,8 +355,8 @@ All criteria aligned with Requirement.md, Architecture.md, and Traceability matr
 **Test Coverage**:
 - [x] ≥95% code coverage for core services: `NoteService`, `EncryptionService`, `KeyManager`, `SecureNotePolicyService`, `ProtectedTrashService`, `NoteSearchService`, `ExportImportService` (All phases).
 - [x] All 20 test sections with 200+ individual test cases pass (All phases).
-- [x] Regression test suite covers unlock, CRUD, expiration, trash, export/import, key rotation (Phases 2-5).
-- [x] Integration tests verify feature interactions: secure note + attachment + expiration + auto-lock + key rotation (Phase 5).
+- [x] Regression test suite covers unlock, CRUD, trash, export/import, key rotation (Phases 2-5).
+- [x] Integration tests verify feature interactions: secure note + attachment + auto-lock + key rotation (Phase 5).
 - [x] Manual testing: Accessibility, VoiceOver, plugin failure modes, UI responsiveness (Phase 5).
 
 **Performance Verification**:

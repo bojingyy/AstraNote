@@ -16,7 +16,6 @@ struct NotesWorkspaceView: View {
     let secureTrashPreviewAction: (UUID) async throws -> String?
     let secureNotePassphraseAuthAction: (String) async throws -> Void
     let secureNoteBiometricAuthAction: (() async throws -> Void)?
-    let lockAction: () async -> Void
     let loadSettingsAction: () async -> AppSettings
     let saveSettingsAction: (AppSettings) async throws -> Void
     let updateBiometricAction: (Bool) async throws -> Void
@@ -32,21 +31,17 @@ struct NotesWorkspaceView: View {
     @State private var title = ""
     @State private var content = ""
     @State private var secureModeEnabled = false
-    @State private var expirationDate = Date()
-    @State private var expirationTime = Date()
     @State private var editorSubjectId: UUID?
     @State private var newSubjectName = ""
     @State private var isShowingTrash = false
     @State private var trashItems: [TrashItemView] = []
     @State private var pendingSubjectDeletion: Subject?
     @State private var isShowingSettings = false
-    @State private var errorMessage: String?
-    @State private var infoMessage: String?
     @State private var collapsedGroupIDs: Set<String> = []
     @State private var isShowingSecureAccessPrompt = false
     @State private var pendingSecureNoteId: UUID?
     @State private var secureAccessPassphrase = ""
-    @State private var secureAccessErrorMessage: String?
+    @State private var toasts: [ToastMessage] = []
 
     private struct NoteListItem: Identifiable {
         let id: UUID
@@ -63,6 +58,17 @@ struct NotesWorkspaceView: View {
         var id: String {
             subjectId?.uuidString ?? "ungrouped"
         }
+    }
+
+    private struct ToastMessage: Identifiable {
+        enum Style {
+            case info
+            case error
+        }
+
+        let id = UUID()
+        let text: String
+        let style: Style
     }
 
     private var displayedNotes: [NoteListItem] {
@@ -160,11 +166,6 @@ struct NotesWorkspaceView: View {
                             isShowingTrash = true
                         }
                     }
-                    Button("Lock AstraNote") {
-                        Task {
-                            await lockAction()
-                        }
-                    }
                     Button("Settings") {
                         isShowingSettings = true
                     }
@@ -255,7 +256,7 @@ struct NotesWorkspaceView: View {
                                 newSubjectName = ""
                                 await refreshWorkspace()
                             } catch {
-                                errorMessage = mapError(error)
+                                showToast(mapError(error), style: .error)
                             }
                         }
                     }
@@ -284,21 +285,6 @@ struct NotesWorkspaceView: View {
 
                 Toggle("Secure mode", isOn: $secureModeEnabled)
 
-                if secureModeEnabled {
-                    HStack {
-                        DatePicker(
-                            "Expiration Date",
-                            selection: $expirationDate,
-                            displayedComponents: [.date]
-                        )
-                        DatePicker(
-                            "Expiration Time",
-                            selection: $expirationTime,
-                            displayedComponents: [.hourAndMinute]
-                        )
-                    }
-                }
-
                 ZStack {
                     TextEditor(text: $content)
                         .font(.system(size: 16))
@@ -309,16 +295,6 @@ struct NotesWorkspaceView: View {
                 .overlay {
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(.secondary.opacity(0.4))
-                }
-
-                if let infoMessage {
-                    Text(infoMessage)
-                        .foregroundStyle(.green)
-                }
-
-                if let errorMessage {
-                    Text(errorMessage)
-                        .foregroundStyle(.red)
                 }
 
                 HStack {
@@ -369,9 +345,12 @@ struct NotesWorkspaceView: View {
                                 Button("Why Locked?") {
                                     Task {
                                         do {
-                                            infoMessage = try await secureTrashPreviewAction(item.trashId)
+                                            let previewMessage = try await secureTrashPreviewAction(item.trashId)
+                                            if let previewMessage {
+                                                showToast(previewMessage, style: .info)
+                                            }
                                         } catch {
-                                            errorMessage = mapError(error)
+                                            showToast(mapError(error), style: .error)
                                         }
                                     }
                                 }
@@ -384,7 +363,7 @@ struct NotesWorkspaceView: View {
                                         await loadTrashItems()
                                         await refreshWorkspace()
                                     } catch {
-                                        errorMessage = mapError(error)
+                                        showToast(mapError(error), style: .error)
                                     }
                                 }
                             }
@@ -395,7 +374,7 @@ struct NotesWorkspaceView: View {
                                         _ = try await permanentlyDeleteTrashAction(item.trashId)
                                         await loadTrashItems()
                                     } catch {
-                                        errorMessage = mapError(error)
+                                        showToast(mapError(error), style: .error)
                                     }
                                 }
                             }
@@ -427,16 +406,10 @@ struct NotesWorkspaceView: View {
                     .textFieldStyle(.roundedBorder)
                     .autocorrectionDisabled(true)
 
-                if let secureAccessErrorMessage {
-                    Text(secureAccessErrorMessage)
-                        .foregroundStyle(.red)
-                }
-
                 HStack {
                     Button("Cancel", role: .cancel) {
                         pendingSecureNoteId = nil
                         secureAccessPassphrase = ""
-                        secureAccessErrorMessage = nil
                         isShowingSecureAccessPrompt = false
                     }
 
@@ -461,6 +434,26 @@ struct NotesWorkspaceView: View {
         }
         .task {
             await refreshWorkspace()
+        }
+        .overlay(alignment: .topTrailing) {
+            VStack(alignment: .trailing, spacing: 8) {
+                ForEach(toasts) { toast in
+                    HStack(spacing: 8) {
+                        Image(systemName: toast.style == .error ? "exclamationmark.triangle.fill" : "checkmark.circle.fill")
+                            .foregroundStyle(toast.style == .error ? .red : .green)
+                        Text(toast.text)
+                            .font(.subheadline)
+                            .foregroundStyle(.primary)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                    .background(.regularMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .shadow(radius: 4)
+                }
+            }
+            .padding(.top, 10)
+            .padding(.trailing, 12)
         }
         .alert("Delete Subject?", isPresented: Binding(
             get: { pendingSubjectDeletion != nil },
@@ -511,7 +504,6 @@ struct NotesWorkspaceView: View {
         if note.isSecure {
             pendingSecureNoteId = note.id
             secureAccessPassphrase = ""
-            secureAccessErrorMessage = nil
             isShowingSecureAccessPrompt = true
             return
         }
@@ -529,19 +521,8 @@ struct NotesWorkspaceView: View {
             content = loaded.content
             secureModeEnabled = loaded.isSecure
             editorSubjectId = loaded.subjectId
-
-            if let expiration = loaded.expirationUTC {
-                expirationDate = expiration
-                expirationTime = expiration
-            } else {
-                let defaultFuture = Date().addingTimeInterval(3600)
-                expirationDate = defaultFuture
-                expirationTime = defaultFuture
-            }
-            errorMessage = nil
-            infoMessage = nil
         } catch {
-            errorMessage = mapError(error)
+            showToast(mapError(error), style: .error)
         }
     }
 
@@ -551,14 +532,13 @@ struct NotesWorkspaceView: View {
         }
 
         do {
-            secureAccessErrorMessage = nil
             try await secureNotePassphraseAuthAction(secureAccessPassphrase)
             await selectNote(pendingSecureNoteId)
             secureAccessPassphrase = ""
             self.pendingSecureNoteId = nil
             isShowingSecureAccessPrompt = false
         } catch {
-            secureAccessErrorMessage = mapError(error)
+            showToast(mapError(error), style: .error)
         }
     }
 
@@ -568,38 +548,34 @@ struct NotesWorkspaceView: View {
         }
 
         do {
-            secureAccessErrorMessage = nil
             try await action()
             await selectNote(pendingSecureNoteId)
             secureAccessPassphrase = ""
             self.pendingSecureNoteId = nil
             isShowingSecureAccessPrompt = false
         } catch {
-            secureAccessErrorMessage = mapError(error)
+            showToast(mapError(error), style: .error)
         }
     }
 
     private func saveCurrentDraft() async {
         do {
-            let expirationUTC = secureModeEnabled ? combineExpiration(datePart: expirationDate, timePart: expirationTime) : nil
             let draft = NoteDraft(
                 id: selectedNoteId,
                 title: title,
                 content: content,
                 subjectId: editorSubjectId,
                 secureModeEnabled: secureModeEnabled,
-                expirationUTC: expirationUTC
+                expirationUTC: nil
             )
 
             let savedId = try await saveDraftAction(draft)
             selectedNoteId = savedId
-            infoMessage = "Note saved."
-            errorMessage = nil
+            showToast("Note saved.", style: .info)
             await refreshWorkspace()
             await selectNote(savedId)
         } catch {
-            errorMessage = mapError(error)
-            infoMessage = nil
+            showToast(mapError(error), style: .error)
         }
     }
 
@@ -608,16 +584,42 @@ struct NotesWorkspaceView: View {
             return
         }
 
+        let deletedNoteTitle = title
+        let deletedNoteWasSecure = secureModeEnabled
+
         do {
             _ = try await deleteNoteAction(selectedNoteId)
+            appendOptimisticTrashItem(
+                sourceNoteId: selectedNoteId,
+                isSecure: deletedNoteWasSecure,
+                displayTitle: deletedNoteWasSecure ? nil : deletedNoteTitle
+            )
             clearEditorForNewNote()
-            infoMessage = "Note moved to protected trash."
-            errorMessage = nil
-            await refreshWorkspace()
+            showToast("Note moved to protected trash.", style: .info)
+            await loadTrashItems()
+            Task {
+                await refreshWorkspace()
+            }
         } catch {
-            errorMessage = mapError(error)
-            infoMessage = nil
+            showToast(mapError(error), style: .error)
         }
+    }
+
+    private func appendOptimisticTrashItem(sourceNoteId: UUID, isSecure: Bool, displayTitle: String?) {
+        let candidate = TrashItemView(
+            trashId: UUID(),
+            sourceNoteId: sourceNoteId,
+            isSecure: isSecure,
+            displayTitle: displayTitle,
+            deletionTime: Date(),
+            lockBadgeVisible: isSecure
+        )
+
+        guard !trashItems.contains(where: { $0.sourceNoteId == sourceNoteId }) else {
+            return
+        }
+
+        trashItems.insert(candidate, at: 0)
     }
 
     private func deleteSubject(_ subject: Subject) async {
@@ -626,11 +628,10 @@ struct NotesWorkspaceView: View {
             if selectedSubjectId == subject.id {
                 selectedSubjectId = nil
             }
-            infoMessage = "Subject deleted; notes are now ungrouped."
-            errorMessage = nil
+            showToast("Subject deleted; notes are now ungrouped.", style: .info)
             await refreshWorkspace()
         } catch {
-            errorMessage = mapError(error)
+            showToast(mapError(error), style: .error)
         }
     }
 
@@ -640,37 +641,25 @@ struct NotesWorkspaceView: View {
         content = ""
         secureModeEnabled = false
         editorSubjectId = selectedSubjectId
-        let defaultFuture = Date().addingTimeInterval(3600)
-        expirationDate = defaultFuture
-        expirationTime = defaultFuture
-        errorMessage = nil
-        infoMessage = nil
     }
 
-    private func combineExpiration(datePart: Date, timePart: Date) -> Date {
-        let calendar = Calendar.current
-        let dateComponents = calendar.dateComponents([.year, .month, .day], from: datePart)
-        let timeComponents = calendar.dateComponents([.hour, .minute], from: timePart)
+    private func showToast(_ text: String, style: ToastMessage.Style) {
+        let toast = ToastMessage(text: text, style: style)
+        withAnimation {
+            toasts.append(toast)
+        }
 
-        var merged = DateComponents()
-        merged.year = dateComponents.year
-        merged.month = dateComponents.month
-        merged.day = dateComponents.day
-        merged.hour = timeComponents.hour
-        merged.minute = timeComponents.minute
-        merged.second = 0
-
-        return calendar.date(from: merged) ?? datePart
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            withAnimation {
+                toasts.removeAll { $0.id == toast.id }
+            }
+        }
     }
 
     private func mapError(_ error: Error) -> String {
         switch error {
         case NoteServiceError.titleRequired:
             return "Title is required."
-        case NoteServiceError.secureModeRequiresExpiration:
-            return "Secure mode requires expiration date and time."
-        case NoteServiceError.secureModeExpirationInPast:
-            return "Expiration must be in the future."
         case NoteServiceError.recordNotFound:
             return "The selected note was not found."
         case SubjectServiceError.emptyName:

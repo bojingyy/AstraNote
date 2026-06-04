@@ -85,7 +85,6 @@ public struct NoteDraft: Sendable, Equatable {
     public let content: String
     public let subjectId: UUID?
     public let secureModeEnabled: Bool
-    public let expirationUTC: Date?
 
     public init(
         id: UUID? = nil,
@@ -93,14 +92,13 @@ public struct NoteDraft: Sendable, Equatable {
         content: String,
         subjectId: UUID?,
         secureModeEnabled: Bool,
-        expirationUTC: Date?
+        expirationUTC: Date? = nil
     ) {
         self.id = id
         self.title = title
         self.content = content
         self.subjectId = subjectId
         self.secureModeEnabled = secureModeEnabled
-        self.expirationUTC = expirationUTC
     }
 }
 
@@ -110,9 +108,27 @@ public struct NoteView: Sendable, Equatable {
     public let content: String
     public let subjectId: UUID?
     public let isSecure: Bool
-    public let expirationUTC: Date?
     public let createdAt: Date
     public let updatedAt: Date
+
+    public init(
+        id: UUID,
+        title: String,
+        content: String,
+        subjectId: UUID?,
+        isSecure: Bool,
+        expirationUTC: Date? = nil,
+        createdAt: Date,
+        updatedAt: Date
+    ) {
+        self.id = id
+        self.title = title
+        self.content = content
+        self.subjectId = subjectId
+        self.isSecure = isSecure
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+    }
 }
 
 public struct NoteSummary: Sendable, Equatable {

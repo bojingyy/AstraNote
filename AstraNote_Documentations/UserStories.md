@@ -22,18 +22,16 @@
 - As a user, I want to secure only selected notes so I can protect sensitive content without slowing down all notes.
 - Acceptance criteria:
   - I can turn secure mode on from the note editor toolbar.
-  - Secure mode requires both expiration date and expiration time.
-  - The app rejects expiration timestamps in the past.
+  - Secure mode does not require expiration fields.
+  - Secure notes are encrypted immediately when saved.
   - Secure note title and content are encrypted before persistence.
 
-## 4. Secure note expiration behavior
-- As a user, I want secure notes to expire automatically at an exact time so sensitive content is removed on schedule.
+## 4. Secure note retention behavior
+- As a user, I want secure notes to remain available until I delete them so the app does not remove them automatically.
 - Acceptance criteria:
-  - Expiration checks run during active use and app launch.
-  - Expiration is selected in local time and stored as UTC timestamp.
-  - When expiration is reached, the secure note leaves active list and moves to protected trash.
-  - Foreground expiry shows in-app notice; background expiry uses local notification.
-  - If the device clock appears to have moved backward compared to the last recorded timestamp, no secure note is treated as unexpired.
+  - Secure notes remain in the active list until deleted.
+  - Secure-note access still requires passphrase or biometrics before content is shown.
+  - Deleting a secure note still moves it to protected trash.
 
 ## 5. Manage trash for normal and secure notes
 - As a user, I want a trash view so I can restore deleted notes or permanently remove them.

@@ -4,15 +4,15 @@
 
 **FR1.1** [Unlock] On first launch, the app shall enter a dedicated first-launch initialization branch that presents a passphrase creation dialog before any note data is stored or any other feature is accessible. This initialization branch shall block all note operations until a passphrase is successfully created and confirmed.
 
-**FR1.2** [Unlock] On subsequent launches, the app shall require the master passphrase to start a session.
+**FR1.2** [Unlock] On subsequent launches, the app shall open the workspace without requiring whole-app unlock; secure-note content access shall require authentication at note-open time.
 
-**FR1.3** [Unlock] After a successful passphrase unlock, the user may optionally enable biometric unlock for future sessions.
+**FR1.3** [Unlock] After initial passphrase setup, the user may optionally enable biometric authentication as an alternative to passphrase for secure-note access.
 
-**FR1.4** [Unlock] Biometric unlock shall fall back to passphrase if biometrics are unavailable, rejected, or fail three consecutive times.
+**FR1.4** [Unlock] Biometric authentication for secure-note access shall fall back to passphrase if biometrics are unavailable, rejected, or fail.
 
 **FR1.5** [Unlock] If biometric hardware becomes unavailable after enrollment, passphrase fallback shall activate automatically.
 
-**FR1.6** [Unlock] The consecutive biometric failure counter shall reset to zero after any successful unlock.
+**FR1.6** [Unlock] The consecutive biometric failure counter shall reset to zero after any successful secure-note authentication.
 
 **FR2.1** [Normal Note Lifecycle] The user shall be able to create, edit, and delete notes containing text; image and recording attachments are optional.
 
@@ -26,9 +26,7 @@
 
 **FR3.1** [Secure Note Lifecycle] The user shall be able to opt any note into secure mode via the secure toggle in the editor top-right toolbar.
 
-**FR3.2** [Secure Note Lifecycle] Enabling secure mode shall require the user to set both expiration date and expiration time.
-
-**FR3.8** [Secure Note Lifecycle] The app shall reject an expiration timestamp that is in the past.
+**FR3.2** [Secure Note Lifecycle] Enabling secure mode shall not require any time-based policy fields; the note is protected immediately when saved.
 
 **FR3.3** [Secure Note Lifecycle] When a secure note is saved, the title and content shall be encrypted on-device before any write to storage. Storage shall contain only ciphertext, nonce, and salt.
 
@@ -42,19 +40,9 @@
 
 **FR3.9** [Secure Note Lifecycle] Opening a secure note from the workspace shall require step-up authentication per access attempt: the user must provide either master passphrase or biometric authentication before decrypted content is shown.
 
-**FR4.1** [Secure Note Expiration] The app shall check secure note expiration on every launch and periodically during active use.
+**FR4.1** [Secure Note Retention] Secure notes shall remain in the active note list until the user deletes them or edits them.
 
-**FR4.6** [Secure Note Expiration] The expiration timestamp shall be interpreted in device local time at selection and stored as UTC for comparison.
-
-**FR4.2** [Secure Note Expiration] A note that expired while the app was not running shall be treated as expired on the next launch.
-
-**FR4.3** [Secure Note Expiration] When a secure note expires, it shall be removed from the active note list and moved to protected trash automatically.
-
-**FR4.4** [Secure Note Expiration] The app shall show an in-app banner for expiry events in the foreground, and a scheduled local notification when backgrounded or not running.
-
-**FR4.5** [Secure Note Expiration] The app shall store the last known UTC timestamp on each launch. If the current device time is earlier than that stored value, a time-rollback guard shall activate: no secure note shall be treated as unexpired, and all expiration checks shall defer until the device time advances past the stored timestamp. The app shall log this guard activation and inform the user if a rollback is detected.
-
-**FR4.7** [Secure Note Expiration] The secure note editor shall provide explicit date and time controls so the user can choose the exact expiration moment.
+**FR4.2** [Secure Note Retention] Secure-note save and load flows shall preserve the encrypted record without any automatic time-based move to protected trash.
 
 **FR5.1** [Protected Trash] All deleted notes (normal and secure) shall be moved to protected trash, not deleted immediately.
 
@@ -82,15 +70,15 @@
 
 **FR13.3** [Image Attachment] Images exceeding 20 MB shall be rejected before storage with a message stating the limit.
 
-**FR7.1** [Auto-Lock] The app shall auto-lock after no user input for longer than the configured timeout (default 5 minutes).
+**FR7.1** [Secure Session Timeout] The app shall clear in-memory secure key material after no user input for longer than the configured timeout (default 5 minutes).
 
-**FR7.2** [Auto-Lock] The app shall auto-lock when the OS sleeps or the app enters the background.
+**FR7.2** [Secure Session Timeout] The app shall clear in-memory secure key material when the OS sleeps or the app enters the background.
 
-**FR7.3** [Auto-Lock] Background operations such as export or key rotation shall not count as user activity and shall not reset the inactivity timer. When the inactivity timer check occurs during an active background operation (export or re-encryption in progress), the timer shall continue its countdown without reset, and if the timer expires, the lock shall proceed immediately after the background operation completes or is canceled.
+**FR7.3** [Secure Session Timeout] Background operations such as export or key rotation shall not count as user activity and shall not reset the inactivity timer. When the timeout check occurs during an active background operation (export or re-encryption in progress), timeout handling shall proceed immediately after the background operation completes or is canceled.
 
-**FR7.4** [Auto-Lock] On lock, all in-memory key material shall be cleared before re-authentication is required.
+**FR7.4** [Secure Session Timeout] On timeout or immediate lock-trigger events, all in-memory key material shall be cleared before secure-note re-authentication is required.
 
-**FR7.5** [Auto-Lock] If auto-lock fires while a secure note is being edited, the app shall encrypt and persist unsaved changes as a draft before completing the lock transition.
+**FR7.5** [Secure Session Timeout] If timeout handling fires while a secure note is being edited, the app shall encrypt and persist unsaved changes as a draft before secure key material is cleared.
 
 **FR8.1** [Passphrase Change and Key Rotation] The user shall be able to change the master passphrase at any time.
 
@@ -115,6 +103,8 @@
 **FR10.1** [Settings] The app shall allow the user to configure lock timeout, telemetry opt-in, and a global plugin enable/disable toggle; disabling the toggle shall prevent all plugins from running without removing installed plugin records.
 
 **FR10.2** [Settings] All settings changes shall be validated before commit; invalid values shall be rejected with a user-visible message.
+
+**FR10.3** [Notification Presentation] User-facing operation feedback in the workspace (success, warning, error) shall be presented as transient pop-up notifications and shall auto-dismiss after about 5 seconds; inline message text under the editor input area shall not be used for this feedback.
 
 **FR11.1** [Simple Plugin Support] The app shall allow the user to install a plugin from a local package file.
 
