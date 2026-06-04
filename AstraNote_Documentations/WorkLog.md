@@ -126,3 +126,13 @@
 
 #### AstraCoreTests.swift
 - Fixed 14 passing tests to remain green after the above coordinator and persistence changes; no new test failures introduced.
+
+---
+
+## 2026-06-03
+
+### UI Refinement — Notes Workspace Editor Readability
+
+#### NotesWorkspaceView.swift
+- Increased default typography size for note editing inputs to improve readability in the workspace editor.
+- Updated `Title` input and note `TextEditor` content font to `.system(size: 16)` for a clearer default writing experience.

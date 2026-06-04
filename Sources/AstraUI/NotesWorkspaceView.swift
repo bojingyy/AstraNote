@@ -216,6 +216,7 @@ struct NotesWorkspaceView: View {
                     .bold()
 
                 TextField("Title", text: $title)
+                    .font(.system(size: 16))
                     .textFieldStyle(.roundedBorder)
 
                 Picker("Subject", selection: $editorSubjectId) {
@@ -244,6 +245,7 @@ struct NotesWorkspaceView: View {
 
                 ZStack {
                     TextEditor(text: $content)
+                        .font(.system(size: 16))
                         .padding(.top, 6)
                         .padding(.horizontal, 4)
                 }
