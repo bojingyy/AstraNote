@@ -40,6 +40,8 @@
 
 **FR3.7** [Secure Note Lifecycle] Deleting a secure note shall move the encrypted record and its attachments to protected trash in a single ACID transaction.
 
+**FR3.9** [Secure Note Lifecycle] Opening a secure note from the workspace shall require step-up authentication per access attempt: the user must provide either master passphrase or biometric authentication before decrypted content is shown.
+
 **FR4.1** [Secure Note Expiration] The app shall check secure note expiration on every launch and periodically during active use.
 
 **FR4.6** [Secure Note Expiration] The expiration timestamp shall be interpreted in device local time at selection and stored as UTC for comparison.

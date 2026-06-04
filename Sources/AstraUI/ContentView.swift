@@ -26,13 +26,16 @@ struct ContentView: View {
             case .unlocked:
                 NotesWorkspaceView(
                     searchAction: { query in
-                        await env.noteSearchService.searchTitle(query: query, isUnlocked: true)
+                        _ = try? await env.secureNotePolicyService.sweepExpiredSecureNotes(isForeground: true)
+                        return await env.noteSearchService.searchTitle(query: query, isUnlocked: true)
                     },
                     listNotesAction: {
-                        await env.noteService.listSummaries()
+                        _ = try? await env.secureNotePolicyService.sweepExpiredSecureNotes(isForeground: true)
+                        return await env.noteService.listSummaries()
                     },
                     loadNoteAction: { noteId in
-                        try await env.noteService.load(id: noteId)
+                        _ = try? await env.secureNotePolicyService.sweepExpiredSecureNotes(isForeground: true)
+                        return try await env.noteService.load(id: noteId)
                     },
                     saveDraftAction: { draft in
                         try await env.noteService.save(draft: draft)
@@ -60,6 +63,12 @@ struct ContentView: View {
                     },
                     secureTrashPreviewAction: { trashId in
                         try await env.trashService.secureTitlePreviewMessage(trashId: trashId)
+                    },
+                    secureNotePassphraseAuthAction: { passphrase in
+                        try await env.coordinator.reauthenticateForSecureNote(passphrase: passphrase)
+                    },
+                    secureNoteBiometricAuthAction: {
+                        try await env.coordinator.reauthenticateForSecureNoteWithBiometrics()
                     },
                     lockAction: {
                         await env.coordinator.lockNow()

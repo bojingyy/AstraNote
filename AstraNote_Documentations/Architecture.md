@@ -107,10 +107,11 @@ All data flow sinks for decrypted secure note content are explicitly controlled:
 
 ### 5.2 Create/Edit Note
 1. UI sends draft to `NoteService`.
-2. `NoteService` checks the note's secure flag.
-3. If secure is off: standard payload is persisted via `NoteRepository` transaction.
-4. If secure is on: `EncryptionService` encrypts the payload; ciphertext is persisted via `NoteRepository` transaction.
-5. UI refreshes list and editor state from service result.
+2. When user opens a secure note, UI requires step-up authentication (passphrase or biometrics) before calling secure note load.
+3. `NoteService` checks the note's secure flag.
+4. If secure is off: standard payload is persisted via `NoteRepository` transaction.
+5. If secure is on: `EncryptionService` encrypts the payload; ciphertext is persisted via `NoteRepository` transaction.
+6. UI refreshes list and editor state from service result.
 
 ### 5.3 Secure Note Expiration
 1. When user enables secure mode, an expiration date and time are required.

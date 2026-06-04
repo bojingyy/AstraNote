@@ -136,3 +136,18 @@
 #### NotesWorkspaceView.swift
 - Increased default typography size for note editing inputs to improve readability in the workspace editor.
 - Updated `Title` input and note `TextEditor` content font to `.system(size: 16)` for a clearer default writing experience.
+
+### Security UX Enhancement — Secure Note Step-Up Access
+
+#### NotesWorkspaceView.swift
+- Added secure-note access prompt that requires step-up authentication before opening secure note content.
+- Added passphrase and biometric options in the access prompt; secure note load proceeds only after successful re-authentication.
+- Added typed error messages for failed secure-note access attempts (invalid passphrase, lockout, biometric disabled/unavailable).
+
+#### ContentView.swift / AppCoordinator.swift
+- Wired workspace secure-note access actions to coordinator-level re-authentication methods.
+- Added dedicated coordinator APIs for secure-note access checks with passphrase and biometrics.
+
+#### Requirement.md / Architecture.md
+- Added FR3.9 to require passphrase or biometric step-up authentication per secure-note open attempt.
+- Updated note open flow in architecture to include secure-note access authentication before load.

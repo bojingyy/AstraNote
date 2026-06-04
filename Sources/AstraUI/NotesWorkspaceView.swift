@@ -14,6 +14,8 @@ struct NotesWorkspaceView: View {
     let restoreTrashAction: (UUID) async throws -> Bool
     let permanentlyDeleteTrashAction: (UUID) async throws -> Bool
     let secureTrashPreviewAction: (UUID) async throws -> String?
+    let secureNotePassphraseAuthAction: (String) async throws -> Void
+    let secureNoteBiometricAuthAction: (() async throws -> Void)?
     let lockAction: () async -> Void
     let loadSettingsAction: () async -> AppSettings
     let saveSettingsAction: (AppSettings) async throws -> Void
@@ -40,26 +42,86 @@ struct NotesWorkspaceView: View {
     @State private var isShowingSettings = false
     @State private var errorMessage: String?
     @State private var infoMessage: String?
+    @State private var collapsedGroupIDs: Set<String> = []
+    @State private var isShowingSecureAccessPrompt = false
+    @State private var pendingSecureNoteId: UUID?
+    @State private var secureAccessPassphrase = ""
+    @State private var secureAccessErrorMessage: String?
 
     private struct NoteListItem: Identifiable {
         let id: UUID
         let title: String
         let isSecure: Bool
+        let subjectId: UUID?
+    }
+
+    private struct SubjectGroup: Identifiable {
+        let subjectId: UUID?
+        let name: String
+        let canDelete: Bool
+
+        var id: String {
+            subjectId?.uuidString ?? "ungrouped"
+        }
     }
 
     private var displayedNotes: [NoteListItem] {
         let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmedQuery.isEmpty {
             return searchResults.map { result in
-                NoteListItem(id: result.noteId, title: result.matchedTitle, isSecure: result.isSecure)
+                let subjectId = notes.first(where: { $0.id == result.noteId })?.subjectId
+                return NoteListItem(
+                    id: result.noteId,
+                    title: result.matchedTitle,
+                    isSecure: result.isSecure,
+                    subjectId: subjectId
+                )
             }
         }
 
-        let filtered = notes.filter { summary in
-            selectedSubjectId == nil || summary.subjectId == selectedSubjectId
+        return notes.map { summary in
+            NoteListItem(
+                id: summary.id,
+                title: summary.title,
+                isSecure: summary.isSecure,
+                subjectId: summary.subjectId
+            )
         }
-        return filtered.map { summary in
-            NoteListItem(id: summary.id, title: summary.title, isSecure: summary.isSecure)
+    }
+
+    private var subjectGroups: [SubjectGroup] {
+        var groups = [SubjectGroup(subjectId: nil, name: "Ungrouped", canDelete: false)]
+        groups.append(contentsOf: subjects.map { subject in
+            SubjectGroup(subjectId: subject.id, name: subject.name, canDelete: true)
+        })
+
+        let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedQuery.isEmpty {
+            return groups
+        }
+
+        return groups.filter { group in
+            displayedNotes.contains { $0.subjectId == group.subjectId }
+        }
+    }
+
+    private func notesForGroup(_ subjectId: UUID?) -> [NoteListItem] {
+        displayedNotes.filter { $0.subjectId == subjectId }
+    }
+
+    private func groupID(for subjectId: UUID?) -> String {
+        subjectId?.uuidString ?? "ungrouped"
+    }
+
+    private func isGroupCollapsed(_ group: SubjectGroup) -> Bool {
+        collapsedGroupIDs.contains(group.id)
+    }
+
+    private func toggleGroupCollapse(_ group: SubjectGroup) {
+        if collapsedGroupIDs.contains(group.id) {
+            collapsedGroupIDs.remove(group.id)
+        } else {
+            collapsedGroupIDs.insert(group.id)
         }
     }
 
@@ -110,63 +172,78 @@ struct NotesWorkspaceView: View {
 
                 Divider()
 
-                Text("Subjects")
+                Text("Subjects & Notes")
                     .font(.headline)
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 6) {
-                        Button {
-                            selectedSubjectId = nil
-                        } label: {
-                            HStack {
-                                Text("All Notes")
-                                Spacer(minLength: 0)
-                            }
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 8)
-                            .background {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(selectedSubjectId == nil ? Color.accentColor.opacity(0.18) : Color.clear)
-                            }
-                        }
-                        .buttonStyle(.plain)
-
-                        ForEach(subjects, id: \.id) { subject in
-                            HStack {
-                                Button {
-                                    selectedSubjectId = subject.id
-                                } label: {
-                                    HStack {
-                                        Text(subject.name)
-                                        Spacer(minLength: 0)
+                        ForEach(subjectGroups) { group in
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Button {
+                                        toggleGroupCollapse(group)
+                                    } label: {
+                                        Image(systemName: isGroupCollapsed(group) ? "chevron.right" : "chevron.down")
+                                            .foregroundStyle(.secondary)
                                     }
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 8)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(selectedSubjectId == subject.id ? Color.accentColor.opacity(0.18) : Color.clear)
+                                    .buttonStyle(.plain)
+
+                                    Text(group.name)
+                                    Spacer()
+
+                                    if group.canDelete, let subjectId = group.subjectId,
+                                       let subject = subjects.first(where: { $0.id == subjectId }) {
+                                        Button("Delete") {
+                                            let subjectHasNotes = notes.contains { $0.subjectId == subject.id }
+                                            if subjectHasNotes {
+                                                pendingSubjectDeletion = subject
+                                            } else {
+                                                Task {
+                                                    await deleteSubject(subject)
+                                                }
+                                            }
+                                        }
+                                        .buttonStyle(.borderless)
                                     }
                                 }
-                                .buttonStyle(.plain)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.vertical, 8)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color.clear)
+                                }
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    selectedSubjectId = group.subjectId
+                                }
 
-                                Spacer()
-
-                                Button("Delete") {
-                                    let subjectHasNotes = notes.contains { $0.subjectId == subject.id }
-                                    if subjectHasNotes {
-                                        pendingSubjectDeletion = subject
-                                    } else {
-                                        Task {
-                                            await deleteSubject(subject)
+                                if !isGroupCollapsed(group) {
+                                    ForEach(notesForGroup(group.subjectId)) { note in
+                                        HStack {
+                                            Text(note.isSecure ? "[Secure]" : "[Normal]")
+                                            Text(note.title)
+                                            Spacer(minLength: 0)
+                                        }
+                                        .font(.subheadline)
+                                        .padding(.leading, 24)
+                                        .padding(.vertical, 4)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(selectedNoteId == note.id ? Color.accentColor.opacity(0.14) : Color.clear)
+                                        }
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            Task {
+                                                await requestOpenNote(note)
+                                            }
                                         }
                                     }
                                 }
-                                .buttonStyle(.borderless)
                             }
                         }
                     }
                 }
-                .frame(maxHeight: 160)
 
                 HStack {
                     TextField("New subject", text: $newSubjectName)
@@ -185,27 +262,6 @@ struct NotesWorkspaceView: View {
                 }
 
                 Divider()
-
-                Text("Notes")
-                    .font(.headline)
-
-                List(displayedNotes) { note in
-                    HStack {
-                        Text(note.isSecure ? "[Secure]" : "[Normal]")
-                        Text(note.title)
-                    }
-                    .padding(.vertical, 2)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        Task {
-                            await selectNote(note.id)
-                        }
-                    }
-                    .listRowBackground(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(selectedNoteId == note.id ? Color.accentColor.opacity(0.14) : Color.clear)
-                    )
-                }
             }
             .padding()
             .frame(minWidth: 360)
@@ -358,6 +414,51 @@ struct NotesWorkspaceView: View {
             }
             .frame(minWidth: 600, minHeight: 420)
         }
+        .sheet(isPresented: $isShowingSecureAccessPrompt) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Unlock Secure Note")
+                    .font(.title2)
+                    .bold()
+
+                Text("Enter your passphrase or use biometrics to open this secure note.")
+                    .foregroundStyle(.secondary)
+
+                SecureField("Passphrase", text: $secureAccessPassphrase)
+                    .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled(true)
+
+                if let secureAccessErrorMessage {
+                    Text(secureAccessErrorMessage)
+                        .foregroundStyle(.red)
+                }
+
+                HStack {
+                    Button("Cancel", role: .cancel) {
+                        pendingSecureNoteId = nil
+                        secureAccessPassphrase = ""
+                        secureAccessErrorMessage = nil
+                        isShowingSecureAccessPrompt = false
+                    }
+
+                    if let secureNoteBiometricAuthAction {
+                        Button("Use Biometrics") {
+                            Task {
+                                await authenticatePendingSecureNoteWithBiometrics(action: secureNoteBiometricAuthAction)
+                            }
+                        }
+                    }
+
+                    Button("Unlock") {
+                        Task {
+                            await authenticatePendingSecureNoteWithPassphrase()
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+            .padding()
+            .frame(minWidth: 420)
+        }
         .task {
             await refreshWorkspace()
         }
@@ -406,10 +507,24 @@ struct NotesWorkspaceView: View {
         trashItems = await listTrashAction()
     }
 
+    private func requestOpenNote(_ note: NoteListItem) async {
+        if note.isSecure {
+            pendingSecureNoteId = note.id
+            secureAccessPassphrase = ""
+            secureAccessErrorMessage = nil
+            isShowingSecureAccessPrompt = true
+            return
+        }
+
+        await selectNote(note.id)
+    }
+
     private func selectNote(_ noteId: UUID) async {
         do {
             let loaded = try await loadNoteAction(noteId)
             selectedNoteId = loaded.id
+            selectedSubjectId = loaded.subjectId
+            collapsedGroupIDs.remove(groupID(for: loaded.subjectId))
             title = loaded.title
             content = loaded.content
             secureModeEnabled = loaded.isSecure
@@ -427,6 +542,40 @@ struct NotesWorkspaceView: View {
             infoMessage = nil
         } catch {
             errorMessage = mapError(error)
+        }
+    }
+
+    private func authenticatePendingSecureNoteWithPassphrase() async {
+        guard let pendingSecureNoteId else {
+            return
+        }
+
+        do {
+            secureAccessErrorMessage = nil
+            try await secureNotePassphraseAuthAction(secureAccessPassphrase)
+            await selectNote(pendingSecureNoteId)
+            secureAccessPassphrase = ""
+            self.pendingSecureNoteId = nil
+            isShowingSecureAccessPrompt = false
+        } catch {
+            secureAccessErrorMessage = mapError(error)
+        }
+    }
+
+    private func authenticatePendingSecureNoteWithBiometrics(action: () async throws -> Void) async {
+        guard let pendingSecureNoteId else {
+            return
+        }
+
+        do {
+            secureAccessErrorMessage = nil
+            try await action()
+            await selectNote(pendingSecureNoteId)
+            secureAccessPassphrase = ""
+            self.pendingSecureNoteId = nil
+            isShowingSecureAccessPrompt = false
+        } catch {
+            secureAccessErrorMessage = mapError(error)
         }
     }
 
@@ -530,6 +679,16 @@ struct NotesWorkspaceView: View {
             return "Subject name must be unique."
         case ProtectedTrashServiceError.restoreRequiresUnlockedSession:
             return "Unlock AstraNotes to restore secure notes from trash."
+        case KeyManagerError.invalidPassphrase:
+            return "Invalid passphrase. Please try again."
+        case KeyManagerError.lockoutActive(let remainingSeconds):
+            return "Too many attempts. Try again in \(remainingSeconds) seconds."
+        case KeyManagerError.passphraseNotInitialized:
+            return "No passphrase found. Please restart and create a passphrase."
+        case AppCoordinatorError.biometricUnavailable:
+            return "Biometric authentication is unavailable on this device."
+        case AppCoordinatorError.biometricUnlockDisabled:
+            return "Biometric unlock is disabled. Use passphrase or enable biometrics in Settings."
         default:
             return String(describing: error)
         }

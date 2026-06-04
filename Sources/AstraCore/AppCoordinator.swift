@@ -82,6 +82,26 @@ public final class AppCoordinator: ObservableObject {
         registerUserInteraction(now: Date())
     }
 
+    public func reauthenticateForSecureNote(passphrase: String) async throws {
+        _ = try await keyManager.unlock(passphrase: passphrase)
+        registerUserInteraction(now: Date())
+    }
+
+    public func reauthenticateForSecureNoteWithBiometrics() async throws {
+        guard let localAuthService else {
+            throw AppCoordinatorError.biometricUnavailable
+        }
+
+        let settings = await settingsService.load()
+        guard settings.biometricUnlockEnabled else {
+            throw AppCoordinatorError.biometricUnlockDisabled
+        }
+
+        let recoveredKey = try await localAuthService.authenticate(reason: "Access Secure Note")
+        _ = try await keyManager.unlockWithRecoveredKey(recoveredKey)
+        registerUserInteraction(now: Date())
+    }
+
     public func changePassphrase(current: String, next: String) async throws {
         try await keyManager.changePassphrase(current: current, next: next)
         await refreshBiometricEnrollmentIfNeeded()
