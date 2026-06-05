@@ -97,11 +97,12 @@ final class AstraIntegrationTests: XCTestCase {
                 content: "payload",
                 subjectId: nil,
                 secureModeEnabled: true,
+                secureTitleAlias: "Finance Vault",
                 expirationUTC: clock.now().addingTimeInterval(20)
             )
         )
 
-        let unlockedSearch = await searchService.searchTitle(query: "secure", isUnlocked: true)
+        let unlockedSearch = await searchService.searchTitle(query: "vault", isUnlocked: true)
         XCTAssertEqual(unlockedSearch.count, 1)
         XCTAssertTrue(unlockedSearch[0].isSecure)
 
@@ -118,8 +119,8 @@ final class AstraIntegrationTests: XCTestCase {
         let trashItems = await trashService.listTrashItems()
         XCTAssertTrue(trashItems.isEmpty)
 
-        let lockedSearch = await searchService.searchTitle(query: "secure", isUnlocked: false)
-        XCTAssertTrue(lockedSearch.isEmpty)
+        let lockedSearch = await searchService.searchTitle(query: "vault", isUnlocked: false)
+        XCTAssertEqual(lockedSearch.count, 1)
     }
 
     @MainActor

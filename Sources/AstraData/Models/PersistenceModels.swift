@@ -26,6 +26,7 @@ public struct StoredNoteRecord: Codable, Sendable, Equatable {
     public var plainTitle: String?
     public var plainContent: String?
     public var securePayload: StoredEncryptedPayload?
+    public var secureTitleAlias: String?
     public let createdAt: Date
     public var updatedAt: Date
 
@@ -36,6 +37,7 @@ public struct StoredNoteRecord: Codable, Sendable, Equatable {
         plainTitle: String?,
         plainContent: String?,
         securePayload: StoredEncryptedPayload?,
+        secureTitleAlias: String? = nil,
         expirationUTC: Date? = nil,
         createdAt: Date,
         updatedAt: Date
@@ -46,6 +48,7 @@ public struct StoredNoteRecord: Codable, Sendable, Equatable {
         self.plainTitle = plainTitle
         self.plainContent = plainContent
         self.securePayload = securePayload
+        self.secureTitleAlias = secureTitleAlias
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }

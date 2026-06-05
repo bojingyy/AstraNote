@@ -85,6 +85,7 @@ public struct NoteDraft: Sendable, Equatable {
     public let content: String
     public let subjectId: UUID?
     public let secureModeEnabled: Bool
+    public let secureTitleAlias: String?
 
     public init(
         id: UUID? = nil,
@@ -92,6 +93,7 @@ public struct NoteDraft: Sendable, Equatable {
         content: String,
         subjectId: UUID?,
         secureModeEnabled: Bool,
+        secureTitleAlias: String? = nil,
         expirationUTC: Date? = nil
     ) {
         self.id = id
@@ -99,6 +101,7 @@ public struct NoteDraft: Sendable, Equatable {
         self.content = content
         self.subjectId = subjectId
         self.secureModeEnabled = secureModeEnabled
+        self.secureTitleAlias = secureTitleAlias
     }
 }
 
@@ -108,6 +111,7 @@ public struct NoteView: Sendable, Equatable {
     public let content: String
     public let subjectId: UUID?
     public let isSecure: Bool
+    public let secureTitleAlias: String?
     public let createdAt: Date
     public let updatedAt: Date
 
@@ -117,6 +121,7 @@ public struct NoteView: Sendable, Equatable {
         content: String,
         subjectId: UUID?,
         isSecure: Bool,
+        secureTitleAlias: String? = nil,
         expirationUTC: Date? = nil,
         createdAt: Date,
         updatedAt: Date
@@ -126,6 +131,7 @@ public struct NoteView: Sendable, Equatable {
         self.content = content
         self.subjectId = subjectId
         self.isSecure = isSecure
+        self.secureTitleAlias = secureTitleAlias
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }

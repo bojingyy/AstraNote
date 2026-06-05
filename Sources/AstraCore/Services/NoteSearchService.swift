@@ -9,13 +9,9 @@ public struct NoteSearchResult: Sendable, Equatable {
 
 public actor NoteSearchService {
     private let noteRepository: NoteRepositoryProtocol
-    private let noteService: NoteService
 
-    private var secureTitleCache: [UUID: String] = [:]
-
-    public init(noteRepository: NoteRepositoryProtocol, noteService: NoteService) {
+    public init(noteRepository: NoteRepositoryProtocol, noteService _: NoteService) {
         self.noteRepository = noteRepository
-        self.noteService = noteService
     }
 
     public func searchTitle(query: String, isUnlocked: Bool) async -> [NoteSearchResult] {
@@ -36,37 +32,23 @@ public actor NoteSearchService {
             }
         }
 
-        guard isUnlocked else {
-            return results
-        }
-
-        await ensureSecureCacheLoaded(notes: all)
-        for (noteId, title) in secureTitleCache where title.lowercased().contains(normalizedQuery) {
-            results.append(NoteSearchResult(noteId: noteId, matchedTitle: title, isSecure: true))
+        for note in all where note.isSecure {
+            guard let alias = note.secureTitleAlias else {
+                continue
+            }
+            if alias.lowercased().contains(normalizedQuery) {
+                results.append(NoteSearchResult(noteId: note.id, matchedTitle: alias, isSecure: true))
+            }
         }
 
         return results
     }
 
     public func clearSecureCacheOnLock() {
-        secureTitleCache.removeAll(keepingCapacity: false)
+        // Secure aliases are non-sensitive metadata persisted in storage.
     }
 
     public func secureCacheCount() -> Int {
-        secureTitleCache.count
-    }
-
-    private func ensureSecureCacheLoaded(notes: [StoredNoteRecord]) async {
-        let secureIds = notes.filter(\.isSecure).map(\.id)
-        if secureTitleCache.keys.count == secureIds.count && secureIds.allSatisfy({ secureTitleCache[$0] != nil }) {
-            return
-        }
-
-        secureTitleCache.removeAll(keepingCapacity: true)
-        for noteId in secureIds {
-            if let loaded = try? await noteService.load(id: noteId) {
-                secureTitleCache[noteId] = loaded.title
-            }
-        }
+        0
     }
 }

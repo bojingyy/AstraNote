@@ -6,6 +6,7 @@ struct NotesWorkspaceView: View {
     let listNotesAction: () async -> [NoteSummary]
     let loadNoteAction: (UUID) async throws -> NoteView
     let saveDraftAction: (NoteDraft) async throws -> UUID
+    let updateSecureMetadataAction: (UUID, String?, UUID?) async throws -> Void
     let deleteNoteAction: (UUID) async throws -> Bool
     let listSubjectsAction: () async -> [Subject]
     let createSubjectAction: (String) async throws -> Subject
@@ -21,6 +22,7 @@ struct NotesWorkspaceView: View {
     let updateBiometricAction: (Bool) async throws -> Void
     let installedPluginsAction: () async -> [InstalledPlugin]
     let setPluginEnabledAction: (String, Bool) async throws -> Void
+    let userInteractionAction: () -> Void
 
     @State private var query = ""
     @State private var searchResults: [NoteSearchResult] = []
@@ -30,7 +32,13 @@ struct NotesWorkspaceView: View {
     @State private var selectedNoteId: UUID?
     @State private var title = ""
     @State private var content = ""
+    @State private var loadedTitleSnapshot = ""
+    @State private var loadedContentSnapshot = ""
+    @State private var loadedSubjectIdSnapshot: UUID?
+    @State private var loadedSecureModeSnapshot = false
+    @State private var loadedSecureAliasSnapshot = ""
     @State private var secureModeEnabled = false
+    @State private var secureTitleAlias = ""
     @State private var editorSubjectId: UUID?
     @State private var newSubjectName = ""
     @State private var isShowingTrash = false
@@ -39,9 +47,14 @@ struct NotesWorkspaceView: View {
     @State private var isShowingSettings = false
     @State private var collapsedGroupIDs: Set<String> = []
     @State private var isShowingSecureAccessPrompt = false
-    @State private var pendingSecureNoteId: UUID?
+    @State private var pendingSecureAccessAction: SecureAccessAction?
     @State private var secureAccessPassphrase = ""
     @State private var toasts: [ToastMessage] = []
+
+    private enum SecureAccessAction {
+        case openSecureNote(UUID)
+        case saveSecureDraft
+    }
 
     private struct NoteListItem: Identifiable {
         let id: UUID
@@ -137,6 +150,9 @@ struct NotesWorkspaceView: View {
                 HStack {
                     TextField("Search note titles", text: $query)
                         .textFieldStyle(.roundedBorder)
+                        .onChange(of: query) { _, _ in
+                            userInteractionAction()
+                        }
                         .onSubmit {
                             Task {
                                 await performSearch()
@@ -249,6 +265,9 @@ struct NotesWorkspaceView: View {
                 HStack {
                     TextField("New subject", text: $newSubjectName)
                         .textFieldStyle(.roundedBorder)
+                        .onChange(of: newSubjectName) { _, _ in
+                            userInteractionAction()
+                        }
                     Button("Add") {
                         Task {
                             do {
@@ -275,6 +294,9 @@ struct NotesWorkspaceView: View {
                 TextField("Title", text: $title)
                     .font(.system(size: 16))
                     .textFieldStyle(.roundedBorder)
+                    .onChange(of: title) { _, _ in
+                        userInteractionAction()
+                    }
 
                 Picker("Subject", selection: $editorSubjectId) {
                     Text("Ungrouped").tag(Optional<UUID>.none)
@@ -284,12 +306,26 @@ struct NotesWorkspaceView: View {
                 }
 
                 Toggle("Secure mode", isOn: $secureModeEnabled)
+                    .onChange(of: secureModeEnabled) { _, _ in
+                        userInteractionAction()
+                    }
+
+                if secureModeEnabled {
+                    TextField("Secure title alias (default: Locked Note)", text: $secureTitleAlias)
+                        .textFieldStyle(.roundedBorder)
+                        .onChange(of: secureTitleAlias) { _, _ in
+                            userInteractionAction()
+                        }
+                }
 
                 ZStack {
                     TextEditor(text: $content)
                         .font(.system(size: 16))
                         .padding(.top, 6)
                         .padding(.horizontal, 4)
+                        .onChange(of: content) { _, _ in
+                            userInteractionAction()
+                        }
                 }
                 .frame(minHeight: 240)
                 .overlay {
@@ -395,20 +431,23 @@ struct NotesWorkspaceView: View {
         }
         .sheet(isPresented: $isShowingSecureAccessPrompt) {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Unlock Secure Note")
+                Text(secureAccessPromptTitle)
                     .font(.title2)
                     .bold()
 
-                Text("Enter your passphrase or use biometrics to open this secure note.")
+                Text(secureAccessPromptMessage)
                     .foregroundStyle(.secondary)
 
                 SecureField("Passphrase", text: $secureAccessPassphrase)
                     .textFieldStyle(.roundedBorder)
                     .autocorrectionDisabled(true)
+                    .onChange(of: secureAccessPassphrase) { _, _ in
+                        userInteractionAction()
+                    }
 
                 HStack {
                     Button("Cancel", role: .cancel) {
-                        pendingSecureNoteId = nil
+                        pendingSecureAccessAction = nil
                         secureAccessPassphrase = ""
                         isShowingSecureAccessPrompt = false
                     }
@@ -500,9 +539,28 @@ struct NotesWorkspaceView: View {
         trashItems = await listTrashAction()
     }
 
+    private var secureAccessPromptTitle: String {
+        switch pendingSecureAccessAction {
+        case .saveSecureDraft:
+            return "Authenticate to Save Secure Note"
+        case .openSecureNote, .none:
+            return "Unlock Secure Note"
+        }
+    }
+
+    private var secureAccessPromptMessage: String {
+        switch pendingSecureAccessAction {
+        case .saveSecureDraft:
+            return "Enter your passphrase or use biometrics to encrypt and save this secure note."
+        case .openSecureNote, .none:
+            return "Enter your passphrase or use biometrics to open this secure note."
+        }
+    }
+
     private func requestOpenNote(_ note: NoteListItem) async {
+        userInteractionAction()
         if note.isSecure {
-            pendingSecureNoteId = note.id
+            pendingSecureAccessAction = .openSecureNote(note.id)
             secureAccessPassphrase = ""
             isShowingSecureAccessPrompt = true
             return
@@ -519,7 +577,13 @@ struct NotesWorkspaceView: View {
             collapsedGroupIDs.remove(groupID(for: loaded.subjectId))
             title = loaded.title
             content = loaded.content
+            loadedTitleSnapshot = loaded.title
+            loadedContentSnapshot = loaded.content
+            loadedSubjectIdSnapshot = loaded.subjectId
+            loadedSecureModeSnapshot = loaded.isSecure
             secureModeEnabled = loaded.isSecure
+            secureTitleAlias = loaded.secureTitleAlias ?? ""
+            loadedSecureAliasSnapshot = loaded.secureTitleAlias ?? ""
             editorSubjectId = loaded.subjectId
         } catch {
             showToast(mapError(error), style: .error)
@@ -527,15 +591,20 @@ struct NotesWorkspaceView: View {
     }
 
     private func authenticatePendingSecureNoteWithPassphrase() async {
-        guard let pendingSecureNoteId else {
+        guard let pendingSecureAccessAction else {
             return
         }
 
         do {
             try await secureNotePassphraseAuthAction(secureAccessPassphrase)
-            await selectNote(pendingSecureNoteId)
+            switch pendingSecureAccessAction {
+            case .openSecureNote(let noteId):
+                await selectNote(noteId)
+            case .saveSecureDraft:
+                await saveCurrentDraft(retryingAfterReauth: true)
+            }
             secureAccessPassphrase = ""
-            self.pendingSecureNoteId = nil
+            self.pendingSecureAccessAction = nil
             isShowingSecureAccessPrompt = false
         } catch {
             showToast(mapError(error), style: .error)
@@ -543,22 +612,49 @@ struct NotesWorkspaceView: View {
     }
 
     private func authenticatePendingSecureNoteWithBiometrics(action: () async throws -> Void) async {
-        guard let pendingSecureNoteId else {
+        guard let pendingSecureAccessAction else {
             return
         }
 
         do {
             try await action()
-            await selectNote(pendingSecureNoteId)
+            switch pendingSecureAccessAction {
+            case .openSecureNote(let noteId):
+                await selectNote(noteId)
+            case .saveSecureDraft:
+                await saveCurrentDraft(retryingAfterReauth: true)
+            }
             secureAccessPassphrase = ""
-            self.pendingSecureNoteId = nil
+            self.pendingSecureAccessAction = nil
             isShowingSecureAccessPrompt = false
         } catch {
             showToast(mapError(error), style: .error)
         }
     }
 
-    private func saveCurrentDraft() async {
+    private func saveCurrentDraft(retryingAfterReauth: Bool = false) async {
+        userInteractionAction()
+        if let selectedNoteId,
+           loadedSecureModeSnapshot,
+           secureModeEnabled,
+           title == loadedTitleSnapshot,
+           content == loadedContentSnapshot {
+            let secureAliasChanged = secureTitleAlias != loadedSecureAliasSnapshot
+            let secureSubjectChanged = editorSubjectId != loadedSubjectIdSnapshot
+
+            if secureAliasChanged || secureSubjectChanged {
+                do {
+                    try await updateSecureMetadataAction(selectedNoteId, secureTitleAlias, editorSubjectId)
+                    showToast("Secure note metadata saved.", style: .info)
+                    await refreshWorkspace()
+                    await selectNote(selectedNoteId)
+                } catch {
+                    showToast(mapError(error), style: .error)
+                }
+                return
+            }
+        }
+
         do {
             let draft = NoteDraft(
                 id: selectedNoteId,
@@ -566,6 +662,7 @@ struct NotesWorkspaceView: View {
                 content: content,
                 subjectId: editorSubjectId,
                 secureModeEnabled: secureModeEnabled,
+                secureTitleAlias: secureModeEnabled ? secureTitleAlias : nil,
                 expirationUTC: nil
             )
 
@@ -574,6 +671,33 @@ struct NotesWorkspaceView: View {
             showToast("Note saved.", style: .info)
             await refreshWorkspace()
             await selectNote(savedId)
+        } catch NoteServiceError.keyMaterialUnavailable where secureModeEnabled {
+            // Existing note: if only alias/subject changed, save without requiring key material.
+            if let selectedNoteId,
+               loadedSecureModeSnapshot,
+               (secureTitleAlias != loadedSecureAliasSnapshot || editorSubjectId != loadedSubjectIdSnapshot),
+               title == loadedTitleSnapshot,
+               content == loadedContentSnapshot {
+                do {
+                    try await updateSecureMetadataAction(selectedNoteId, secureTitleAlias, editorSubjectId)
+                    showToast("Secure note alias saved.", style: .info)
+                    await refreshWorkspace()
+                    await selectNote(selectedNoteId)
+                    return
+                } catch {
+                    showToast(mapError(error), style: .error)
+                    return
+                }
+            }
+
+            // New note or content change: encryption is genuinely required — prompt auth.
+            if !retryingAfterReauth {
+                pendingSecureAccessAction = .saveSecureDraft
+                secureAccessPassphrase = ""
+                isShowingSecureAccessPrompt = true
+            } else {
+                showToast("Authentication failed. Secure note not saved.", style: .error)
+            }
         } catch {
             showToast(mapError(error), style: .error)
         }
@@ -639,7 +763,13 @@ struct NotesWorkspaceView: View {
         selectedNoteId = nil
         title = ""
         content = ""
+        loadedTitleSnapshot = ""
+        loadedContentSnapshot = ""
+        loadedSubjectIdSnapshot = nil
+        loadedSecureModeSnapshot = false
         secureModeEnabled = false
+        secureTitleAlias = ""
+        loadedSecureAliasSnapshot = ""
         editorSubjectId = selectedSubjectId
     }
 
@@ -660,6 +790,8 @@ struct NotesWorkspaceView: View {
         switch error {
         case NoteServiceError.titleRequired:
             return "Title is required."
+        case NoteServiceError.keyMaterialUnavailable:
+            return "Secure note key is locked. Authenticate to save secure notes."
         case NoteServiceError.recordNotFound:
             return "The selected note was not found."
         case SubjectServiceError.emptyName:

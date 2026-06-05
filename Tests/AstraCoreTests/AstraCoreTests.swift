@@ -92,6 +92,7 @@ final class AstraCoreTests: XCTestCase {
         XCTAssertNil(secureStored?.plainTitle)
         XCTAssertNil(secureStored?.plainContent)
         XCTAssertNotNil(secureStored?.securePayload)
+        XCTAssertEqual(secureStored?.secureTitleAlias, "Locked Note")
 
         let loadedSecure = try await service.load(id: secureId)
         XCTAssertEqual(loadedSecure.title, "Secure")
@@ -250,7 +251,7 @@ final class AstraCoreTests: XCTestCase {
         XCTAssertTrue(restored)
     }
 
-    func testNoteSearchSecureCacheAndLockBehavior() async throws {
+    func testNoteSearchUsesSecureAliasesInsteadOfDecryptedTitles() async throws {
         let database = DatabaseProvider()
         let noteRepository = NoteRepository(database: database)
         let attachmentRepository = AttachmentRepository(database: database)
@@ -287,21 +288,25 @@ final class AstraCoreTests: XCTestCase {
                 content: "s",
                 subjectId: nil,
                 secureModeEnabled: true,
+                secureTitleAlias: "Math Vault",
                 expirationUTC: time.now().addingTimeInterval(300)
             )
         )
 
-        let unlockedResults = await searchService.searchTitle(query: "secret", isUnlocked: true)
-        XCTAssertEqual(unlockedResults.count, 1)
-        XCTAssertTrue(unlockedResults.first?.isSecure == true)
-        let countBeforeLock = await searchService.secureCacheCount()
-        XCTAssertEqual(countBeforeLock, 1)
+        let decryptedTitleResults = await searchService.searchTitle(query: "secret", isUnlocked: true)
+        XCTAssertTrue(decryptedTitleResults.isEmpty)
+
+        let aliasResults = await searchService.searchTitle(query: "vault", isUnlocked: true)
+        XCTAssertEqual(aliasResults.count, 1)
+        XCTAssertTrue(aliasResults.first?.isSecure == true)
+        XCTAssertEqual(aliasResults.first?.matchedTitle, "Math Vault")
 
         await searchService.clearSecureCacheOnLock()
         let countAfterLock = await searchService.secureCacheCount()
         XCTAssertEqual(countAfterLock, 0)
-        let lockedResults = await searchService.searchTitle(query: "secret", isUnlocked: false)
-        XCTAssertEqual(lockedResults.count, 0)
+
+        let lockedAliasResults = await searchService.searchTitle(query: "vault", isUnlocked: false)
+        XCTAssertEqual(lockedAliasResults.count, 1)
     }
 
     func testAttachmentLimitsAndSecurityModeInheritance() async throws {
@@ -724,5 +729,46 @@ final class AstraCoreTests: XCTestCase {
         XCTAssertEqual(coordinator.sessionState, .unlocked)
         let keyAfterBackgroundEvent = await keyManager.currentKeyMaterial()
         XCTAssertNil(keyAfterBackgroundEvent)
+    }
+
+    func testSecureMetadataUpdateDoesNotRequireInMemoryKey() async throws {
+        let database = DatabaseProvider()
+        let noteRepository = NoteRepository(database: database)
+        let attachmentRepository = AttachmentRepository(database: database)
+        let subjectRepository = SubjectRepository(database: database)
+        let settings = SettingsRepository(database: database)
+        let time = MutableTimeProvider(now: Date())
+        let logger = InMemoryAuditLogger(timeProvider: time)
+        let keyManager = KeyManager(settingsRepository: settings, timeProvider: time, logger: logger)
+        let service = NoteService(
+            notes: noteRepository,
+            attachments: attachmentRepository,
+            subjects: subjectRepository,
+            keyManager: keyManager,
+            encryptionService: EncryptionService(),
+            timeProvider: time
+        )
+
+        try await keyManager.createInitialPassphrase("meta-only")
+        _ = try await keyManager.unlock(passphrase: "meta-only")
+
+        let secureId = try await service.save(
+            draft: NoteDraft(
+                title: "Private Title",
+                content: "Private Content",
+                subjectId: nil,
+                secureModeEnabled: true,
+                secureTitleAlias: "Old Alias",
+                expirationUTC: nil
+            )
+        )
+
+        await keyManager.clearInMemoryKeyMaterial()
+
+        try await service.updateSecureMetadata(noteId: secureId, secureTitleAlias: "New Alias", subjectId: nil)
+
+        let stored = await noteRepository.fetch(id: secureId)
+        XCTAssertEqual(stored?.secureTitleAlias, "New Alias")
+        XCTAssertNotNil(stored?.securePayload)
     }
 }

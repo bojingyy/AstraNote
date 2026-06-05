@@ -48,7 +48,14 @@ public final class AppCoordinator: ObservableObject {
         }
         lastUserInteractionAt = now
         let hasPassphrase = await keyManager.hasPassphrase()
-        sessionState = hasPassphrase ? .unlocked : .firstLaunchSetup
+        if hasPassphrase {
+            // Key material is NOT restored from disk on startup; it must be re-derived
+            // by the user unlocking. Use .locked so secure operations prompt auth while
+            // normal-note work remains available in the workspace.
+            sessionState = .locked
+        } else {
+            sessionState = .firstLaunchSetup
+        }
     }
 
     public func createInitialPassphraseAndUnlock(_ passphrase: String) async throws {

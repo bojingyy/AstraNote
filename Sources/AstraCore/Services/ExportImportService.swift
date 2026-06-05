@@ -179,6 +179,7 @@ public actor ExportImportService {
                     plainTitle: note.plainTitle,
                     plainContent: note.plainContent,
                     securePayload: note.securePayload,
+                    secureTitleAlias: note.secureTitleAlias,
                     expirationUTC: nil,
                     createdAt: note.createdAt,
                     updatedAt: note.updatedAt
@@ -213,6 +214,7 @@ public actor ExportImportService {
                 plainTitle: record.sourceNote.plainTitle,
                 plainContent: record.sourceNote.plainContent,
                 securePayload: record.sourceNote.securePayload,
+                secureTitleAlias: record.sourceNote.secureTitleAlias,
                 expirationUTC: nil,
                 createdAt: record.sourceNote.createdAt,
                 updatedAt: record.sourceNote.updatedAt

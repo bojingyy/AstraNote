@@ -12,6 +12,8 @@ public enum NoteServiceError: Error, Equatable {
 }
 
 public actor NoteService {
+    private static let defaultSecureTitleAlias = "Locked Note"
+
     private let notes: NoteRepositoryProtocol
     private let attachments: AttachmentRepositoryProtocol
     private let subjects: SubjectRepositoryProtocol
@@ -60,6 +62,7 @@ public actor NoteService {
             plainTitle: nil,
             plainContent: nil,
             securePayload: nil,
+            secureTitleAlias: nil,
             createdAt: existing?.createdAt ?? now,
             updatedAt: now
         )
@@ -71,16 +74,19 @@ public actor NoteService {
 
             let plaintext = try SecurePayloadCodec.encode(title: draft.title, content: draft.content)
             let encrypted = try encryptionService.encrypt(plaintext: plaintext, keyMaterial: keyMaterial)
+            let alias = normalizedSecureTitleAlias(from: draft.secureTitleAlias)
 
             record.isSecure = true
             record.securePayload = encrypted.stored
             record.plainTitle = nil
             record.plainContent = nil
+            record.secureTitleAlias = alias
         } else {
             record.isSecure = false
             record.securePayload = nil
             record.plainTitle = draft.title
             record.plainContent = draft.content
+            record.secureTitleAlias = nil
         }
 
         try await notes.upsert(record)
@@ -109,6 +115,7 @@ public actor NoteService {
                 content: decoded.content,
                 subjectId: stored.subjectId,
                 isSecure: true,
+                secureTitleAlias: stored.secureTitleAlias,
                 createdAt: stored.createdAt,
                 updatedAt: stored.updatedAt
             )
@@ -120,6 +127,7 @@ public actor NoteService {
             content: stored.plainContent ?? "",
             subjectId: stored.subjectId,
             isSecure: false,
+            secureTitleAlias: nil,
             createdAt: stored.createdAt,
             updatedAt: stored.updatedAt
         )
@@ -130,12 +138,20 @@ public actor NoteService {
         return all.map {
             NoteSummary(
                 id: $0.id,
-                title: $0.isSecure ? "Locked Note" : ($0.plainTitle ?? ""),
+                title: $0.isSecure ? ($0.secureTitleAlias ?? Self.defaultSecureTitleAlias) : ($0.plainTitle ?? ""),
                 isSecure: $0.isSecure,
                 subjectId: $0.subjectId,
                 updatedAt: $0.updatedAt
             )
         }
+    }
+
+    private func normalizedSecureTitleAlias(from alias: String?) -> String {
+        let trimmed = alias?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if trimmed.isEmpty {
+            return Self.defaultSecureTitleAlias
+        }
+        return trimmed
     }
 
     public func delete(noteId: UUID) async throws -> Bool {
@@ -215,5 +231,20 @@ public actor NoteService {
             throw NoteServiceError.recordNotFound
         }
         try await notes.setSubject(noteId: noteId, subjectId: subjectId)
+    }
+
+    public func updateSecureMetadata(noteId: UUID, secureTitleAlias: String?, subjectId: UUID?) async throws {
+        guard var existing = await notes.fetch(id: noteId), existing.isSecure else {
+            throw NoteServiceError.recordNotFound
+        }
+
+        if let subjectId, await subjects.fetch(id: subjectId) == nil {
+            throw NoteServiceError.recordNotFound
+        }
+
+        existing.secureTitleAlias = normalizedSecureTitleAlias(from: secureTitleAlias)
+        existing.subjectId = subjectId
+        existing.updatedAt = timeProvider.now()
+        try await notes.upsert(existing)
     }
 }

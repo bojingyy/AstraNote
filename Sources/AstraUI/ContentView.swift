@@ -37,6 +37,9 @@ struct ContentView: View {
                     saveDraftAction: { draft in
                         try await env.noteService.save(draft: draft)
                     },
+                    updateSecureMetadataAction: { noteId, alias, subjectId in
+                        try await env.noteService.updateSecureMetadata(noteId: noteId, secureTitleAlias: alias, subjectId: subjectId)
+                    },
                     deleteNoteAction: { noteId in
                         try await env.noteService.delete(noteId: noteId)
                     },
@@ -86,6 +89,9 @@ struct ContentView: View {
                     },
                     setPluginEnabledAction: { pluginId, isEnabled in
                         try await env.pluginService.setEnabled(pluginId: pluginId, isEnabled: isEnabled)
+                    },
+                    userInteractionAction: {
+                        env.coordinator.registerUserInteraction(now: Date())
                     }
                 )
             }

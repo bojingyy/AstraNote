@@ -16,7 +16,7 @@
 - Create, edit, delete, and restore notes.
 - Normal notes are stored unencrypted; attachments are optional and limited to images and recordings.
 - Secure note mode is opt-in per note: encrypts the note and routes deletion through protected trash.
-- Title search in workspace: normal note titles are searched from storage; secure note titles are searchable only while app is unlocked using in-memory decrypted matching.
+- Title search in workspace: normal note titles are searched from storage; secure note search uses a non-sensitive alias (default: "Locked Note") instead of decrypted secure titles.
 - Voice capture trigger in the editor top bar (record and attach flow can start simple).
 - Encrypted export/import for local backup and restore with atomic import behavior.
 - Settings for lock timeout, telemetry opt-in, and a global plugin enable/disable toggle.
@@ -50,7 +50,7 @@ Out of MVP:
 - `EncryptionService.swift`: encrypt/decrypt payload boundary.
 - `SubjectService.swift`: subject group CRUD (create, rename, delete); enforces non-empty name and prevents deletion of non-empty groups without confirmation.
 - `NoteService.swift`: note CRUD orchestration; routes to encrypted or standard storage path based on note's secure flag.
-- `NoteSearchService.swift`: title search orchestration for normal and secure notes (secure titles are matched in memory only while unlocked).
+- `NoteSearchService.swift`: title search orchestration for normal and secure notes (secure notes are matched by stored alias only; decrypted secure titles are never used for search).
 - `SecureNotePolicyService.swift`: secure-note rules (encryption enforcement, protected-delete decisions).
 - `ProtectedTrashService.swift`: move/restore/permanent-delete logic.
 - `SettingsService.swift`: validation + updates for settings.
@@ -84,7 +84,7 @@ Out of MVP:
 - Repositories store standard notes as-is and secure notes as ciphertext only; the storage path is determined by the note's secure flag.
 - Platform wrappers isolate OS APIs from UI and repository layers.
 - Secure-note decisions happen in `SecureNotePolicyService.swift`, not in view logic.
-- Secure note title search never reads plaintext from persistent storage; search for secure titles runs only on in-memory decrypted data while unlocked.
+- Secure note title search never uses decrypted secure titles; search uses persisted secure aliases only.
 - Plugins can call only the small host API exposed by `PluginService.swift`; plugins never access repositories directly.
 - Plugin failures are contained and surfaced as user-visible errors without crashing note editing flows.
 
@@ -92,7 +92,7 @@ Out of MVP:
 All data flow sinks for decrypted secure note content are explicitly controlled:
 - **Disk persistence**: Decrypted secure note content is NEVER written to disk. Repositories persist only ciphertext, nonce, salt, and policy metadata for secure notes. Only `EncryptionService` performs decrypt operations in memory; results are held transiently for UI display or search matching only.
 - **Logging**: `Logging.swift` sanitizes all audit logs to exclude decrypted note content, titles, and content-derived data. Authentication failures, plugin errors, and system events are logged; note payloads are never logged.
-- **Caching**: The only persistent cache containing decrypted secure data is the in-memory search cache (`NoteSearchService` secure title cache), which holds plaintext titles during active unlocked sessions only. This cache is cleared immediately on lock. No decrypted content is cached to disk or shared state.
+- **Caching**: `NoteSearchService` does not cache decrypted secure titles. Secure note search uses only the stored secure alias metadata and keeps decrypted content out of search paths.
 - **Exports**: `ExportImportService` exports an encrypted archive. The plaintext note records are encrypted before archive assembly. The export file itself is encrypted under the user's passphrase; no decrypted content appears in the export artifact.
 - **UI display**: UI views display decrypted content transiently in memory; the view hierarchy is disposed on lock, and all text fields and labels are cleared or masked before the lock transition completes.
 - **Plugin interface**: Plugins receive decrypted content only through the `PluginService` API if the user explicitly invokes a plugin action. Plugin results are treated as untrusted and passed through normal note save flow (re-encryption if the note is in secure mode).
@@ -151,9 +151,9 @@ All data flow sinks for decrypted secure note content are explicitly controlled:
 ### 5.8 Title Search Flow (Normal + Secure)
 1. User types a search query in `WorkspaceTopBar`.
 2. `NoteSearchService` queries normal note titles directly from `NoteRepository`.
-3. If app is unlocked, `NoteSearchService` also matches secure note titles from in-memory decrypted title cache.
-4. If app is locked, secure note titles are excluded from search results.
-5. On secure-key-clear events (timeout/background/sleep), `KeyManager` clears key material and `NoteSearchService` clears secure title cache.
+3. `NoteSearchService` matches secure notes by `secureTitleAlias` (user-provided alias or default "Locked Note").
+4. Decrypted secure titles are never used as search input.
+5. On secure-key-clear events (timeout/background/sleep), `KeyManager` clears key material. Search behavior remains alias-based and does not rely on decrypted caches.
 
 ### 5.9 Auto-Lock Flow
 1. `PlatformIntegration` detects OS sleep, app backgrounding, or reports inactivity to `AppCoordinator`.
@@ -191,4 +191,4 @@ All data flow sinks for decrypted secure note content are explicitly controlled:
 - Settings: lock timeout, telemetry opt-in, plugin enabled (global on/off toggle).
 - Plugin manifest: `pluginId`, `name`, `version`, `supportedAppVersion`, `entryAction`, `capabilities`.
 - Plugin metadata: `pluginId`, install path/hash, enabled flag, last run status, last error.
-- Search session cache (memory only): decrypted secure titles for active unlocked session; never persisted.
+- Secure-note alias metadata: non-sensitive `secureTitleAlias` (default "Locked Note") used for search and list display without decrypting secure content.
