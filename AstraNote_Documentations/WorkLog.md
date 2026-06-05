@@ -227,3 +227,11 @@
 - Replaced `[Secure]` / `[Normal]` text markers before note titles.
 - Secure notes now show a lock icon; normal notes show no prefix.
 
+### Workspace Editor Update — Rich Text Formatting
+
+#### NotesWorkspaceView.swift / RichTextEditor.swift
+- Added rich text controls for text size, bold, italic, underline, and preset text colors.
+- Limited text colors to black, blue, green, and red.
+- Fixed formatting so style changes apply only to the selected text, not the whole note.
+- Updated the toolbar to reflect the style of the current text selection, including highlighted formatting buttons.
+

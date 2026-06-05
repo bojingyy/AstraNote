@@ -1,5 +1,6 @@
 import SwiftUI
 import AstraCore
+import AppKit
 
 struct NotesWorkspaceView: View {
     let searchAction: (String) async -> [NoteSearchResult]
@@ -40,6 +41,13 @@ struct NotesWorkspaceView: View {
     @State private var loadedSecureAliasSnapshot = ""
     @State private var secureModeEnabled = false
     @State private var secureTitleAlias = ""
+    @State private var editorFontSize: Double = 16
+    @State private var editorTextColor: Color = .black
+    @State private var editorTextColorKey = "black"
+    @State private var editorApplyStyleRevision = 0
+    @State private var editorIsBold = false
+    @State private var editorIsItalic = false
+    @State private var editorIsUnderlined = false
     @State private var editorSubjectId: UUID?
     @State private var newSubjectName = ""
     @State private var isShowingTrash = false
@@ -144,6 +152,10 @@ struct NotesWorkspaceView: View {
         } else {
             collapsedGroupIDs.insert(group.id)
         }
+    }
+
+    private var fontSizeLabel: String {
+        "Text: \(Int(editorFontSize))"
     }
 
     var body: some View {
@@ -374,14 +386,81 @@ struct NotesWorkspaceView: View {
                             }
                     }
 
+                    HStack(spacing: 10) {
+                        Stepper(fontSizeLabel, value: $editorFontSize, in: 12...36)
+                            .frame(width: 120)
+                        colorPresetButton(key: "black", color: .black)
+                        colorPresetButton(key: "blue", color: .blue)
+                        colorPresetButton(key: "green", color: .green)
+                        colorPresetButton(key: "red", color: .red)
+
+                        Button {
+                            editorIsBold.toggle()
+                            editorApplyStyleRevision += 1
+                        } label: {
+                            Text("B").bold()
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(editorIsBold ? .accentColor : .secondary)
+
+                        Button {
+                            editorIsItalic.toggle()
+                            editorApplyStyleRevision += 1
+                        } label: {
+                            Text("I").italic()
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(editorIsItalic ? .accentColor : .secondary)
+
+                        Button {
+                            editorIsUnderlined.toggle()
+                            editorApplyStyleRevision += 1
+                        } label: {
+                            Text("U").underline()
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(editorIsUnderlined ? .accentColor : .secondary)
+
+                        Spacer()
+                    }
+                    .onChange(of: editorFontSize) { _, _ in
+                        userInteractionAction()
+                        editorApplyStyleRevision += 1
+                    }
+                    .onChange(of: editorTextColor) { _, _ in
+                        userInteractionAction()
+                    }
+                    .onChange(of: editorIsBold) { _, _ in
+                        userInteractionAction()
+                    }
+                    .onChange(of: editorIsItalic) { _, _ in
+                        userInteractionAction()
+                    }
+                    .onChange(of: editorIsUnderlined) { _, _ in
+                        userInteractionAction()
+                    }
+
                     ZStack {
-                        TextEditor(text: $content)
-                            .font(.system(size: 16))
-                            .padding(.top, 6)
-                            .padding(.horizontal, 4)
-                            .onChange(of: content) { _, _ in
-                                userInteractionAction()
-                            }
+                        RichTextEditor(
+                            text: $content,
+                            fontSize: $editorFontSize,
+                            textColor: $editorTextColor,
+                            textColorKey: $editorTextColorKey,
+                            isBold: $editorIsBold,
+                            isItalic: $editorIsItalic,
+                            isUnderlined: $editorIsUnderlined,
+                            applyStyleRevision: $editorApplyStyleRevision
+                        ) { selectionStyle in
+                            editorFontSize = min(max(selectionStyle.fontSize, 12), 36)
+                            editorTextColorKey = selectionStyle.colorKey
+                            editorTextColor = colorForKey(selectionStyle.colorKey)
+                            editorIsBold = selectionStyle.isBold
+                            editorIsItalic = selectionStyle.isItalic
+                            editorIsUnderlined = selectionStyle.isUnderlined
+                        }
+                        .onChange(of: content) { _, _ in
+                            userInteractionAction()
+                        }
                     }
                     .frame(minHeight: 240)
                     .overlay {
@@ -829,6 +908,13 @@ struct NotesWorkspaceView: View {
         secureModeEnabled = false
         secureTitleAlias = ""
         loadedSecureAliasSnapshot = ""
+        editorFontSize = 16
+        editorTextColor = .black
+        editorTextColorKey = "black"
+        editorApplyStyleRevision = 0
+        editorIsBold = false
+        editorIsItalic = false
+        editorIsUnderlined = false
         editorSubjectId = selectedSubjectId
     }
 
@@ -844,7 +930,46 @@ struct NotesWorkspaceView: View {
         secureModeEnabled = false
         secureTitleAlias = ""
         loadedSecureAliasSnapshot = ""
+        editorFontSize = 16
+        editorTextColor = .black
+        editorTextColorKey = "black"
+        editorApplyStyleRevision = 0
+        editorIsBold = false
+        editorIsItalic = false
+        editorIsUnderlined = false
         editorSubjectId = selectedSubjectId
+    }
+
+    @ViewBuilder
+    private func colorPresetButton(key: String, color: Color) -> some View {
+        Button {
+            editorTextColorKey = key
+            editorTextColor = color
+            editorApplyStyleRevision += 1
+        } label: {
+            Circle()
+                .fill(color)
+                .frame(width: 16, height: 16)
+                .padding(4)
+                .overlay(
+                    Circle()
+                        .stroke(editorTextColorKey == key ? Color.accentColor : Color.clear, lineWidth: 2)
+                )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func colorForKey(_ key: String) -> Color {
+        switch key {
+        case "red":
+            return .red
+        case "green":
+            return .green
+        case "blue":
+            return .blue
+        default:
+            return .black
+        }
     }
 
     private func showToast(_ text: String, style: ToastMessage.Style) {

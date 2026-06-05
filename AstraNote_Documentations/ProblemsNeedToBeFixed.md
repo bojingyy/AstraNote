@@ -3,4 +3,14 @@
 
 2. notifications being shown in the background layer when pop up window is opened
 
-3. 
+3. [Resolved]change text size, bold etc. in note workspace
+
+4. can click subject text or empty space right after it to trigger the fold & unfold
+
+5. voice transfer to text
+
+6. add images as attachment
+
+7. export as PDF
+
+8. 
