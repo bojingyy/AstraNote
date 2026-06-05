@@ -43,6 +43,15 @@ struct ContentView: View {
                     deleteNoteAction: { noteId in
                         try await env.noteService.delete(noteId: noteId)
                     },
+                    addImageAttachmentAction: { noteId, storagePath, byteSize in
+                        try await env.noteService.addImageAttachment(noteId: noteId, storagePath: storagePath, byteSize: byteSize)
+                    },
+                    addVoiceAttachmentAction: { noteId, storagePath, byteSize in
+                        try await env.noteService.addVoiceAttachment(noteId: noteId, storagePath: storagePath, byteSize: byteSize)
+                    },
+                    listAttachmentsAction: { noteId in
+                        await env.noteService.listAttachments(noteId: noteId)
+                    },
                     listSubjectsAction: {
                         await env.subjectService.list()
                     },

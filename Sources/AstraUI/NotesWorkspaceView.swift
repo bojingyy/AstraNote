@@ -9,6 +9,9 @@ struct NotesWorkspaceView: View {
     let saveDraftAction: (NoteDraft) async throws -> UUID
     let updateSecureMetadataAction: (UUID, String?, UUID?) async throws -> Void
     let deleteNoteAction: (UUID) async throws -> Bool
+    let addImageAttachmentAction: (UUID, String, Int) async throws -> UUID
+    let addVoiceAttachmentAction: (UUID, String, Int) async throws -> UUID
+    let listAttachmentsAction: (UUID) async -> [Attachment]
     let listSubjectsAction: () async -> [Subject]
     let createSubjectAction: (String) async throws -> Subject
     let deleteSubjectAction: (UUID) async throws -> Bool
@@ -56,14 +59,22 @@ struct NotesWorkspaceView: View {
     @State private var isShowingSettings = false
     @State private var collapsedGroupIDs: Set<String> = []
     @State private var isLeftPanelCollapsed = false
+    @State private var attachments: [Attachment] = []
     @State private var isShowingSecureAccessPrompt = false
     @State private var pendingSecureAccessAction: SecureAccessAction?
     @State private var secureAccessPassphrase = ""
     @State private var toasts: [ToastMessage] = []
+    @StateObject private var recordingController = AudioRecordingController()
 
     private enum SecureAccessAction {
         case openSecureNote(UUID)
         case saveSecureDraft
+        case continueAttachment(PendingAttachmentAction)
+    }
+
+    private enum PendingAttachmentAction {
+        case importImage(URL)
+        case finalizeRecording(storagePath: String, byteSize: Int)
     }
 
     private struct NoteListItem: Identifiable {
@@ -468,6 +479,56 @@ struct NotesWorkspaceView: View {
                             .stroke(.secondary.opacity(0.4))
                     }
 
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Text("Attachments")
+                                .font(.headline)
+
+                            Spacer()
+
+                            Button("Add Image") {
+                                Task {
+                                    await attachImage()
+                                }
+                            }
+                            .disabled(recordingController.isRecording)
+
+                            Button(recordingController.isRecording ? "Stop Recording" : "Record Voice") {
+                                Task {
+                                    await toggleVoiceRecording()
+                                }
+                            }
+                        }
+
+                        if attachments.isEmpty {
+                            Text("No attachments yet.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            ForEach(attachments, id: \.id) { attachment in
+                                HStack(spacing: 10) {
+                                    Image(systemName: attachment.type == .image ? "photo" : "waveform")
+                                        .foregroundStyle(.secondary)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(attachmentName(for: attachment))
+                                        Text("\(attachment.type == .image ? "Image" : "Recording") • \(ByteCountFormatter.string(fromByteCount: Int64(attachment.byteSize), countStyle: .file))")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    Spacer()
+                                    Button("Open") {
+                                        WorkspaceAttachmentImport.open(at: attachment.storagePath)
+                                    }
+                                    Button("Reveal") {
+                                        WorkspaceAttachmentImport.reveal(at: attachment.storagePath)
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                            }
+                        }
+                    }
+                    .padding(.top, 4)
+
                     HStack {
                         Button("Save") {
                             Task {
@@ -675,10 +736,25 @@ struct NotesWorkspaceView: View {
         trashItems = await listTrashAction()
     }
 
+    private func loadAttachments(for noteId: UUID?) async {
+        guard let noteId else {
+            attachments = []
+            return
+        }
+        attachments = await listAttachmentsAction(noteId)
+    }
+
     private var secureAccessPromptTitle: String {
         switch pendingSecureAccessAction {
         case .saveSecureDraft:
             return "Authenticate to Save Secure Note"
+        case .continueAttachment(let action):
+            switch action {
+            case .importImage:
+                return "Authenticate to Attach Image"
+            case .finalizeRecording:
+                return "Authenticate to Save Recording"
+            }
         case .openSecureNote, .none:
             return "Unlock Secure Note"
         }
@@ -688,6 +764,13 @@ struct NotesWorkspaceView: View {
         switch pendingSecureAccessAction {
         case .saveSecureDraft:
             return "Enter your passphrase or use biometrics to encrypt and save this secure note."
+        case .continueAttachment(let action):
+            switch action {
+            case .importImage:
+                return "Enter your passphrase or use biometrics to save this image attachment to the secure note."
+            case .finalizeRecording:
+                return "Enter your passphrase or use biometrics to save this recording attachment to the secure note."
+            }
         case .openSecureNote, .none:
             return "Enter your passphrase or use biometrics to open this secure note."
         }
@@ -722,6 +805,7 @@ struct NotesWorkspaceView: View {
             secureTitleAlias = loaded.secureTitleAlias ?? ""
             loadedSecureAliasSnapshot = loaded.secureTitleAlias ?? ""
             editorSubjectId = loaded.subjectId
+            await loadAttachments(for: loaded.id)
         } catch {
             showToast(mapError(error), style: .error)
         }
@@ -739,6 +823,8 @@ struct NotesWorkspaceView: View {
                 await selectNote(noteId)
             case .saveSecureDraft:
                 await saveCurrentDraft(retryingAfterReauth: true)
+            case .continueAttachment(let action):
+                await completePendingAttachment(action, retryingAfterReauth: true)
             }
             secureAccessPassphrase = ""
             self.pendingSecureAccessAction = nil
@@ -760,6 +846,8 @@ struct NotesWorkspaceView: View {
                 await selectNote(noteId)
             case .saveSecureDraft:
                 await saveCurrentDraft(retryingAfterReauth: true)
+            case .continueAttachment(let pendingAction):
+                await completePendingAttachment(pendingAction, retryingAfterReauth: true)
             }
             secureAccessPassphrase = ""
             self.pendingSecureAccessAction = nil
@@ -916,6 +1004,8 @@ struct NotesWorkspaceView: View {
         editorIsItalic = false
         editorIsUnderlined = false
         editorSubjectId = selectedSubjectId
+        attachments = []
+        recordingController.cancel()
     }
 
     private func beginNewDraft() {
@@ -938,6 +1028,8 @@ struct NotesWorkspaceView: View {
         editorIsItalic = false
         editorIsUnderlined = false
         editorSubjectId = selectedSubjectId
+        attachments = []
+        recordingController.cancel()
     }
 
     @ViewBuilder
@@ -972,6 +1064,114 @@ struct NotesWorkspaceView: View {
         }
     }
 
+    private func attachmentName(for attachment: Attachment) -> String {
+        URL(fileURLWithPath: attachment.storagePath).lastPathComponent
+    }
+
+    private func attachImage() async {
+        if recordingController.isRecording {
+            showToast("Stop recording before attaching an image.", style: .error)
+            return
+        }
+
+        guard let sourceURL = WorkspaceAttachmentImport.chooseImageFileURL() else {
+            return
+        }
+
+        await completePendingAttachment(.importImage(sourceURL), retryingAfterReauth: false)
+    }
+
+    private func toggleVoiceRecording() async {
+        if recordingController.isRecording {
+            do {
+                let result = try recordingController.stop()
+                await completePendingAttachment(.finalizeRecording(storagePath: result.storagePath, byteSize: result.byteSize), retryingAfterReauth: false)
+            } catch {
+                showToast(mapError(error), style: .error)
+            }
+            return
+        }
+
+        do {
+            try await recordingController.start()
+            showToast("Recording started.", style: .info)
+        } catch {
+            showToast(mapError(error), style: .error)
+        }
+    }
+
+    private func completePendingAttachment(_ action: PendingAttachmentAction, retryingAfterReauth: Bool) async {
+        do {
+            let noteId = try await ensureNoteReadyForAttachment(retryingAfterReauth: retryingAfterReauth, pendingAction: action)
+
+            switch action {
+            case .importImage(let sourceURL):
+                let imported = try WorkspaceAttachmentImport.importImage(from: sourceURL)
+                do {
+                    _ = try await addImageAttachmentAction(noteId, imported.storagePath, imported.byteSize)
+                } catch {
+                    try? FileManager.default.removeItem(atPath: imported.storagePath)
+                    throw error
+                }
+                showToast("Image attached.", style: .info)
+            case .finalizeRecording(let storagePath, let byteSize):
+                _ = try await addVoiceAttachmentAction(noteId, storagePath, byteSize)
+                showToast("Recording attached.", style: .info)
+            }
+
+            await loadAttachments(for: noteId)
+            await refreshWorkspace()
+            if selectedNoteId != noteId {
+                await selectNote(noteId)
+            }
+        } catch NoteServiceError.keyMaterialUnavailable where !retryingAfterReauth {
+            pendingSecureAccessAction = .continueAttachment(action)
+            secureAccessPassphrase = ""
+            isShowingSecureAccessPrompt = true
+        } catch {
+            cleanupPendingAttachment(action)
+            showToast(mapError(error), style: .error)
+        }
+    }
+
+    private func ensureNoteReadyForAttachment(retryingAfterReauth: Bool, pendingAction: PendingAttachmentAction) async throws -> UUID {
+        if let selectedNoteId {
+            return selectedNoteId
+        }
+
+        let draft = NoteDraft(
+            id: selectedNoteId,
+            title: title,
+            content: content,
+            subjectId: editorSubjectId,
+            secureModeEnabled: secureModeEnabled,
+            secureTitleAlias: secureModeEnabled ? secureTitleAlias : nil,
+            expirationUTC: nil
+        )
+
+        do {
+            let savedId = try await saveDraftAction(draft)
+            selectedNoteId = savedId
+            await refreshWorkspace()
+            await selectNote(savedId)
+            return savedId
+        } catch NoteServiceError.keyMaterialUnavailable where secureModeEnabled && !retryingAfterReauth {
+            pendingSecureAccessAction = .continueAttachment(pendingAction)
+            secureAccessPassphrase = ""
+            isShowingSecureAccessPrompt = true
+            throw NoteServiceError.keyMaterialUnavailable
+        }
+    }
+
+    private func cleanupPendingAttachment(_ action: PendingAttachmentAction) {
+        switch action {
+        case .importImage:
+            return
+        case .finalizeRecording(let storagePath, _):
+            try? FileManager.default.removeItem(atPath: storagePath)
+        }
+    }
+
     private func showToast(_ text: String, style: ToastMessage.Style) {
         let toast = ToastMessage(text: text, style: style)
         withAnimation {
@@ -991,6 +1191,10 @@ struct NotesWorkspaceView: View {
             return "Title is required."
         case NoteServiceError.keyMaterialUnavailable:
             return "Secure note key is locked. Authenticate to save secure notes."
+        case NoteServiceError.imageAttachmentTooLarge:
+            return "Image attachment exceeds the 20 MB size limit."
+        case NoteServiceError.voiceAttachmentTooLarge:
+            return "Voice attachment exceeds the 50 MB size limit."
         case NoteServiceError.recordNotFound:
             return "The selected note was not found."
         case SubjectServiceError.emptyName:
@@ -1009,6 +1213,12 @@ struct NotesWorkspaceView: View {
             return "Biometric authentication is unavailable on this device."
         case AppCoordinatorError.biometricUnlockDisabled:
             return "Biometric unlock is disabled. Use passphrase or enable biometrics in Settings."
+        case RecordingError.microphonePermissionDenied:
+            return "Microphone access is required to record audio attachments."
+        case RecordingError.startFailed:
+            return "Audio recording could not be started."
+        case RecordingError.notRecording:
+            return "No active recording was found."
         default:
             return String(describing: error)
         }

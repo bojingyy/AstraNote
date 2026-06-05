@@ -235,3 +235,13 @@
 - Fixed formatting so style changes apply only to the selected text, not the whole note.
 - Updated the toolbar to reflect the style of the current text selection, including highlighted formatting buttons.
 
+### Workspace Editor Update — Attachment Support
+
+#### NotesWorkspaceView.swift / ContentView.swift / WorkspaceAttachmentSupport.swift
+- Added UI actions to attach images and voice recordings directly in note workspace.
+- Added image import flow using a macOS file picker and attachment persistence wiring.
+- Added voice recording flow (start/stop) using microphone permission and local recording files.
+- Added attachment list in workspace with type icon, file size, and Open/Reveal actions.
+- Added secure-note compatible attachment flow, including auth continuation when needed.
+- Added cleanup and user-facing error handling for failed attachment operations.
+
