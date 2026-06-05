@@ -30,6 +30,7 @@ struct NotesWorkspaceView: View {
     @State private var subjects: [Subject] = []
     @State private var selectedSubjectId: UUID?
     @State private var selectedNoteId: UUID?
+    @State private var isComposingNewNote = false
     @State private var title = ""
     @State private var content = ""
     @State private var loadedTitleSnapshot = ""
@@ -174,7 +175,7 @@ struct NotesWorkspaceView: View {
 
                 HStack {
                     Button("New Note") {
-                        clearEditorForNewNote()
+                        beginNewDraft()
                     }
                     Button("Trash Can") {
                         Task {
@@ -287,73 +288,92 @@ struct NotesWorkspaceView: View {
             .frame(minWidth: 360)
 
             VStack(alignment: .leading, spacing: 12) {
-                Text(selectedNoteId == nil ? "Create Note" : "Edit Note")
-                    .font(.title2)
-                    .bold()
-
-                TextField("Title", text: $title)
-                    .font(.system(size: 16))
-                    .textFieldStyle(.roundedBorder)
-                    .onChange(of: title) { _, _ in
-                        userInteractionAction()
-                    }
-
-                Picker("Subject", selection: $editorSubjectId) {
-                    Text("Ungrouped").tag(Optional<UUID>.none)
-                    ForEach(subjects, id: \.id) { subject in
-                        Text(subject.name).tag(Optional(subject.id))
-                    }
-                }
-
-                Toggle("Secure mode", isOn: $secureModeEnabled)
-                    .onChange(of: secureModeEnabled) { _, _ in
-                        userInteractionAction()
-                    }
-
-                if secureModeEnabled {
-                    TextField("Secure title alias (default: Locked Note)", text: $secureTitleAlias)
-                        .textFieldStyle(.roundedBorder)
-                        .onChange(of: secureTitleAlias) { _, _ in
-                            userInteractionAction()
+                if selectedNoteId == nil && !isComposingNewNote {
+                    Spacer()
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Welcome to AstraNotes")
+                            .font(.largeTitle)
+                            .bold()
+                        Text("Start by creating a new note, or select one from the left panel to continue editing.")
+                            .foregroundStyle(.secondary)
+                        Button("Create a Note") {
+                            beginNewDraft()
                         }
-                }
+                        .buttonStyle(.borderedProminent)
+                    }
+                    .padding(20)
+                    .background(.regularMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    Spacer()
+                } else {
+                    Text(selectedNoteId == nil ? "Create Note" : "Edit Note")
+                        .font(.title2)
+                        .bold()
 
-                ZStack {
-                    TextEditor(text: $content)
+                    TextField("Title", text: $title)
                         .font(.system(size: 16))
-                        .padding(.top, 6)
-                        .padding(.horizontal, 4)
-                        .onChange(of: content) { _, _ in
+                        .textFieldStyle(.roundedBorder)
+                        .onChange(of: title) { _, _ in
                             userInteractionAction()
                         }
-                }
-                .frame(minHeight: 240)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.secondary.opacity(0.4))
-                }
 
-                HStack {
-                    Button("Save") {
-                        Task {
-                            await saveCurrentDraft()
+                    Picker("Subject", selection: $editorSubjectId) {
+                        Text("Ungrouped").tag(Optional<UUID>.none)
+                        ForEach(subjects, id: \.id) { subject in
+                            Text(subject.name).tag(Optional(subject.id))
                         }
                     }
-                    .buttonStyle(.borderedProminent)
 
-                    Button("Delete") {
-                        Task {
-                            await deleteSelectedNote()
+                    Toggle("Secure mode", isOn: $secureModeEnabled)
+                        .onChange(of: secureModeEnabled) { _, _ in
+                            userInteractionAction()
+                        }
+
+                    if secureModeEnabled {
+                        TextField("Secure title alias (default: Locked Note)", text: $secureTitleAlias)
+                            .textFieldStyle(.roundedBorder)
+                            .onChange(of: secureTitleAlias) { _, _ in
+                                userInteractionAction()
+                            }
+                    }
+
+                    ZStack {
+                        TextEditor(text: $content)
+                            .font(.system(size: 16))
+                            .padding(.top, 6)
+                            .padding(.horizontal, 4)
+                            .onChange(of: content) { _, _ in
+                                userInteractionAction()
+                            }
+                    }
+                    .frame(minHeight: 240)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.secondary.opacity(0.4))
+                    }
+
+                    HStack {
+                        Button("Save") {
+                            Task {
+                                await saveCurrentDraft()
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+
+                        Button("Delete") {
+                            Task {
+                                await deleteSelectedNote()
+                            }
+                        }
+                        .disabled(selectedNoteId == nil)
+
+                        Button("New") {
+                            beginNewDraft()
                         }
                     }
-                    .disabled(selectedNoteId == nil)
 
-                    Button("New") {
-                        clearEditorForNewNote()
-                    }
+                    Spacer()
                 }
-
-                Spacer()
             }
             .padding()
         }
@@ -572,6 +592,7 @@ struct NotesWorkspaceView: View {
     private func selectNote(_ noteId: UUID) async {
         do {
             let loaded = try await loadNoteAction(noteId)
+            isComposingNewNote = false
             selectedNoteId = loaded.id
             selectedSubjectId = loaded.subjectId
             collapsedGroupIDs.remove(groupID(for: loaded.subjectId))
@@ -761,6 +782,22 @@ struct NotesWorkspaceView: View {
 
     private func clearEditorForNewNote() {
         selectedNoteId = nil
+        isComposingNewNote = false
+        title = ""
+        content = ""
+        loadedTitleSnapshot = ""
+        loadedContentSnapshot = ""
+        loadedSubjectIdSnapshot = nil
+        loadedSecureModeSnapshot = false
+        secureModeEnabled = false
+        secureTitleAlias = ""
+        loadedSecureAliasSnapshot = ""
+        editorSubjectId = selectedSubjectId
+    }
+
+    private func beginNewDraft() {
+        selectedNoteId = nil
+        isComposingNewNote = true
         title = ""
         content = ""
         loadedTitleSnapshot = ""
