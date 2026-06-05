@@ -47,6 +47,7 @@ struct NotesWorkspaceView: View {
     @State private var pendingSubjectDeletion: Subject?
     @State private var isShowingSettings = false
     @State private var collapsedGroupIDs: Set<String> = []
+    @State private var isLeftPanelCollapsed = false
     @State private var isShowingSecureAccessPrompt = false
     @State private var pendingSecureAccessAction: SecureAccessAction?
     @State private var secureAccessPassphrase = ""
@@ -147,7 +148,39 @@ struct NotesWorkspaceView: View {
 
     var body: some View {
         HSplitView {
-            VStack(alignment: .leading, spacing: 12) {
+            if !isLeftPanelCollapsed {
+                VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Button {
+                        isShowingSettings = true
+                    } label: {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 16, weight: .semibold))
+                            .frame(width: 20, height: 20)
+                    }
+                    .buttonStyle(.bordered)
+                    .help("Settings")
+
+                    Button {
+                        Task {
+                            await loadTrashItems()
+                            isShowingTrash = true
+                        }
+                    } label: {
+                        Image(systemName: "trash")
+                            .font(.system(size: 16, weight: .semibold))
+                            .frame(width: 20, height: 20)
+                    }
+                    .buttonStyle(.bordered)
+                    .help("Trash Can")
+
+                    Spacer()
+
+                    Button("New Note") {
+                        beginNewDraft()
+                    }
+                }
+
                 HStack {
                     TextField("Search note titles", text: $query)
                         .textFieldStyle(.roundedBorder)
@@ -170,21 +203,6 @@ struct NotesWorkspaceView: View {
                             searchResults = []
                             await refreshWorkspace()
                         }
-                    }
-                }
-
-                HStack {
-                    Button("New Note") {
-                        beginNewDraft()
-                    }
-                    Button("Trash Can") {
-                        Task {
-                            await loadTrashItems()
-                            isShowingTrash = true
-                        }
-                    }
-                    Button("Settings") {
-                        isShowingSettings = true
                     }
                 }
 
@@ -238,7 +256,10 @@ struct NotesWorkspaceView: View {
                                 if !isGroupCollapsed(group) {
                                     ForEach(notesForGroup(group.subjectId)) { note in
                                         HStack {
-                                            Text(note.isSecure ? "[Secure]" : "[Normal]")
+                                            if note.isSecure {
+                                                Image(systemName: "lock.fill")
+                                                    .foregroundStyle(.secondary)
+                                            }
                                             Text(note.title)
                                             Spacer(minLength: 0)
                                         }
@@ -286,8 +307,24 @@ struct NotesWorkspaceView: View {
             }
             .padding()
             .frame(minWidth: 360)
+            }
 
             VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Button {
+                        withAnimation {
+                            isLeftPanelCollapsed.toggle()
+                        }
+                    } label: {
+                        Image(systemName: isLeftPanelCollapsed ? "sidebar.right" : "sidebar.left")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .buttonStyle(.bordered)
+                    .help(isLeftPanelCollapsed ? "Show left panel" : "Hide left panel")
+
+                    Spacer()
+                }
+
                 if selectedNoteId == nil && !isComposingNewNote {
                     Spacer()
                     VStack(alignment: .leading, spacing: 12) {

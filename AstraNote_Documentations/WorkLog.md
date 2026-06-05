@@ -178,3 +178,52 @@
 #### Requirement.md / Architecture.md
 - Updated requirement language to define transient pop-up notification windows (about 5 seconds) for foreground feedback.
 - Updated architecture module map and secure-note retention flow to document toast-based foreground notification behavior.
+
+---
+
+## 2026-06-05
+
+### Secure Note Search & Save Fixes — Alias Model + Session Correctness
+
+#### NoteService.swift / NoteSearchService.swift / CoreModels.swift / PersistenceModels.swift
+- Added secure-note alias support (`secureTitleAlias`) to draft/view/persistence models.
+- Updated secure-note save flow to persist alias metadata with default fallback `Locked Note`.
+- Updated note summary display for secure notes to use alias fallback instead of decrypted title.
+- Reworked secure-title search to match on stored alias metadata only.
+- Removed decrypted secure-title cache dependency from search behavior.
+
+#### NotesWorkspaceView.swift / ContentView.swift / AppCoordinator.swift
+- Added secure alias input field in editor when secure mode is enabled.
+- Added secure-note metadata-only update path for alias/subject changes on existing secure notes, avoiding unnecessary re-encryption.
+- Refined secure save error handling so alias-only edits can still save even when key material is unavailable.
+- Added interaction callbacks from workspace editing controls to coordinator for inactivity timer refresh.
+- Corrected startup session behavior: existing passphrase now starts in `.locked` state (workspace remains available, secure operations require unlock).
+- Preserved secure-note authentication prompt for new secure-note creation and real secure content encryption operations.
+
+#### ExportImportService.swift / ProtectedTrashRepository.swift
+- Ensured `secureTitleAlias` is preserved in import remap and secure-trash restore/collision flows.
+
+#### Tests
+- Updated secure search tests to validate alias-based matching and no decrypted-title search dependency.
+- Added regression coverage for secure metadata updates without in-memory key material.
+- Verification status during this update cycle: targeted and full test runs passed (latest full run: 29 passed, 0 failed).
+
+### Workspace UX Update — Welcome Default + Header Toolbar Layout
+
+#### NotesWorkspaceView.swift
+- Added a default workspace state card in editor pane: `Welcome to AstraNotes`.
+- Changed empty-right-pane behavior so blank editor appears only when user explicitly starts a new draft.
+- Added explicit new-draft mode to separate welcome state from compose state.
+- Updated welcome CTA label to `Create a Note`.
+- Reworked top header layout:
+	- First row: settings icon (left), trash icon (next), New Note button (right).
+	- Second row: search input with Search and Reset actions.
+
+### Workspace UX Update — Simple Navigation Improvements
+
+#### NotesWorkspaceView.swift
+- Added a fold/unfold control in the top-left of the note workspace pane.
+- Made the entire left panel collapsible.
+- Replaced `[Secure]` / `[Normal]` text markers before note titles.
+- Secure notes now show a lock icon; normal notes show no prefix.
+
