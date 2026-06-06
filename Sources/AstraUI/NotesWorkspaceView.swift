@@ -65,6 +65,8 @@ struct NotesWorkspaceView: View {
     @State private var secureAccessPassphrase = ""
     @State private var toasts: [ToastMessage] = []
     @StateObject private var recordingController = AudioRecordingController()
+    @State private var leftPanelWidth: CGFloat = 0
+    @State private var dragStartWidth: CGFloat? = nil
 
     private enum SecureAccessAction {
         case openSecureNote(UUID)
@@ -170,7 +172,8 @@ struct NotesWorkspaceView: View {
     }
 
     var body: some View {
-        HSplitView {
+        GeometryReader { geo in
+        HStack(spacing: 0) {
             if !isLeftPanelCollapsed {
                 VStack(alignment: .leading, spacing: 12) {
                 HStack {
@@ -329,8 +332,25 @@ struct NotesWorkspaceView: View {
                 Divider()
             }
             .padding()
-            .frame(minWidth: 360)
+            .frame(width: max(200, min(leftPanelWidth, geo.size.width * 0.65)))
             }
+
+            // Draggable divider
+            Rectangle()
+                .fill(Color(NSColor.separatorColor))
+                .frame(width: 8)
+                .contentShape(Rectangle())
+                .onHover { inside in inside ? NSCursor.resizeLeftRight.push() : NSCursor.pop() }
+                .gesture(
+                    DragGesture(minimumDistance: 1, coordinateSpace: .global)
+                        .onChanged { value in
+                            if dragStartWidth == nil { dragStartWidth = leftPanelWidth }
+                            leftPanelWidth = max(200, min(dragStartWidth! + value.translation.width, geo.size.width * 0.65))
+                        }
+                        .onEnded { _ in
+                            dragStartWidth = nil
+                        }
+                )
 
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
@@ -553,6 +573,12 @@ struct NotesWorkspaceView: View {
                 }
             }
             .padding()
+            .frame(maxWidth: .infinity)
+        }
+        .task(id: geo.size.width) {
+            if leftPanelWidth == 0 {
+                leftPanelWidth = geo.size.width / 3
+            }
         }
         .sheet(isPresented: $isShowingSettings) {
             SettingsView(
@@ -711,6 +737,7 @@ struct NotesWorkspaceView: View {
         } message: { subject in
             Text("\(subject.name) contains notes. Deleting the subject will ungroup those notes.")
         }
+        } // GeometryReader
     }
 
     private func performSearch() async {

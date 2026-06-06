@@ -3,4 +3,5 @@
 
 .build/
 .vscode/
+.claude/
 AstraNote_Documentations/ProblemsNeedToBeFixed.md

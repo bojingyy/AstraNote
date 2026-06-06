@@ -13,4 +13,4 @@
 
 7. export as PDF
 
-8. 
+8. add last edit time for each note (inside note workspace)
