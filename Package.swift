@@ -17,7 +17,11 @@ let package = Package(
         .executableTarget(
             name: "AstraUI",
             dependencies: ["AstraCore", "AstraData", "AstraPlatform"],
-            path: "Sources/AstraUI"
+            path: "Sources/AstraUI",
+            resources: [
+                .process("Assets.xcassets"),
+                .copy("AstraNotes_Logo.png")
+            ]
         ),
         
         // MARK: - AstraCore (Business Logic & Services)

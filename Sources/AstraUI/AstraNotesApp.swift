@@ -6,6 +6,10 @@ final class AstraNotesAppDelegate: NSObject, NSApplicationDelegate {
         // Ensure SwiftPM-launched app windows receive keyboard focus as a foreground app.
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
+        if let url = Bundle.module.url(forResource: "AstraNotes_Logo", withExtension: "png"),
+           let icon = NSImage(contentsOf: url) {
+            NSApp.applicationIconImage = icon
+        }
     }
 }
 

@@ -245,3 +245,24 @@
 - Added secure-note compatible attachment flow, including auth continuation when needed.
 - Added cleanup and user-facing error handling for failed attachment operations.
 
+---
+
+## 2026-06-06
+
+### App Icon — AstraNotes Logo in Dock and App Switcher
+
+#### Sources/AstraUI/Assets.xcassets/AppIcon.appiconset/
+- Created asset catalog with a full set of macOS icon sizes (16×16 through 1024×1024, including @2x variants).
+- All sizes generated from `AstraNotes_Logo.png` using `sips`.
+- Applied macOS squircle mask (22.5% corner radius, continuous curve) via a CoreGraphics Swift script to match the standard macOS Big Sur+ app icon shape.
+- Rounded version saved as `AstraNotes_Logo_Rounded.png` in `AstraNote_Documentations/`.
+
+#### Sources/AstraUI/AstraNotes_Logo.png
+- Added rounded logo as a directly bundled resource for programmatic icon assignment at runtime.
+
+#### Package.swift
+- Registered `Assets.xcassets` (`.process`) and `AstraNotes_Logo.png` (`.copy`) as resources for the `AstraUI` target.
+
+#### AstraNotesApp.swift
+- Added programmatic app icon assignment in `applicationDidFinishLaunching`: loads `AstraNotes_Logo.png` from `Bundle.module` and sets `NSApp.applicationIconImage`, so the logo appears in the Dock and app switcher when running via `swift run`.
+
