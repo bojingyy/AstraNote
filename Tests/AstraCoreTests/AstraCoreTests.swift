@@ -403,7 +403,7 @@ final class AstraCoreTests: XCTestCase {
         )
         let searchService = NoteSearchService(noteRepository: noteRepository, noteService: noteService)
         let settingsService = SettingsService(repository: settingsRepository)
-        try await settingsService.update(lockTimeoutSeconds: 30, telemetryEnabled: false, pluginsEnabled: true)
+        try await settingsService.update(pluginsEnabled: true)
 
         let coordinator = AppCoordinator(
             keyManager: keyManager,

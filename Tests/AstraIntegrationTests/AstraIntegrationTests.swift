@@ -46,10 +46,8 @@ final class AstraIntegrationTests: XCTestCase {
         XCTAssertEqual(loaded.subjectId, subject.id)
         XCTAssertTrue(loaded.isSecure)
 
-        try await settingsService.update(lockTimeoutSeconds: 600, telemetryEnabled: true, pluginsEnabled: false)
+        try await settingsService.update(pluginsEnabled: false)
         let updatedSettings = await settingsService.load()
-        XCTAssertEqual(updatedSettings.lockTimeoutSeconds, 600)
-        XCTAssertTrue(updatedSettings.telemetryEnabled)
         XCTAssertFalse(updatedSettings.pluginsEnabled)
 
         let deleted = try await noteService.delete(noteId: id)

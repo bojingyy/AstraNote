@@ -7,17 +7,23 @@ struct SettingsView: View {
     let updateBiometricAction: (Bool) async throws -> Void
     let installedPluginsAction: () async -> [InstalledPlugin]
     let setPluginEnabledAction: (String, Bool) async throws -> Void
+    let changePassphraseAction: (String, String) async throws -> Void
 
     @Environment(\.dismiss) private var dismiss
 
     @State private var settings = AppSettings(
-        lockTimeoutSeconds: 300,
-        telemetryEnabled: false,
         pluginsEnabled: true,
         biometricUnlockEnabled: false
     )
     @State private var installedPlugins: [InstalledPlugin] = []
     @State private var errorMessage: String?
+
+    @State private var currentPassphrase = ""
+    @State private var newPassphrase = ""
+    @State private var confirmNewPassphrase = ""
+    @State private var passphraseChangeError: String?
+    @State private var passphraseChangeSuccess: String?
+    @State private var isChangingPassphrase = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -25,31 +31,9 @@ struct SettingsView: View {
                 .font(.title2)
                 .bold()
 
-            Stepper("Lock timeout: \(settings.lockTimeoutSeconds) seconds", value: Binding(
-                get: { settings.lockTimeoutSeconds },
-                set: { settings = AppSettings(
-                    lockTimeoutSeconds: $0,
-                    telemetryEnabled: settings.telemetryEnabled,
-                    pluginsEnabled: settings.pluginsEnabled,
-                    biometricUnlockEnabled: settings.biometricUnlockEnabled
-                ) }
-            ), in: 30...3600, step: 30)
-
-            Toggle("Telemetry opt-in", isOn: Binding(
-                get: { settings.telemetryEnabled },
-                set: { settings = AppSettings(
-                    lockTimeoutSeconds: settings.lockTimeoutSeconds,
-                    telemetryEnabled: $0,
-                    pluginsEnabled: settings.pluginsEnabled,
-                    biometricUnlockEnabled: settings.biometricUnlockEnabled
-                ) }
-            ))
-
             Toggle("Enable plugins", isOn: Binding(
                 get: { settings.pluginsEnabled },
                 set: { settings = AppSettings(
-                    lockTimeoutSeconds: settings.lockTimeoutSeconds,
-                    telemetryEnabled: settings.telemetryEnabled,
                     pluginsEnabled: $0,
                     biometricUnlockEnabled: settings.biometricUnlockEnabled
                 ) }
@@ -59,8 +43,6 @@ struct SettingsView: View {
                 get: { settings.biometricUnlockEnabled },
                 set: { newValue in
                     settings = AppSettings(
-                        lockTimeoutSeconds: settings.lockTimeoutSeconds,
-                        telemetryEnabled: settings.telemetryEnabled,
                         pluginsEnabled: settings.pluginsEnabled,
                         biometricUnlockEnabled: newValue
                     )
@@ -73,6 +55,44 @@ struct SettingsView: View {
                     }
                 }
             ))
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Change Passphrase")
+                    .font(.headline)
+
+                SecureField("Current passphrase", text: $currentPassphrase)
+                    .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled(true)
+
+                SecureField("New passphrase", text: $newPassphrase)
+                    .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled(true)
+
+                SecureField("Confirm new passphrase", text: $confirmNewPassphrase)
+                    .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled(true)
+
+                if let passphraseChangeError {
+                    Text(passphraseChangeError)
+                        .foregroundStyle(.red)
+                }
+                if let passphraseChangeSuccess {
+                    Text(passphraseChangeSuccess)
+                        .foregroundStyle(.green)
+                }
+
+                Button("Change Passphrase") {
+                    Task {
+                        await submitPassphraseChange()
+                    }
+                }
+                .buttonStyle(.bordered)
+                .disabled(isChangingPassphrase)
+            }
+
+            Divider()
 
             PluginStoreView(plugins: installedPlugins, setPluginEnabledAction: setPluginEnabledAction)
 
@@ -99,10 +119,44 @@ struct SettingsView: View {
             }
         }
         .padding()
-        .frame(minWidth: 420, minHeight: 420)
+        .frame(minWidth: 420, minHeight: 320)
         .task {
             settings = await loadSettingsAction()
             installedPlugins = await installedPluginsAction()
+        }
+    }
+
+    private func submitPassphraseChange() async {
+        passphraseChangeError = nil
+        passphraseChangeSuccess = nil
+
+        guard !newPassphrase.isEmpty, newPassphrase == confirmNewPassphrase else {
+            passphraseChangeError = "New passphrase must be non-empty and match confirmation."
+            return
+        }
+
+        isChangingPassphrase = true
+        defer { isChangingPassphrase = false }
+
+        do {
+            try await changePassphraseAction(currentPassphrase, newPassphrase)
+            currentPassphrase = ""
+            newPassphrase = ""
+            confirmNewPassphrase = ""
+            passphraseChangeSuccess = "Passphrase changed successfully."
+        } catch {
+            switch error {
+            case KeyManagerError.invalidPassphrase:
+                passphraseChangeError = "Current passphrase is incorrect."
+            case KeyManagerError.identicalPassphrase:
+                passphraseChangeError = "New passphrase must be different from the current one."
+            case KeyManagerError.passphraseNotInitialized:
+                passphraseChangeError = "No passphrase found. Please restart and create a passphrase."
+            case KeyManagerError.migrationUnavailable:
+                passphraseChangeError = "Changing the passphrase is unavailable right now."
+            default:
+                passphraseChangeError = String(describing: error)
+            }
         }
     }
 }

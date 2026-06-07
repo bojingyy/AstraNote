@@ -84,8 +84,6 @@ struct ContentView: View {
                     },
                     saveSettingsAction: { settings in
                         try await env.settingsService.update(
-                            lockTimeoutSeconds: settings.lockTimeoutSeconds,
-                            telemetryEnabled: settings.telemetryEnabled,
                             pluginsEnabled: settings.pluginsEnabled,
                             biometricUnlockEnabled: settings.biometricUnlockEnabled
                         )
@@ -98,6 +96,9 @@ struct ContentView: View {
                     },
                     setPluginEnabledAction: { pluginId, isEnabled in
                         try await env.pluginService.setEnabled(pluginId: pluginId, isEnabled: isEnabled)
+                    },
+                    changePassphraseAction: { current, next in
+                        try await env.coordinator.changePassphrase(current: current, next: next)
                     },
                     userInteractionAction: {
                         env.coordinator.registerUserInteraction(now: Date())
@@ -116,12 +117,6 @@ struct ContentView: View {
         }
         .onReceive(env.coordinator.$sessionState) { updatedState in
             sessionState = updatedState
-        }
-        .task {
-            while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                await env.coordinator.evaluateInactivityAutoLock(now: Date())
-            }
         }
         .onChange(of: scenePhase) { _, newPhase in
             Task {

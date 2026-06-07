@@ -266,3 +266,21 @@
 #### AstraNotesApp.swift
 - Added programmatic app icon assignment in `applicationDidFinishLaunching`: loads `AstraNotes_Logo.png` from `Bundle.module` and sets `NSApp.applicationIconImage`, so the logo appears in the Dock and app switcher when running via `swift run`.
 
+---
+
+## 2026-06-06
+
+### Settings Cleanup and Change Passphrase Support
+
+#### Removed Telemetry Opt-In Setting
+- Removed `telemetryEnabled` from `AppSettings` (`CoreModels.swift`) and `StoredSettingsRecord` (`PersistenceModels.swift`).
+- Removed the `telemetryEnabled` parameter from `SettingsService.update(...)` and its forwarding in `setBiometricUnlockEnabled`.
+- Removed the "Telemetry opt-in" toggle from `SettingsView` and its references in `ContentView`'s save action.
+- Updated `AstraCoreTests` and `AstraIntegrationTests` settings-update calls and assertions accordingly.
+- Rationale: the toggle was a scaffolded privacy-policy placeholder (per NFR7.1/NFR7.2) with no actual telemetry collection/transmission code anywhere in the codebase, so it had no observable effect.
+
+#### Added Change Passphrase UI to Settings
+- `KeyManager.changePassphrase` and `AppCoordinator.changePassphrase` were already fully implemented (key re-derivation, transactional re-encryption of all secure notes, biometric re-enrollment) but had no UI entry point.
+- Added a "Change Passphrase" section to `SettingsView` with current/new/confirm `SecureField`s, client-side validation, and `KeyManagerError` mapping (`invalidPassphrase`, `identicalPassphrase`, `passphraseNotInitialized`, `migrationUnavailable`) to user-friendly messages, following the same pattern as `UnlockView`.
+- Wired `changePassphraseAction` through `NotesWorkspaceView` and `ContentView` to `env.coordinator.changePassphrase(current:next:)`.
+

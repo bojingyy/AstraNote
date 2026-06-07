@@ -160,34 +160,24 @@ public struct Subject: Sendable, Equatable {
 }
 
 public struct AppSettings: Sendable, Equatable {
-    public let lockTimeoutSeconds: Int
-    public let telemetryEnabled: Bool
     public let pluginsEnabled: Bool
     public let biometricUnlockEnabled: Bool
 
     public init(
-        lockTimeoutSeconds: Int,
-        telemetryEnabled: Bool,
         pluginsEnabled: Bool,
         biometricUnlockEnabled: Bool
     ) {
-        self.lockTimeoutSeconds = lockTimeoutSeconds
-        self.telemetryEnabled = telemetryEnabled
         self.pluginsEnabled = pluginsEnabled
         self.biometricUnlockEnabled = biometricUnlockEnabled
     }
 
     init(stored: StoredSettingsRecord) {
-        self.lockTimeoutSeconds = stored.lockTimeoutSeconds
-        self.telemetryEnabled = stored.telemetryEnabled
         self.pluginsEnabled = stored.pluginsEnabled
         self.biometricUnlockEnabled = stored.biometricUnlockEnabled
     }
 
     var stored: StoredSettingsRecord {
         StoredSettingsRecord(
-            lockTimeoutSeconds: lockTimeoutSeconds,
-            telemetryEnabled: telemetryEnabled,
             pluginsEnabled: pluginsEnabled,
             biometricUnlockEnabled: biometricUnlockEnabled
         )

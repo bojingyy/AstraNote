@@ -165,26 +165,6 @@ public final class AppCoordinator: ObservableObject {
         }
     }
 
-    public func evaluateInactivityAutoLock(now: Date = Date()) async {
-        guard sessionState != .firstLaunchSetup else {
-            return
-        }
-
-        let settings = await settingsService.load()
-        let effectiveLockTimeoutSeconds = min(max(settings.lockTimeoutSeconds, 30), 3600)
-        let idleSeconds = now.timeIntervalSince(lastUserInteractionAt)
-        guard idleSeconds > TimeInterval(effectiveLockTimeoutSeconds) else {
-            return
-        }
-
-        if activeBackgroundOperations > 0 {
-            lockPendingAfterBackgroundOperation = true
-            return
-        }
-
-        await lockNow()
-    }
-
     private func handlePlatformEvent(_ event: PlatformEvent) async {
         switch event {
         case .appDidBackground, .osWillSleep:

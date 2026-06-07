@@ -26,6 +26,7 @@ struct NotesWorkspaceView: View {
     let updateBiometricAction: (Bool) async throws -> Void
     let installedPluginsAction: () async -> [InstalledPlugin]
     let setPluginEnabledAction: (String, Bool) async throws -> Void
+    let changePassphraseAction: (String, String) async throws -> Void
     let userInteractionAction: () -> Void
 
     @State private var query = ""
@@ -67,6 +68,7 @@ struct NotesWorkspaceView: View {
     @StateObject private var recordingController = AudioRecordingController()
     @State private var leftPanelWidth: CGFloat = 0
     @State private var dragStartWidth: CGFloat? = nil
+    @State private var loadedUpdatedAt: Date? = nil
 
     private enum SecureAccessAction {
         case openSecureNote(UUID)
@@ -84,6 +86,7 @@ struct NotesWorkspaceView: View {
         let title: String
         let isSecure: Bool
         let subjectId: UUID?
+        let updatedAt: Date?
     }
 
     private struct SubjectGroup: Identifiable {
@@ -111,12 +114,13 @@ struct NotesWorkspaceView: View {
         let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmedQuery.isEmpty {
             return searchResults.map { result in
-                let subjectId = notes.first(where: { $0.id == result.noteId })?.subjectId
+                let match = notes.first(where: { $0.id == result.noteId })
                 return NoteListItem(
                     id: result.noteId,
                     title: result.matchedTitle,
                     isSecure: result.isSecure,
-                    subjectId: subjectId
+                    subjectId: match?.subjectId,
+                    updatedAt: match?.updatedAt
                 )
             }
         }
@@ -126,7 +130,8 @@ struct NotesWorkspaceView: View {
                 id: summary.id,
                 title: summary.title,
                 isSecure: summary.isSecure,
-                subjectId: summary.subjectId
+                subjectId: summary.subjectId,
+                updatedAt: summary.updatedAt
             )
         }
     }
@@ -173,7 +178,7 @@ struct NotesWorkspaceView: View {
 
     var body: some View {
         GeometryReader { geo in
-        HStack(spacing: 0) {
+        HStack(alignment: .top, spacing: 0) {
             if !isLeftPanelCollapsed {
                 VStack(alignment: .leading, spacing: 12) {
                 HStack {
@@ -276,18 +281,25 @@ struct NotesWorkspaceView: View {
                                 }
                                 .contentShape(Rectangle())
                                 .onTapGesture {
-                                    selectedSubjectId = group.subjectId
+                                    toggleGroupCollapse(group)
                                 }
 
                                 if !isGroupCollapsed(group) {
                                     ForEach(notesForGroup(group.subjectId)) { note in
-                                        HStack {
-                                            if note.isSecure {
-                                                Image(systemName: "lock.fill")
-                                                    .foregroundStyle(.secondary)
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            HStack {
+                                                if note.isSecure {
+                                                    Image(systemName: "lock.fill")
+                                                        .foregroundStyle(.secondary)
+                                                }
+                                                Text(note.title)
+                                                Spacer(minLength: 0)
                                             }
-                                            Text(note.title)
-                                            Spacer(minLength: 0)
+                                            if let updatedAt = note.updatedAt {
+                                                Text(updatedAt.formatted(date: .abbreviated, time: .shortened))
+                                                    .font(.caption2)
+                                                    .foregroundStyle(.tertiary)
+                                            }
                                         }
                                         .font(.subheadline)
                                         .padding(.leading, 24)
@@ -355,9 +367,7 @@ struct NotesWorkspaceView: View {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Button {
-                        withAnimation {
-                            isLeftPanelCollapsed.toggle()
-                        }
+                        isLeftPanelCollapsed.toggle()
                     } label: {
                         Image(systemName: isLeftPanelCollapsed ? "sidebar.right" : "sidebar.left")
                             .font(.system(size: 16, weight: .semibold))
@@ -386,9 +396,17 @@ struct NotesWorkspaceView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     Spacer()
                 } else {
-                    Text(selectedNoteId == nil ? "Create Note" : "Edit Note")
-                        .font(.title2)
-                        .bold()
+                    HStack(alignment: .firstTextBaseline) {
+                        Text(selectedNoteId == nil ? "Create Note" : "Edit Note")
+                            .font(.title2)
+                            .bold()
+                        Spacer()
+                        if let updatedAt = loadedUpdatedAt {
+                            Text("Last edited \(updatedAt.formatted(date: .abbreviated, time: .shortened))")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
 
                     TextField("Title", text: $title)
                         .font(.system(size: 16))
@@ -586,7 +604,8 @@ struct NotesWorkspaceView: View {
                 saveSettingsAction: saveSettingsAction,
                 updateBiometricAction: updateBiometricAction,
                 installedPluginsAction: installedPluginsAction,
-                setPluginEnabledAction: setPluginEnabledAction
+                setPluginEnabledAction: setPluginEnabledAction,
+                changePassphraseAction: changePassphraseAction
             )
         }
         .sheet(isPresented: $isShowingTrash) {
@@ -832,6 +851,7 @@ struct NotesWorkspaceView: View {
             secureTitleAlias = loaded.secureTitleAlias ?? ""
             loadedSecureAliasSnapshot = loaded.secureTitleAlias ?? ""
             editorSubjectId = loaded.subjectId
+            loadedUpdatedAt = loaded.updatedAt
             await loadAttachments(for: loaded.id)
         } catch {
             showToast(mapError(error), style: .error)
@@ -1031,6 +1051,7 @@ struct NotesWorkspaceView: View {
         editorIsItalic = false
         editorIsUnderlined = false
         editorSubjectId = selectedSubjectId
+        loadedUpdatedAt = nil
         attachments = []
         recordingController.cancel()
     }
@@ -1055,6 +1076,7 @@ struct NotesWorkspaceView: View {
         editorIsItalic = false
         editorIsUnderlined = false
         editorSubjectId = selectedSubjectId
+        loadedUpdatedAt = nil
         attachments = []
         recordingController.cancel()
     }

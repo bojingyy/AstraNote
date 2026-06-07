@@ -97,19 +97,13 @@ public struct StoredSubjectRecord: Codable, Sendable, Equatable {
 }
 
 public struct StoredSettingsRecord: Codable, Sendable, Equatable {
-    public var lockTimeoutSeconds: Int
-    public var telemetryEnabled: Bool
     public var pluginsEnabled: Bool
     public var biometricUnlockEnabled: Bool
 
     public init(
-        lockTimeoutSeconds: Int = 300,
-        telemetryEnabled: Bool = false,
         pluginsEnabled: Bool = true,
         biometricUnlockEnabled: Bool = false
     ) {
-        self.lockTimeoutSeconds = lockTimeoutSeconds
-        self.telemetryEnabled = telemetryEnabled
         self.pluginsEnabled = pluginsEnabled
         self.biometricUnlockEnabled = biometricUnlockEnabled
     }
