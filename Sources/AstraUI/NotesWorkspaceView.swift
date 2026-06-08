@@ -27,6 +27,8 @@ struct NotesWorkspaceView: View {
     let updateBiometricAction: (Bool) async throws -> Void
     let installedPluginsAction: () async -> [InstalledPlugin]
     let setPluginEnabledAction: (String, Bool) async throws -> Void
+    let installPluginAction: (PluginManifest, Data) async throws -> Void
+    let removePluginAction: (String) async throws -> Void
     let changePassphraseAction: (String, String) async throws -> Void
     let exportArchiveAction: () async throws -> Data
     let importArchiveAction: (Data) async throws -> ImportResult
@@ -614,6 +616,8 @@ struct NotesWorkspaceView: View {
                 updateBiometricAction: updateBiometricAction,
                 installedPluginsAction: installedPluginsAction,
                 setPluginEnabledAction: setPluginEnabledAction,
+                installPluginAction: installPluginAction,
+                removePluginAction: removePluginAction,
                 changePassphraseAction: changePassphraseAction,
                 exportArchiveAction: exportArchiveAction,
                 importArchiveAction: importArchiveAction

@@ -8,6 +8,8 @@ struct SettingsView: View {
     let updateBiometricAction: (Bool) async throws -> Void
     let installedPluginsAction: () async -> [InstalledPlugin]
     let setPluginEnabledAction: (String, Bool) async throws -> Void
+    let installPluginAction: (PluginManifest, Data) async throws -> Void
+    let removePluginAction: (String) async throws -> Void
     let changePassphraseAction: (String, String) async throws -> Void
     let exportArchiveAction: () async throws -> Data
     let importArchiveAction: (Data) async throws -> ImportResult
@@ -140,7 +142,18 @@ struct SettingsView: View {
 
             Divider()
 
-            PluginStoreView(plugins: installedPlugins, setPluginEnabledAction: setPluginEnabledAction)
+            PluginStoreView(
+                plugins: installedPlugins,
+                setPluginEnabledAction: setPluginEnabledAction,
+                installPluginAction: { manifest, bundleData in
+                    try await installPluginAction(manifest, bundleData)
+                    installedPlugins = await installedPluginsAction()
+                },
+                removePluginAction: { pluginId in
+                    try await removePluginAction(pluginId)
+                    installedPlugins = await installedPluginsAction()
+                }
+            )
 
             if let errorMessage {
                 Text(errorMessage)

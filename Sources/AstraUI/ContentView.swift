@@ -100,6 +100,12 @@ struct ContentView: View {
                     setPluginEnabledAction: { pluginId, isEnabled in
                         try await env.pluginService.setEnabled(pluginId: pluginId, isEnabled: isEnabled)
                     },
+                    installPluginAction: { manifest, bundleData in
+                        try await env.pluginService.install(manifest: manifest, bundleData: bundleData)
+                    },
+                    removePluginAction: { pluginId in
+                        try await env.pluginService.remove(pluginId: pluginId)
+                    },
                     changePassphraseAction: { current, next in
                         try await env.coordinator.changePassphrase(current: current, next: next)
                     },
