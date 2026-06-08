@@ -65,7 +65,6 @@ For detailed design notes, see [AstraNote_Documentations/Architecture.md](AstraN
 - [User Stories](AstraNote_Documentations/UserStories.md): Detailed user stories and acceptance criteria.
 - [Requirements](AstraNote_Documentations/Requirement.md): Functional and non-functional requirements.
 - [Architecture](AstraNote_Documentations/Architecture.md): In-depth architecture design.
-- [Work Log](AstraNote_Documentations/WorkLog.md): Chronological record of implementation progress and changes.
 
 ## Testing
 
