@@ -15,6 +15,7 @@ struct NotesWorkspaceView: View {
     let deleteAttachmentAction: (UUID, UUID) async throws -> Void
     let listSubjectsAction: () async -> [Subject]
     let createSubjectAction: (String) async throws -> Subject
+    let renameSubjectAction: (UUID, String) async throws -> Subject
     let deleteSubjectAction: (UUID) async throws -> Bool
     let listTrashAction: () async -> [TrashItemView]
     let restoreTrashAction: (UUID) async throws -> Bool
@@ -62,6 +63,8 @@ struct NotesWorkspaceView: View {
     @State private var isShowingTrash = false
     @State private var trashItems: [TrashItemView] = []
     @State private var pendingSubjectDeletion: Subject?
+    @State private var pendingSubjectRename: Subject?
+    @State private var renameSubjectText = ""
     @State private var isShowingSettings = false
     @State private var collapsedGroupIDs: Set<String> = []
     @State private var isLeftPanelCollapsed = false
@@ -265,6 +268,12 @@ struct NotesWorkspaceView: View {
 
                                     if group.canDelete, let subjectId = group.subjectId,
                                        let subject = subjects.first(where: { $0.id == subjectId }) {
+                                        Button("Rename") {
+                                            renameSubjectText = subject.name
+                                            pendingSubjectRename = subject
+                                        }
+                                        .buttonStyle(.borderless)
+
                                         Button("Delete") {
                                             let subjectHasNotes = notes.contains { $0.subjectId == subject.id }
                                             if subjectHasNotes {
@@ -777,6 +786,31 @@ struct NotesWorkspaceView: View {
         } message: { subject in
             Text("\(subject.name) contains notes. Deleting the subject will ungroup those notes.")
         }
+        .alert("Rename Subject", isPresented: Binding(
+            get: { pendingSubjectRename != nil },
+            set: { isPresented in
+                if !isPresented {
+                    pendingSubjectRename = nil
+                    renameSubjectText = ""
+                }
+            }
+        ), presenting: pendingSubjectRename) { subject in
+            TextField("Subject name", text: $renameSubjectText)
+            Button("Rename") {
+                let newName = renameSubjectText
+                Task {
+                    await renameSubject(subject, to: newName)
+                    pendingSubjectRename = nil
+                    renameSubjectText = ""
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                pendingSubjectRename = nil
+                renameSubjectText = ""
+            }
+        } message: { subject in
+            Text("Enter a new name for \"\(subject.name)\".")
+        }
         } // GeometryReader
     }
 
@@ -955,8 +989,7 @@ struct NotesWorkspaceView: View {
                 content: content,
                 subjectId: editorSubjectId,
                 secureModeEnabled: secureModeEnabled,
-                secureTitleAlias: secureModeEnabled ? secureTitleAlias : nil,
-                expirationUTC: nil
+                secureTitleAlias: secureModeEnabled ? secureTitleAlias : nil
             )
 
             let savedId = try await saveDraftAction(draft)
@@ -1045,6 +1078,16 @@ struct NotesWorkspaceView: View {
         }
 
         trashItems.insert(candidate, at: 0)
+    }
+
+    private func renameSubject(_ subject: Subject, to newName: String) async {
+        do {
+            _ = try await renameSubjectAction(subject.id, newName)
+            showToast("Subject renamed.", style: .info)
+            await refreshWorkspace()
+        } catch {
+            showToast(mapError(error), style: .error)
+        }
     }
 
     private func deleteSubject(_ subject: Subject) async {
@@ -1234,8 +1277,7 @@ struct NotesWorkspaceView: View {
             content: content,
             subjectId: editorSubjectId,
             secureModeEnabled: secureModeEnabled,
-            secureTitleAlias: secureModeEnabled ? secureTitleAlias : nil,
-            expirationUTC: nil
+            secureTitleAlias: secureModeEnabled ? secureTitleAlias : nil
         )
 
         do {

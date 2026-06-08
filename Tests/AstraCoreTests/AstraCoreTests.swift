@@ -68,8 +68,7 @@ final class AstraCoreTests: XCTestCase {
                 title: "Normal",
                 content: "Plain",
                 subjectId: nil,
-                secureModeEnabled: false,
-                expirationUTC: nil
+                secureModeEnabled: false
             )
         )
         let secureId = try await service.save(
@@ -77,8 +76,7 @@ final class AstraCoreTests: XCTestCase {
                 title: "Secure",
                 content: "Encrypted",
                 subjectId: nil,
-                secureModeEnabled: true,
-                expirationUTC: time.now().addingTimeInterval(600)
+                secureModeEnabled: true
             )
         )
 
@@ -97,107 +95,6 @@ final class AstraCoreTests: XCTestCase {
         let loadedSecure = try await service.load(id: secureId)
         XCTAssertEqual(loadedSecure.title, "Secure")
         XCTAssertEqual(loadedSecure.content, "Encrypted")
-    }
-
-    func testSecureNotePolicyDoesNotExpireSecureNotes() async throws {
-        let database = DatabaseProvider()
-        let noteRepository = NoteRepository(database: database)
-        let attachmentRepository = AttachmentRepository(database: database)
-        let subjectRepository = SubjectRepository(database: database)
-        let settingsRepository = SettingsRepository(database: database)
-        let time = MutableTimeProvider(now: Date())
-        let logger = InMemoryAuditLogger(timeProvider: time)
-        let notifications = InMemoryNotificationService(timeProvider: time)
-
-        let keyManager = KeyManager(settingsRepository: settingsRepository, timeProvider: time, logger: logger)
-        let noteService = NoteService(
-            notes: noteRepository,
-            attachments: attachmentRepository,
-            subjects: subjectRepository,
-            keyManager: keyManager,
-            encryptionService: EncryptionService(),
-            timeProvider: time
-        )
-        let policy = SecureNotePolicyService(
-            noteService: noteService,
-            logger: logger,
-            timeProvider: time
-        )
-
-        try await keyManager.createInitialPassphrase("phase3")
-        _ = try await keyManager.unlock(passphrase: "phase3")
-
-        let secureId = try await noteService.save(
-            draft: NoteDraft(
-                title: "Expires Soon",
-                content: "payload",
-                subjectId: nil,
-                secureModeEnabled: true,
-                expirationUTC: time.now().addingTimeInterval(5)
-            )
-        )
-        let fetchedNoteCore = await noteRepository.fetch(id: secureId)
-        XCTAssertNotNil(fetchedNoteCore)
-
-        let launchResult = try await policy.handleLaunchTimeCheckpoint()
-        XCTAssertEqual(launchResult.expiredMovedCount, 0)
-
-        time.advance(seconds: 10)
-        let sweep = try await policy.sweepExpiredSecureNotes(isForeground: true)
-        XCTAssertEqual(sweep.expiredMovedCount, 0)
-        let fetchedStillActiveNote = await noteRepository.fetch(id: secureId)
-        XCTAssertNotNil(fetchedStillActiveNote)
-
-        let events = await notifications.history()
-        XCTAssertTrue(events.isEmpty)
-    }
-
-    func testLaunchCheckpointNoLongerAppliesRollbackGuard() async throws {
-        let database = DatabaseProvider()
-        let noteRepository = NoteRepository(database: database)
-        let attachmentRepository = AttachmentRepository(database: database)
-        let subjectRepository = SubjectRepository(database: database)
-        let settingsRepository = SettingsRepository(database: database)
-        let now = Date()
-        let time = MutableTimeProvider(now: now)
-        let logger = InMemoryAuditLogger(timeProvider: time)
-
-        let keyManager = KeyManager(settingsRepository: settingsRepository, timeProvider: time, logger: logger)
-        let noteService = NoteService(
-            notes: noteRepository,
-            attachments: attachmentRepository,
-            subjects: subjectRepository,
-            keyManager: keyManager,
-            encryptionService: EncryptionService(),
-            timeProvider: time
-        )
-        let policy = SecureNotePolicyService(
-            noteService: noteService,
-            logger: logger,
-            timeProvider: time
-        )
-
-        try await keyManager.createInitialPassphrase("phase3")
-        _ = try await keyManager.unlock(passphrase: "phase3")
-
-        _ = try await noteService.save(
-            draft: NoteDraft(
-                title: "Guarded",
-                content: "payload",
-                subjectId: nil,
-                secureModeEnabled: true,
-                expirationUTC: now.addingTimeInterval(5)
-            )
-        )
-
-        let launchResult = try await policy.handleLaunchTimeCheckpoint()
-        XCTAssertFalse(launchResult.rollbackGuardActive)
-        XCTAssertEqual(launchResult.expiredMovedCount, 0)
-
-        time.advance(seconds: 10)
-        let sweep = try await policy.sweepExpiredSecureNotes(isForeground: true)
-        XCTAssertFalse(sweep.rollbackGuardActive)
-        XCTAssertEqual(sweep.expiredMovedCount, 0)
     }
 
     func testProtectedTrashRestoreSecureRequiresUnlock() async throws {
@@ -229,8 +126,7 @@ final class AstraCoreTests: XCTestCase {
                 title: "Secure",
                 content: "payload",
                 subjectId: nil,
-                secureModeEnabled: true,
-                expirationUTC: time.now().addingTimeInterval(120)
+                secureModeEnabled: true
             )
         )
         _ = try await noteService.delete(noteId: id)
@@ -278,8 +174,7 @@ final class AstraCoreTests: XCTestCase {
                 title: "Normal Algebra",
                 content: "n",
                 subjectId: nil,
-                secureModeEnabled: false,
-                expirationUTC: nil
+                secureModeEnabled: false
             )
         )
         _ = try await noteService.save(
@@ -288,8 +183,7 @@ final class AstraCoreTests: XCTestCase {
                 content: "s",
                 subjectId: nil,
                 secureModeEnabled: true,
-                secureTitleAlias: "Math Vault",
-                expirationUTC: time.now().addingTimeInterval(300)
+                secureTitleAlias: "Math Vault"
             )
         )
 
@@ -335,8 +229,7 @@ final class AstraCoreTests: XCTestCase {
                 title: "Normal",
                 content: "n",
                 subjectId: nil,
-                secureModeEnabled: false,
-                expirationUTC: nil
+                secureModeEnabled: false
             )
         )
         let secureId = try await noteService.save(
@@ -344,8 +237,7 @@ final class AstraCoreTests: XCTestCase {
                 title: "Secure",
                 content: "s",
                 subjectId: nil,
-                secureModeEnabled: true,
-                expirationUTC: time.now().addingTimeInterval(600)
+                secureModeEnabled: true
             )
         )
 
@@ -383,7 +275,7 @@ final class AstraCoreTests: XCTestCase {
     }
 
     @MainActor
-    func testAppCoordinatorFirstLaunchAndDeferredAutoLock() async throws {
+    func testAppCoordinatorFirstLaunchAndUnlock() async throws {
         let database = DatabaseProvider()
         let noteRepository = NoteRepository(database: database)
         let attachmentRepository = AttachmentRepository(database: database)
@@ -418,15 +310,8 @@ final class AstraCoreTests: XCTestCase {
         try await coordinator.createInitialPassphraseAndUnlock("phase4")
         XCTAssertEqual(coordinator.sessionState, .unlocked)
 
-        coordinator.registerUserInteraction(now: Date(timeIntervalSince1970: 0))
-        coordinator.beginBackgroundOperation()
-        await coordinator.evaluateInactivityAutoLock(now: Date(timeIntervalSince1970: 50))
-        XCTAssertEqual(coordinator.sessionState, .unlocked)
-
-        await coordinator.endBackgroundOperation()
-        XCTAssertEqual(coordinator.sessionState, .unlocked)
-        let keyAfterDeferredTimeout = await keyManager.currentKeyMaterial()
-        XCTAssertNil(keyAfterDeferredTimeout)
+        let keyMaterial = await keyManager.currentKeyMaterial()
+        XCTAssertNotNil(keyMaterial)
     }
 
     func testPassphraseRotationReencryptsSecureNotes() async throws {
@@ -460,8 +345,7 @@ final class AstraCoreTests: XCTestCase {
                 title: "Rotating",
                 content: "phase5",
                 subjectId: nil,
-                secureModeEnabled: true,
-                expirationUTC: time.now().addingTimeInterval(120)
+                secureModeEnabled: true
             )
         )
 
@@ -533,8 +417,7 @@ final class AstraCoreTests: XCTestCase {
                 title: "Exportable",
                 content: "payload",
                 subjectId: nil,
-                secureModeEnabled: false,
-                expirationUTC: nil
+                secureModeEnabled: false
             )
         )
         try await pluginService.install(
@@ -620,62 +503,6 @@ final class AstraCoreTests: XCTestCase {
         }
     }
 
-    func testStorageProtectionTracksAttachmentProtectionClass() async throws {
-        let database = DatabaseProvider()
-        let noteRepository = NoteRepository(database: database)
-        let attachmentRepository = AttachmentRepository(database: database)
-        let subjectRepository = SubjectRepository(database: database)
-        let settingsRepository = SettingsRepository(database: database)
-        let time = MutableTimeProvider(now: Date())
-        let logger = InMemoryAuditLogger(timeProvider: time)
-        let storageProtection = InMemoryStorageProtection()
-
-        let keyManager = KeyManager(
-            settingsRepository: settingsRepository,
-            databaseProvider: database,
-            timeProvider: time,
-            logger: logger
-        )
-        let noteService = NoteService(
-            notes: noteRepository,
-            attachments: attachmentRepository,
-            subjects: subjectRepository,
-            keyManager: keyManager,
-            encryptionService: EncryptionService(),
-            timeProvider: time,
-            storageProtection: storageProtection
-        )
-
-        try await keyManager.createInitialPassphrase("protect")
-        _ = try await keyManager.unlock(passphrase: "protect")
-
-        let secureNoteId = try await noteService.save(
-            draft: NoteDraft(
-                title: "Secure",
-                content: "payload",
-                subjectId: nil,
-                secureModeEnabled: true,
-                expirationUTC: time.now().addingTimeInterval(120)
-            )
-        )
-        let normalNoteId = try await noteService.save(
-            draft: NoteDraft(
-                title: "Normal",
-                content: "payload",
-                subjectId: nil,
-                secureModeEnabled: false,
-                expirationUTC: nil
-            )
-        )
-
-        _ = try await noteService.addImageAttachment(noteId: secureNoteId, storagePath: "/tmp/secure.png", byteSize: 512)
-        _ = try await noteService.addImageAttachment(noteId: normalNoteId, storagePath: "/tmp/normal.png", byteSize: 512)
-
-        let secureProtection = await storageProtection.protectionClass(for: "/tmp/secure.png")
-        let normalProtection = await storageProtection.protectionClass(for: "/tmp/normal.png")
-        XCTAssertEqual(secureProtection, .complete)
-        XCTAssertEqual(normalProtection, .completeUntilFirstUserAuthentication)
-    }
 
     @MainActor
     func testAppCoordinatorSupportsBiometricUnlockAndPlatformAutoLock() async throws {
@@ -758,8 +585,7 @@ final class AstraCoreTests: XCTestCase {
                 content: "Private Content",
                 subjectId: nil,
                 secureModeEnabled: true,
-                secureTitleAlias: "Old Alias",
-                expirationUTC: nil
+                secureTitleAlias: "Old Alias"
             )
         )
 

@@ -93,8 +93,7 @@ public struct NoteDraft: Sendable, Equatable {
         content: String,
         subjectId: UUID?,
         secureModeEnabled: Bool,
-        secureTitleAlias: String? = nil,
-        expirationUTC: Date? = nil
+        secureTitleAlias: String? = nil
     ) {
         self.id = id
         self.title = title
@@ -122,7 +121,6 @@ public struct NoteView: Sendable, Equatable {
         subjectId: UUID?,
         isSecure: Bool,
         secureTitleAlias: String? = nil,
-        expirationUTC: Date? = nil,
         createdAt: Date,
         updatedAt: Date
     ) {

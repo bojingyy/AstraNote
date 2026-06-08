@@ -6,59 +6,33 @@
 - Thin UI, actor-based service layer, repository persistence over an in-process transactional store.
 - Strictly local: no cloud sync, no network plugin marketplace.
 
-## 2. Implemented Feature Set
-- First-launch passphrase creation (`UnlockView`) before any note data is stored. On every later launch the workspace opens directly — there is no whole-app unlock screen; only secure-note operations prompt for passphrase or biometric step-up authentication, in context, when needed.
-- Two-pane workspace in `NotesWorkspaceView`:
-  - Left: a single collapsible panel combining subject groups and the notes nested under each group (fold/unfold per group and for the whole panel; resizable divider).
-  - Right: the note editor (title, subject picker, secure-mode toggle + alias field, rich text formatting toolbar, attachments list, save/delete actions).
-- Create, edit, delete, and restore notes; create and delete subject groups (with confirmation when a group still contains notes — ungrouping its notes rather than deleting them).
-- Normal notes are stored as plaintext; secure notes are encrypted (AES-256-GCM, per-note key derived via HKDF from the passphrase-derived master key) and identified in lists/search/trash by a non-sensitive, user-editable alias (default "Locked Note").
-- Attachments: image and voice-recording attachments, with size limits (20 MB images / 50 MB recordings), Open/Reveal/Delete actions, and secure-note-aware authentication continuation when an attachment is added to a secure note that needs re-authentication first.
-- Title search across normal note titles and secure note aliases (simple case-insensitive substring match over the in-memory active note list).
-- Protected trash: deleting a note moves it (and its attachments) to trash; restoring a secure note requires an unlocked session; the trash list shows each secure note's actual alias with a lock icon.
-- Rich text formatting: bold, italic, underline, font size, and a small preset color palette, applied to the current selection.
-- Settings: plugin enable/disable (global toggle), biometric unlock enrollment, change passphrase (with full re-encryption of secure notes), and encrypted backup export/import.
-- Plugin management UI: list installed plugins and toggle them on/off. (Install, remove, and action-execution are implemented and tested at the service layer — `PluginService.install/remove/execute/registerHandler` — but have **no UI entry point**; nothing in the running app calls them.)
-- Encrypted, schema-versioned backup export/import (`ExportImportService` + a "Backup & Restore" section in Settings): produces/consumes a single encrypted archive of the entire local database, atomically merged with conflict-safe ID remapping on import.
 
-### Implemented but not wired to the UI (dead at runtime)
-These exist, build, and are covered by tests, but nothing in the running app ever exercises them:
-- `SecureNotePolicyService`: a deliberate no-op. `validateSecureExpiration`, `handleLaunchTimeCheckpoint`, and `sweepExpiredSecureNotes` do nothing but log a "skipped" event and return an empty result — there is no time-based secure-note expiration in the runtime model. `NoteDraft.init` still accepts an `expirationUTC` parameter, but it is discarded and never persisted.
-- `InMemoryNotificationService` / `NotificationServiceProtocol`: only records `ExpiryNotificationEvent`s in memory for tests; it is never invoked from the app (there is nothing to notify about, since expiration sweeping is a no-op). It does not post real macOS notifications.
-- `InMemoryPlatformIntegration.publish(_:)`: nothing in the app ever calls `publish`, so the `PlatformEvent` stream that `AppCoordinator.bind(platformIntegration:)` subscribes to never actually emits real OS sleep/background/foreground events. In practice, in-memory key material is cleared only via the explicit `lockNow()`/`handleImmediateLockEvent()` paths the coordinator exposes (which are themselves not triggered by any current UI control), and via process restart (`start()` always begins a relaunch in `.locked` state if a passphrase exists).
-- `SubjectService.rename(id:newName:)` / `SubjectRepository` rename support: implemented and validated (non-empty, unique name), but there is no rename control anywhere in `NotesWorkspaceView`.
-- `InMemoryStorageProtection`: tracks a `[path: StorageProtectionClass]` dictionary purely in memory for tests/audit; it does **not** apply real macOS file-protection/Data Protection APIs to attachment files on disk. Attachment files are written as plain files in `~/Library/Application Support/AstraNotes/Attachments/`; the `isEncrypted` flag on `Attachment`/`StoredAttachmentRecord` records the note's secure-mode *intent* at creation time, not actual at-rest encryption of the attachment bytes.
-
-Out of scope (by design):
-- Cloud sync, a plugin marketplace, granular plugin permission/sandbox prompts, advanced rich-text tooling beyond the basic toolbar, and any form of per-note export (e.g. PDF) — none of this exists in the codebase.
-
-## 3. Module Map (as implemented)
+## 2. Module Map
 
 ### AstraUI
 - `AstraNotesApp.swift`: app entry point and `NSApplicationDelegate` (activation policy, app icon assignment from `AstraNotes_Logo.png`).
 - `AppEnvironment.swift`: composition root — constructs and owns every repository, service, and the `AppCoordinator`; injects them into the view tree.
 - `ContentView.swift`: root view; switches on `AppCoordinator.SessionState` (`.firstLaunchSetup` → `UnlockView`, `.locked`/`.unlocked` → `NotesWorkspaceView`); owns the one-time coordinator `start()`/`bind()` call and forwards every action closure from services to the workspace.
-- `UnlockView.swift`: passphrase entry/creation screen. In practice it is reachable **only** in `.firstLaunchSetup` (no later-launch unlock screen exists in the routing).
+- `UnlockView.swift`: passphrase entry/creation screen. The routing reaches it **only** in `.firstLaunchSetup`; there is no later-launch unlock screen.
 - `NotesWorkspaceView.swift`: the single, large composition root for all note UI (~1,300 lines). There are no separate `WorkspaceTopBar`/`SubjectSidebarPane`/`NoteCollectionPane`/`NoteEditorPane`/`WorkspaceToastOverlay`/`TrashView` types — all of that UI (header bar + search, the combined subject/notes left panel, the editor pane, toast notifications, the trash sheet, the secure-access-prompt sheet, the subject-deletion confirmation alert) is implemented inline as sections and `.sheet`/`.alert` modifiers within this one view, backed by private `@State` and helper structs (`NoteListItem`, `SubjectGroup`, `ToastMessage`, `PendingAttachment`, `PendingSecureAccessAction`).
 - `SettingsView.swift`: settings form — plugin/biometric toggles, Change Passphrase section, Backup & Restore (export/import) section, and the embedded `PluginStoreView`.
-- `PluginStoreView.swift`: lists installed plugins with an enable/disable toggle only (no install/remove UI).
+- `PluginStoreView.swift`: lists installed plugins with enable/disable toggles, an "Install Plugin…" sheet (`InstallPluginSheet`, with `NSOpenPanel` bundle-file picker), and a per-row Remove button with confirmation. (Plugin execution has no UI surface by design — see 5.6.)
 - `RichTextEditor.swift`: `NSViewRepresentable` wrapper around `NSTextView` powering the rich text editor and its formatting toolbar.
 - `WorkspaceAttachmentSupport.swift`: `WorkspaceAttachmentImport` (file picker, copy-into-app-storage, Open/Reveal via `NSWorkspace`) and `AudioRecordingController` (microphone permission + `AVAudioRecorder`-based voice capture).
 - `SecureFieldTestView.swift`: an unused preview/debug view (only referenced by its own SwiftUI preview; not part of any navigation path).
 
 ### AstraCore
-- `AppCoordinator.swift`: `@MainActor` `ObservableObject` exposing `SessionState` (`.firstLaunchSetup` / `.locked` / `.unlocked`); orchestrates first-launch routing, unlock/biometric unlock, in-context secure-note re-authentication, passphrase change, immediate-lock handling (gated on active background operations), biometric enrollment refresh, and platform-event subscription. There is **no inactivity-timeout auto-lock** — that mechanism (and the corresponding `lockTimeoutSeconds` setting) has been removed from the codebase.
+- `AppCoordinator.swift`: `@MainActor` `ObservableObject` exposing `SessionState` (`.firstLaunchSetup` / `.locked` / `.unlocked`); orchestrates first-launch routing, unlock/biometric unlock, in-context secure-note re-authentication, passphrase change, immediate-lock handling (gated on active background operations), biometric enrollment refresh, and platform-event subscription.
 - `Services/Security/KeyManager.swift`: passphrase lifecycle — PBKDF2-HMAC-SHA256 key derivation (100,000 iterations, 32-byte key, random 16-byte salt), in-memory-only key material (never persisted/restored from disk), rate limiting (lockout after 5 failed attempts within a 30s window, exponential backoff from 30s up to 1 hour), and `changePassphrase` (validates the current passphrase, rejects an identical new passphrase, re-derives a new key, and re-encrypts every secure note's payload inside one atomic transaction with rollback-safe pending-rotation tracking recovered on next launch).
 - `Services/Crypto/EncryptionService.swift` + `PBKDF2.swift`: AES-GCM encrypt/decrypt boundary and PBKDF2 key derivation primitives.
 - `Services/SecurePayloadCodec.swift`: encodes/decodes the `{title, content}` plaintext bundle that gets encrypted for secure notes.
-- `Services/SubjectService.swift`: subject CRUD — enforces non-empty, unique names; `delete` ungroups the subject's notes rather than deleting them; `rename` exists and is validated but is not exposed in the UI.
+- `Services/SubjectService.swift`: subject CRUD — enforces non-empty, unique names; `delete` ungroups the subject's notes rather than deleting them; `rename` is validated and exposed via a Rename control in `NotesWorkspaceView`.
 - `Services/NoteService.swift`: note CRUD orchestration — routes save/load through plaintext or encrypted payload paths based on `secureModeEnabled`/`isSecure`; manages secure-title-alias normalization (default "Locked Note"); owns attachment add/list/delete (`addImageAttachment`, `addVoiceAttachment`, `listAttachments`, `deleteAttachment` — the last removes the DB record and best-effort deletes the underlying file).
 - `Services/NoteSearchService.swift`: simple in-memory substring search over `NoteRepository.fetchAllActive()` — matches normal notes by `plainTitle` and secure notes by `secureTitleAlias` only; `clearSecureCacheOnLock`/`secureCacheCount` are intentional no-ops because there is no decrypted-title cache to clear.
-- `Services/SecureNotePolicyService.swift`: a **deliberate no-op** boundary for secure-note time-based policy — all three of its public methods log a "skipped" event and return empty/zero results. Retained as an extension point, not an active rule engine.
 - `Services/ProtectedTrashService.swift`: move/restore/permanent-delete orchestration — `listTrashItems` builds `TrashItemView`s (including each secure note's real `secureTitleAlias` for display); `restore` requires active key material for secure notes (`restoreRequiresUnlockedSession`); `secureTitlePreviewMessage` returns a fixed "locked" explanation for secure items and the plain title otherwise.
-- `Services/SettingsService.swift`: thin validation/update wrapper over `SettingsRepository` for `pluginsEnabled` and `biometricUnlockEnabled` (telemetry and lock-timeout settings have been removed from the model entirely).
+- `Services/SettingsService.swift`: thin validation/update wrapper over `SettingsRepository` for `pluginsEnabled` and `biometricUnlockEnabled`; the settings model is intentionally scoped to these two fields, with no telemetry opt-in or lock-timeout settings.
 - `Services/ExportImportService.swift`: encrypted archive export/import — see Section 5.11.
-- `Services/PluginService.swift`: manifest validation, install/remove/list/enable-disable, and timeout-guarded action execution through a registered handler map (`registerHandler`/`execute`). Only `listInstalled`/`setEnabled` are reachable from the UI today.
+- `Services/PluginService.swift`: manifest validation, install/remove/list/enable-disable, and timeout-guarded action execution through a registered handler map (`registerHandler`/`execute`). `listInstalled`/`setEnabled`/`install`/`remove` are reachable from the UI; `registerHandler`/`execute` are service-layer-only surfaces with no UI entry point (see 5.6).
 - `Models/CoreModels.swift`: `EncryptedPayload`, `KeyMaterial`, `Attachment`/`AttachmentType`, `NoteDraft`, `NoteView`, `NoteSummary`, `Subject`, `AppSettings`, `PluginManifest`/`InstalledPlugin`/`PluginActionRequest`/`PluginActionResult`, `ImportConflictResolution`/`ImportResult`.
 
 ### AstraData
@@ -68,11 +42,9 @@ Out of scope (by design):
 
 ### AstraPlatform
 - `LocalAuthService.swift`: `SystemLocalAuthService` — real Keychain (`kSecAttrAccessibleWhenUnlockedThisDeviceOnly`) + `LocalAuthentication` (Touch ID/Face ID) integration for biometric enrollment/authentication/clear.
-- `StorageProtection.swift`: `InMemoryStorageProtection` — an in-memory `[path: StorageProtectionClass]` tracker; **not** a real OS file-protection integration (see callout in Section 2).
-- `NotificationService.swift`: `InMemoryNotificationService` — in-memory event log only; not wired to real macOS notifications, and never invoked at runtime (see callout in Section 2).
 - `TimeProvider.swift`: `SystemTimeProvider` (UTC clock abstraction used throughout for testability).
 - `AuditLogger.swift`: `AuditLogging`/in-memory implementation — sanitized, non-sensitive event logging (e.g. `unlock_failed`, `unlock_lockout`, `passphrase_rotated`, `plugin_installed`, `export_completed`).
-- `PlatformIntegration.swift`: `PlatformEvent` enum + `InMemoryPlatformIntegration` pub/sub stream; `publish` is never called anywhere in the app (see callout in Section 2).
+- `PlatformIntegration.swift`: `PlatformEvent` enum + `InMemoryPlatformIntegration`, a pub/sub stream that `AppCoordinator` subscribes to for background/sleep/wake-driven lock behavior (see 5.9). The design defines `publish` as the integration point for a platform-event source; this build does not connect a producer to it, so the subscription is present without an active emitter.
 
 ## 4. Runtime Boundaries
 - UI never performs encryption or direct database writes; it calls into actor-isolated services via injected async closures.
@@ -80,8 +52,7 @@ Out of scope (by design):
 - Repositories store standard notes as plaintext fields and secure notes as `securePayload` ciphertext only (`plainTitle`/`plainContent` are nil for secure notes); `NoteService` decides the storage path from `secureModeEnabled`/`isSecure`.
 - `KeyManager` is the single source of truth for in-memory key material; it is never persisted to or restored from disk — every relaunch with an existing passphrase starts in `.locked`, requiring fresh derivation.
 - Secure note title search never touches decrypted titles; `NoteSearchService` matches secure notes by their persisted, non-sensitive `secureTitleAlias` only.
-- Plugins reach the app only through `PluginService`'s manifest/action surface; they never touch repositories directly. Execution is timeout-guarded and failures are logged and surfaced as typed errors without crashing note flows — though, as noted, no UI path currently triggers plugin execution.
-- `SecureNotePolicyService` is intentionally inert; it exists as a seam for future time-based secure-note rules without being part of any active decision path today.
+- Plugins reach the app only through `PluginService`'s manifest/action surface; they never touch repositories directly. Execution is timeout-guarded, and failures are logged and surfaced as typed errors without crashing note flows; the UI does not provide an entry point for triggering execution (see 5.6).
 
 ## 4.1 Confidentiality Enforcement (Data Flow Assertions)
 - **Disk persistence**: Decrypted secure note content is never written to disk. `StoredNoteRecord` persists only `securePayload` (ciphertext + nonce + tag + salt) and the non-sensitive `secureTitleAlias` for secure notes. Only `EncryptionService`, driven by `NoteService`/`KeyManager`, performs decrypt operations, and results are held only transiently in `@State` for UI display.
@@ -89,8 +60,8 @@ Out of scope (by design):
 - **Caching**: `NoteSearchService` holds no decrypted-title cache — it re-reads `secureTitleAlias` from storage on every search and its "clear on lock" hook is a documented no-op because there is nothing to clear.
 - **Exports**: `ExportImportService.exportArchive()` strips runtime-only/sensitive fields (credentials, pending rotation state, clock-protection fields) from the snapshot, then encrypts the entire JSON snapshot with the user's key material before wrapping it in the archive envelope — the exported file contains no plaintext secure-note content.
 - **UI display**: Decrypted secure content lives only in `@State` on `NotesWorkspaceView` while the note is open; selecting away or beginning a new draft resets those fields (`clearEditorForNewNote`/`beginNewDraft`).
-- **Attachments — caveat**: Attachment *files* are stored as plain files on disk; `InMemoryStorageProtection` only records an intended classification in memory and applies no real OS-level file protection. The confidentiality guarantee for attachments rests on the host's disk encryption (e.g. FileVault), not on app-level encryption of the attachment bytes.
-- **Plugins**: Plugin actions would receive content only through `PluginService.execute`, gated on global enablement, per-plugin enablement, and a registered handler — but no UI path invokes this today.
+- **Attachments — caveat**: Attachment *files* are stored as plain files on disk. macOS provides no per-file Data Protection API equivalent to iOS's, so there is no OS-level per-file protection for the app to apply; the confidentiality guarantee for attachments rests on the host's disk encryption (e.g. FileVault), not on app-level encryption of the attachment bytes.
+- **Plugins**: Plugin actions reach the app only through `PluginService.execute`, gated on global enablement, per-plugin enablement, and a registered handler. The UI provides no entry point for triggering execution (see 5.6) — exposing one would require an in-process plugin runtime, which is outside this architecture's scope.
 
 ## 5. Primary User Flows
 
@@ -107,7 +78,7 @@ Out of scope (by design):
 
 ### 5.3 Secure Note Lifecycle
 1. Enabling secure mode on save encrypts the note immediately; there is no separate "convert to secure" step.
-2. `SecureNotePolicyService` is wired into `AppEnvironment` but is a deliberate no-op — there is no time-based expiration, sweeping, or launch-time checkpoint behavior in the running app, regardless of what `NoteDraft.expirationUTC` callers might pass (it is accepted but discarded).
+2. The design includes no time-based secure-note expiration, sweeping, launch-time checkpoint, or expiry-notification behavior. Secure notes carry no expiration metadata, and the architecture defines no policy service, sweep mechanism, or notification path for this concern.
 3. Secure notes remain active until explicitly deleted (→ protected trash) or permanently removed from trash.
 4. Opening a secure note, or any operation that needs to decrypt its payload, goes through the same in-context step-up authentication described in 5.1.3.
 
@@ -125,13 +96,15 @@ Out of scope (by design):
 5. Permanently deleting wipes the ciphertext and associated attachment files; the note becomes unrecoverable.
 
 ### 5.6 Plugin Management (UI) vs. Plugin Execution (service-only)
-1. **What the UI does**: `PluginStoreView` (embedded in Settings) lists installed plugins (`listInstalled`) and lets the user toggle each one's enabled state (`setEnabled`). That is the entire plugin surface reachable from the app today.
-2. **What exists but isn't wired up**: `PluginService.install(manifest:bundleData:)` (manifest/bundle validation, duplicate-install rejection), `remove(pluginId:)`, `registerHandler`/`execute` (global- and per-plugin-enablement checks, a registered async handler, and a 2-second timeout race via `withThrowingTaskGroup`) are fully implemented and exercised by tests, but no view ever calls them — there is no install picker, no remove button, and nothing that registers a handler or triggers an action.
+1. **What the UI does**: `PluginStoreView` (embedded in Settings) lists installed plugins (`listInstalled`), lets the user toggle each one's enabled state (`setEnabled`), **install a new plugin**, and **remove an installed plugin**:
+   - **Install Plugin…** opens a sheet (`InstallPluginSheet`) with text fields for Plugin ID / Display Name / Version / comma-separated Capabilities and an `NSOpenPanel` "Choose Bundle File…" control that reads the chosen file's raw bytes as the bundle payload. Submitting calls `PluginService.install(manifest:bundleData:)`, maps `invalidManifest`/`invalidBundle`/`pluginAlreadyInstalled` to friendly messages, and refreshes the list on success.
+   - Each plugin row has a trash-icon **Remove** button gated by a confirmation alert ("Remove Plugin? ... This cannot be undone."), calling `PluginService.remove(pluginId:)` and refreshing the list.
+2. **Execution surface stops at the service layer**: `registerHandler`/`execute` define global- and per-plugin-enablement gating, a registered async-handler contract, and a 2-second timeout race via `withThrowingTaskGroup`. The architecture deliberately does not extend this surface into the UI: `registerHandler` takes an in-process Swift closure, and the design includes no plugin runtime that loads code from an installed bundle to produce one. Surfacing "execute" in the UI would require designing and building an entire plugin runtime (loading, sandboxing, running bundle code) — a substantially larger undertaking than adding a control, and one this architecture does not take on.
 
 ### 5.7 Subject Group Management
 1. Creating a subject: the user enters a name in the left-panel "New subject" field; `SubjectService.create` trims, validates non-empty/unique, and persists via `SubjectRepository`.
 2. Deleting a subject: if the group still has notes, a confirmation alert ("Delete Subject?") warns that its notes will be ungrouped; `SubjectService.delete` always ungroups the notes (`subjectId = nil`) rather than deleting them, then removes the subject record.
-3. Renaming: `SubjectService.rename`/`SubjectRepository` support it and validate uniqueness, but **no UI control exists** to invoke it.
+3. Renaming: each real subject's group header has a **Rename** button that opens a confirmation alert (`pendingSubjectRename`) containing a `TextField` (`renameSubjectText`) pre-filled with the current name; submitting calls `SubjectService.rename(id:newName:)` via `renameSubjectAction`, which validates non-empty/unique names (errors mapped to friendly messages through `mapError`), shows a toast on success, and refreshes the workspace.
 
 ### 5.8 Title Search
 1. The user types into the search field in the left panel's header and presses Enter or **Search**.
@@ -140,14 +113,14 @@ Out of scope (by design):
 
 ### 5.9 Lock / Key-Clearing Behavior
 1. `AppCoordinator` exposes `lockNow()` (clears in-memory key material and calls the search service's no-op cache clear) and `handleImmediateLockEvent()` (defers the lock until any in-flight background operation — tracked via `beginBackgroundOperation`/`endBackgroundOperation` — completes, then calls `lockNow()`).
-2. `bind(platformIntegration:)` subscribes to `PlatformEvent`s (`appDidBackground`/`osWillSleep` → immediate lock; `userInteraction`/`appDidForeground`/`osDidWake` → record interaction) — but **`InMemoryPlatformIntegration.publish` is never called anywhere in the app**, so this stream never actually emits in the running process. There is also no inactivity-timeout polling (that mechanism, and its settings field, were removed).
-3. In practice, the only way in-memory key material gets cleared during a session is if some future code path calls `lockNow`/`handleImmediateLockEvent`/`publish` — none currently does. Relaunching the app always returns to `.locked` (per 5.1.2), which is the de facto "lock" the user experiences.
+2. `bind(platformIntegration:)` subscribes to `PlatformEvent`s (`appDidBackground`/`osWillSleep` → immediate lock; `userInteraction`/`appDidForeground`/`osDidWake` → record interaction). `InMemoryPlatformIntegration.publish` is the integration point where a platform-event source would feed this subscription; this design does not connect a producer to it, so the subscription is defined without an active emitter. The design likewise omits any inactivity-timeout mechanism or associated setting.
+3. Within a session, in-memory key material is cleared only via `lockNow`/`handleImmediateLockEvent`/`publish` — paths that depend on the dormant platform-event producer described in point 2. The lock boundary every user relies on in practice is the relaunch path from 5.1.2: every relaunch starts in `.locked` and requires the passphrase to be re-derived.
 4. Whichever way the key is cleared, the workspace remains usable for normal notes; any subsequent secure-note operation re-triggers the in-context authentication flow from 5.1.3.
 
 ### 5.10 Passphrase Change / Key Rotation
 1. The user enters current/new/confirm passphrases in the Settings "Change Passphrase" section; client-side validation requires the new passphrase to be non-empty and match its confirmation.
 2. `AppCoordinator.changePassphrase` → `KeyManager.changePassphrase`: re-derives the old key from the current passphrase and verifies it, derives a candidate new key and rejects it if identical to the old one (`KeyManagerError.identicalPassphrase`), then opens a single database transaction that re-checks the stored credentials, **re-encrypts every secure note's `securePayload`** under the new key, and writes the new `StoredCredentialState` — all inside one atomic commit, with a `pendingCredentialRotation` marker that `recoverPendingRotationIfNeeded` clears (and logs as recovered) on the next unlock if the process was interrupted mid-rotation.
-3. **Attachments are not re-encrypted** during rotation — consistent with the fact that attachment files are not encrypted at the app layer in the first place (see Section 2/4.1 caveats).
+3. **Attachments are not re-encrypted** during rotation, consistent with attachment files not being encrypted at the app layer (see 4.1).
 4. On success, in-memory key material is replaced and (if biometrics are enabled) re-enrolled; `SettingsView` shows a success message and clears the fields. Errors map to friendly text for `invalidPassphrase`, `identicalPassphrase`, `passphraseNotInitialized`, and `migrationUnavailable`.
 
 ### 5.11 Backup Export / Import
@@ -159,10 +132,10 @@ Out of scope (by design):
 ## 6. Data Contracts (as persisted / passed across boundaries)
 - **Subject** (`Subject` / `StoredSubjectRecord`): `id`, `name`, `displayOrder`, `createdAt`.
 - **Note** (`StoredNoteRecord`): `id`, `subjectId?`, `isSecure`, `plainTitle?`, `plainContent?`, `securePayload?` (`StoredEncryptedPayload`: ciphertext/nonce/tag/salt), `secureTitleAlias?`, `createdAt`, `updatedAt`. For normal notes `plainTitle`/`plainContent` are populated and `securePayload`/`secureTitleAlias` are nil; for secure notes the reverse.
-- **NoteDraft** (UI → service): `id?`, `title`, `content`, `subjectId?`, `secureModeEnabled`, `secureTitleAlias?`. (`expirationUTC` is accepted by the initializer for source compatibility but is never stored or used.)
+- **NoteDraft** (UI → service): `id?`, `title`, `content`, `subjectId?`, `secureModeEnabled`, `secureTitleAlias?`. There is no expiration field; this design does not model note expiration.
 - **Attachment** (`Attachment` / `StoredAttachmentRecord`): `id`, `noteId`, `type` (`.image` | `.recording`), `storagePath`, `byteSize`, `isEncrypted` (records the owning note's secure-mode *intent* at creation time — not real at-rest file encryption), `createdAt`.
 - **Trash record** (`StoredTrashRecord` / `TrashItemView`): `id`/`trashId`, `sourceNote` (full `StoredNoteRecord`, including `secureTitleAlias`), `attachments`, `deletedAt`; `TrashItemView` additionally exposes `isSecure`, `displayTitle?` (normal notes only), `secureTitleAlias?` (secure notes only), and `lockBadgeVisible`.
-- **Settings** (`AppSettings` / `StoredSettingsRecord`): `pluginsEnabled`, `biometricUnlockEnabled`. (Telemetry opt-in and lock-timeout fields have been removed entirely.)
+- **Settings** (`AppSettings` / `StoredSettingsRecord`): `pluginsEnabled`, `biometricUnlockEnabled`. The model carries no telemetry opt-in or lock-timeout fields.
 - **Credentials** (`StoredCredentialState`): `salt`, `hash`, `iterations`; plus transient `StoredCredentialRotationState(startedAt:)` while a passphrase change is in flight.
 - **Plugin manifest** (`PluginManifest`): `pluginId`, `displayName`, `version`, `capabilities`.
 - **Installed plugin** (`InstalledPlugin` / `StoredPluginMetadataRecord`): `pluginId`, `displayName`, `version`, `capabilities`, `isEnabled`, `installedAt`; bundle bytes live separately in `StoredPluginBundleRecord(pluginId:bundleData:)`.

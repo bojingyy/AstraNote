@@ -36,8 +36,7 @@ final class AstraIntegrationTests: XCTestCase {
                 title: "Secure Draft",
                 content: "phase 2 content",
                 subjectId: subject.id,
-                secureModeEnabled: true,
-                expirationUTC: clock.now().addingTimeInterval(600)
+                secureModeEnabled: true
             )
         )
 
@@ -78,11 +77,6 @@ final class AstraIntegrationTests: XCTestCase {
             encryptionService: EncryptionService(),
             timeProvider: clock
         )
-        let policyService = SecureNotePolicyService(
-            noteService: noteService,
-            logger: logger,
-            timeProvider: clock
-        )
         let searchService = NoteSearchService(noteRepository: noteRepository, noteService: noteService)
         let trashService = ProtectedTrashService(trashRepository: trashRepository, keyManager: keyManager)
 
@@ -95,8 +89,7 @@ final class AstraIntegrationTests: XCTestCase {
                 content: "payload",
                 subjectId: nil,
                 secureModeEnabled: true,
-                secureTitleAlias: "Finance Vault",
-                expirationUTC: clock.now().addingTimeInterval(20)
+                secureTitleAlias: "Finance Vault"
             )
         )
 
@@ -104,12 +97,7 @@ final class AstraIntegrationTests: XCTestCase {
         XCTAssertEqual(unlockedSearch.count, 1)
         XCTAssertTrue(unlockedSearch[0].isSecure)
 
-        let launchResult = try await policyService.handleLaunchTimeCheckpoint()
-        XCTAssertEqual(launchResult.expiredMovedCount, 0)
-
         clock.advance(seconds: 30)
-        let sweep = try await policyService.sweepExpiredSecureNotes(isForeground: true)
-        XCTAssertEqual(sweep.expiredMovedCount, 0)
 
         let activeSecureNote = await noteRepository.fetch(id: secureId)
         XCTAssertNotNil(activeSecureNote)
@@ -146,8 +134,7 @@ final class AstraIntegrationTests: XCTestCase {
             subjects: subjectRepository,
             keyManager: keyManager,
             encryptionService: EncryptionService(),
-            timeProvider: clock,
-            storageProtection: InMemoryStorageProtection()
+            timeProvider: clock
         )
         let searchService = NoteSearchService(noteRepository: noteRepository, noteService: noteService)
         let settingsService = SettingsService(repository: settingsRepository)
@@ -180,8 +167,7 @@ final class AstraIntegrationTests: XCTestCase {
                 title: "Phase 5 Secure",
                 content: "integrated payload",
                 subjectId: nil,
-                secureModeEnabled: true,
-                expirationUTC: clock.now().addingTimeInterval(600)
+                secureModeEnabled: true
             )
         )
 

@@ -18,7 +18,6 @@ final class AstraDataTests: XCTestCase {
                     plainTitle: "before rollback",
                     plainContent: "content",
                     securePayload: nil,
-                    expirationUTC: nil,
                     createdAt: Date(),
                     updatedAt: Date()
                 )
@@ -46,7 +45,6 @@ final class AstraDataTests: XCTestCase {
                 plainTitle: "hello",
                 plainContent: "world",
                 securePayload: nil,
-                expirationUTC: nil,
                 createdAt: Date(),
                 updatedAt: Date()
             )
@@ -88,7 +86,6 @@ final class AstraDataTests: XCTestCase {
                 plainTitle: "n1",
                 plainContent: "c1",
                 securePayload: nil,
-                expirationUTC: nil,
                 createdAt: Date(),
                 updatedAt: Date()
             )
@@ -115,7 +112,6 @@ final class AstraDataTests: XCTestCase {
                 plainTitle: "trash me",
                 plainContent: "data",
                 securePayload: nil,
-                expirationUTC: nil,
                 createdAt: Date(),
                 updatedAt: Date()
             )

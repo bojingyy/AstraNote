@@ -24,7 +24,7 @@ The app follows a layered Swift Package Manager architecture with four modules:
 - **AstraUI**: SwiftUI views, the executable app target, and state/environment wiring (`AppEnvironment`, `ContentView`, `NotesWorkspaceView`, `SettingsView`, `UnlockView`, etc.).
 - **AstraCore**: Business logic and services — `AppCoordinator` (session/lock orchestration), `KeyManager` (passphrase derivation, key lifecycle, rotation), `EncryptionService` (AES-GCM + HKDF), `NoteService`, `SubjectService`, `NoteSearchService`, `ProtectedTrashService`, `PluginService`, `ExportImportService`, and `SettingsService`.
 - **AstraData**: Persistence layer — an in-process transactional `DatabaseProvider` and repositories for notes, subjects, attachments, settings, plugins, and protected trash.
-- **AstraPlatform**: macOS platform integrations — `LocalAuthService` (Keychain + biometrics), `StorageProtection`, `NotificationService`, `PlatformIntegration` (background/sleep/wake events), `AuditLogger`, and `TimeProvider`.
+- **AstraPlatform**: macOS platform integrations — `LocalAuthService` (Keychain + biometrics), `PlatformIntegration` (background/sleep/wake events), `AuditLogger`, and `TimeProvider`.
 
 For detailed design notes, see [AstraNote_Documentations/Architecture.md](AstraNote_Documentations/Architecture.md).
 

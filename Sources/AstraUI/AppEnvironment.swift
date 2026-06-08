@@ -9,9 +9,7 @@ final class AppEnvironment: ObservableObject {
     let database = DatabaseProvider(persistenceURL: DatabaseProvider.defaultPersistenceURL())
     let timeProvider = SystemTimeProvider()
     let logger: InMemoryAuditLogger
-    let notificationService: InMemoryNotificationService
     let localAuthService: any LocalAuthServiceProtocol
-    let storageProtection: InMemoryStorageProtection
     let platformIntegration: InMemoryPlatformIntegration
 
     let settingsRepository: SettingsRepository
@@ -28,16 +26,13 @@ final class AppEnvironment: ObservableObject {
     let subjectService: SubjectService
     let trashService: ProtectedTrashService
     let noteSearchService: NoteSearchService
-    let secureNotePolicyService: SecureNotePolicyService
     let exportImportService: ExportImportService
     let pluginService: PluginService
     let coordinator: AppCoordinator
 
     init() {
         logger = InMemoryAuditLogger(timeProvider: timeProvider)
-        notificationService = InMemoryNotificationService(timeProvider: timeProvider)
         localAuthService = SystemLocalAuthService()
-        storageProtection = InMemoryStorageProtection()
         platformIntegration = InMemoryPlatformIntegration()
 
         settingsRepository = SettingsRepository(database: database)
@@ -61,16 +56,11 @@ final class AppEnvironment: ObservableObject {
             subjects: subjectRepository,
             keyManager: keyManager,
             encryptionService: EncryptionService(),
-            timeProvider: timeProvider,
-            storageProtection: storageProtection
+            timeProvider: timeProvider
         )
         subjectService = SubjectService(repository: subjectRepository)
         trashService = ProtectedTrashService(trashRepository: trashRepository, keyManager: keyManager)
         noteSearchService = NoteSearchService(noteRepository: noteRepository, noteService: noteService)
-        secureNotePolicyService = SecureNotePolicyService(
-            noteService: noteService,
-            logger: logger
-        )
         exportImportService = ExportImportService(
             database: database,
             keyManager: keyManager,

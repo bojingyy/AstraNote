@@ -61,6 +61,9 @@ struct ContentView: View {
                     createSubjectAction: { name in
                         try await env.subjectService.create(name: name)
                     },
+                    renameSubjectAction: { subjectId, newName in
+                        try await env.subjectService.rename(id: subjectId, newName: newName)
+                    },
                     deleteSubjectAction: { subjectId in
                         try await env.subjectService.delete(id: subjectId)
                     },

@@ -20,7 +20,6 @@ public actor NoteService {
     private let keyManager: KeyManager
     private let encryptionService: EncryptionService
     private let timeProvider: TimeProvider
-    private let storageProtection: StorageProtecting?
 
     public init(
         notes: NoteRepositoryProtocol,
@@ -28,8 +27,7 @@ public actor NoteService {
         subjects: SubjectRepositoryProtocol,
         keyManager: KeyManager,
         encryptionService: EncryptionService,
-        timeProvider: TimeProvider = SystemTimeProvider(),
-        storageProtection: StorageProtecting? = nil
+        timeProvider: TimeProvider = SystemTimeProvider()
     ) {
         self.notes = notes
         self.attachments = attachments
@@ -37,7 +35,6 @@ public actor NoteService {
         self.keyManager = keyManager
         self.encryptionService = encryptionService
         self.timeProvider = timeProvider
-        self.storageProtection = storageProtection
     }
 
     @discardableResult
@@ -178,10 +175,6 @@ public actor NoteService {
             isEncrypted: encryptedAtRest,
             createdAt: timeProvider.now()
         )
-        if let storageProtection {
-            let protectionClass: StorageProtectionClass = encryptedAtRest ? .complete : .completeUntilFirstUserAuthentication
-            try await storageProtection.protect(path: storagePath, classification: protectionClass)
-        }
         try await attachments.add(attachment)
         return attachment.id
     }

@@ -38,7 +38,6 @@ public struct StoredNoteRecord: Codable, Sendable, Equatable {
         plainContent: String?,
         securePayload: StoredEncryptedPayload?,
         secureTitleAlias: String? = nil,
-        expirationUTC: Date? = nil,
         createdAt: Date,
         updatedAt: Date
     ) {
