@@ -7,10 +7,12 @@
 
 4. [Resolved] can click subject text or empty space right after it to trigger the fold & unfold
 
-5. 
+5. [Resolved] able to change passphrase in settings
 
 6. [Resolved] add images as attachment
 
 7. export as PDF
 
 8. [Resolved] add last edit time for each note (inside note workspace)
+
+0. Delete button in subject overlap with scroll indicator

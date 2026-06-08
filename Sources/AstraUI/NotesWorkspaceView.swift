@@ -12,6 +12,7 @@ struct NotesWorkspaceView: View {
     let addImageAttachmentAction: (UUID, String, Int) async throws -> UUID
     let addVoiceAttachmentAction: (UUID, String, Int) async throws -> UUID
     let listAttachmentsAction: (UUID) async -> [Attachment]
+    let deleteAttachmentAction: (UUID, UUID) async throws -> Void
     let listSubjectsAction: () async -> [Subject]
     let createSubjectAction: (String) async throws -> Subject
     let deleteSubjectAction: (UUID) async throws -> Bool
@@ -271,6 +272,7 @@ struct NotesWorkspaceView: View {
                                             }
                                         }
                                         .buttonStyle(.borderless)
+                                        .padding(.trailing, 12)
                                     }
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -560,6 +562,11 @@ struct NotesWorkspaceView: View {
                                     Button("Reveal") {
                                         WorkspaceAttachmentImport.reveal(at: attachment.storagePath)
                                     }
+                                    Button("Delete", role: .destructive) {
+                                        Task {
+                                            await deleteAttachment(attachment)
+                                        }
+                                    }
                                 }
                                 .padding(.vertical, 4)
                             }
@@ -612,8 +619,14 @@ struct NotesWorkspaceView: View {
             NavigationStack {
                 List(trashItems, id: \.trashId) { item in
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(item.isSecure ? "[Secure] Locked Note" : (item.displayTitle ?? "Untitled"))
-                            .font(.headline)
+                        HStack(spacing: 6) {
+                            if item.isSecure {
+                                Image(systemName: "lock.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text(item.isSecure ? (item.secureTitleAlias ?? "Locked Note") : (item.displayTitle ?? "Untitled"))
+                                .font(.headline)
+                        }
                         Text("Deleted: \(item.deletionTime.formatted(date: .abbreviated, time: .shortened))")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -982,13 +995,15 @@ struct NotesWorkspaceView: View {
 
         let deletedNoteTitle = title
         let deletedNoteWasSecure = secureModeEnabled
+        let deletedNoteAlias = secureTitleAlias
 
         do {
             _ = try await deleteNoteAction(selectedNoteId)
             appendOptimisticTrashItem(
                 sourceNoteId: selectedNoteId,
                 isSecure: deletedNoteWasSecure,
-                displayTitle: deletedNoteWasSecure ? nil : deletedNoteTitle
+                displayTitle: deletedNoteWasSecure ? nil : deletedNoteTitle,
+                secureTitleAlias: deletedNoteWasSecure ? (deletedNoteAlias.isEmpty ? "Locked Note" : deletedNoteAlias) : nil
             )
             clearEditorForNewNote()
             showToast("Note moved to protected trash.", style: .info)
@@ -1001,12 +1016,18 @@ struct NotesWorkspaceView: View {
         }
     }
 
-    private func appendOptimisticTrashItem(sourceNoteId: UUID, isSecure: Bool, displayTitle: String?) {
+    private func appendOptimisticTrashItem(
+        sourceNoteId: UUID,
+        isSecure: Bool,
+        displayTitle: String?,
+        secureTitleAlias: String? = nil
+    ) {
         let candidate = TrashItemView(
             trashId: UUID(),
             sourceNoteId: sourceNoteId,
             isSecure: isSecure,
             displayTitle: displayTitle,
+            secureTitleAlias: secureTitleAlias,
             deletionTime: Date(),
             lockBadgeVisible: isSecure
         )
@@ -1115,6 +1136,17 @@ struct NotesWorkspaceView: View {
 
     private func attachmentName(for attachment: Attachment) -> String {
         URL(fileURLWithPath: attachment.storagePath).lastPathComponent
+    }
+
+    private func deleteAttachment(_ attachment: Attachment) async {
+        userInteractionAction()
+        do {
+            try await deleteAttachmentAction(attachment.noteId, attachment.id)
+            attachments.removeAll { $0.id == attachment.id }
+            showToast("Attachment deleted.", style: .info)
+        } catch {
+            showToast(mapError(error), style: .error)
+        }
     }
 
     private func attachImage() async {

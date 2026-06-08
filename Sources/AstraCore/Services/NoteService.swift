@@ -226,6 +226,14 @@ public actor NoteService {
         await attachments.list(noteId: noteId).map { Attachment(stored: $0) }
     }
 
+    public func deleteAttachment(noteId: UUID, attachmentId: UUID) async throws {
+        guard let record = await attachments.fetch(id: attachmentId), record.noteId == noteId else {
+            throw NoteServiceError.recordNotFound
+        }
+        try await attachments.remove(id: attachmentId)
+        try? FileManager.default.removeItem(atPath: record.storagePath)
+    }
+
     public func assignSubject(noteId: UUID, subjectId: UUID?) async throws {
         if let subjectId, await subjects.fetch(id: subjectId) == nil {
             throw NoteServiceError.recordNotFound

@@ -52,6 +52,9 @@ struct ContentView: View {
                     listAttachmentsAction: { noteId in
                         await env.noteService.listAttachments(noteId: noteId)
                     },
+                    deleteAttachmentAction: { noteId, attachmentId in
+                        try await env.noteService.deleteAttachment(noteId: noteId, attachmentId: attachmentId)
+                    },
                     listSubjectsAction: {
                         await env.subjectService.list()
                     },

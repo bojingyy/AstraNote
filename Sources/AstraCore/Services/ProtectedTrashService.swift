@@ -6,6 +6,7 @@ public struct TrashItemView: Sendable, Equatable {
     public let sourceNoteId: UUID
     public let isSecure: Bool
     public let displayTitle: String?
+    public let secureTitleAlias: String?
     public let deletionTime: Date
     public let lockBadgeVisible: Bool
 
@@ -14,6 +15,7 @@ public struct TrashItemView: Sendable, Equatable {
         sourceNoteId: UUID,
         isSecure: Bool,
         displayTitle: String?,
+        secureTitleAlias: String? = nil,
         deletionTime: Date,
         lockBadgeVisible: Bool
     ) {
@@ -21,6 +23,7 @@ public struct TrashItemView: Sendable, Equatable {
         self.sourceNoteId = sourceNoteId
         self.isSecure = isSecure
         self.displayTitle = displayTitle
+        self.secureTitleAlias = secureTitleAlias
         self.deletionTime = deletionTime
         self.lockBadgeVisible = lockBadgeVisible
     }
@@ -48,6 +51,7 @@ public actor ProtectedTrashService {
                 sourceNoteId: record.sourceNote.id,
                 isSecure: record.sourceNote.isSecure,
                 displayTitle: record.sourceNote.isSecure ? nil : record.sourceNote.plainTitle,
+                secureTitleAlias: record.sourceNote.isSecure ? record.sourceNote.secureTitleAlias : nil,
                 deletionTime: record.deletedAt,
                 lockBadgeVisible: record.sourceNote.isSecure
             )

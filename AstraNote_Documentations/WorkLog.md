@@ -284,3 +284,25 @@
 - Added a "Change Passphrase" section to `SettingsView` with current/new/confirm `SecureField`s, client-side validation, and `KeyManagerError` mapping (`invalidPassphrase`, `identicalPassphrase`, `passphraseNotInitialized`, `migrationUnavailable`) to user-friendly messages, following the same pattern as `UnlockView`.
 - Wired `changePassphraseAction` through `NotesWorkspaceView` and `ContentView` to `env.coordinator.changePassphrase(current:next:)`.
 
+---
+
+## 2026-06-07
+
+### Bug Fix — Protected Trash Shows Generic Label Instead of Secure Note Alias
+
+#### ProtectedTrashService.swift
+- Added `secureTitleAlias` to `TrashItemView` and populated it from `record.sourceNote.secureTitleAlias` for secure notes.
+
+#### NotesWorkspaceView.swift
+- Trash list now displays each secure note's actual alias (with a lock icon) instead of the hardcoded `[Secure] Locked Note` placeholder.
+- `appendOptimisticTrashItem` and `deleteSelectedNote` now carry the alias through so the trash entry shows the correct alias immediately after deletion, before the list reloads from storage.
+
+### Feature Addition — Delete Attachment
+
+#### AttachmentRepository.swift / NoteService.swift
+- Added `fetch(id:)` and `remove(id:)` to `AttachmentRepositoryProtocol`/`AttachmentRepository`.
+- Added `NoteService.deleteAttachment(noteId:attachmentId:)`, which removes the database record and best-effort deletes the underlying file from disk.
+
+#### ContentView.swift / NotesWorkspaceView.swift
+- Added `deleteAttachmentAction` wiring from `AppEnvironment`/`ContentView` through to `NotesWorkspaceView`.
+- Added a destructive "Delete" button after "Reveal" in the attachment row, with a confirmation toast and immediate removal from the in-memory attachment list.
