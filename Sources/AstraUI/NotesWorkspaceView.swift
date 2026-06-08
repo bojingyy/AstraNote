@@ -28,6 +28,8 @@ struct NotesWorkspaceView: View {
     let installedPluginsAction: () async -> [InstalledPlugin]
     let setPluginEnabledAction: (String, Bool) async throws -> Void
     let changePassphraseAction: (String, String) async throws -> Void
+    let exportArchiveAction: () async throws -> Data
+    let importArchiveAction: (Data) async throws -> ImportResult
     let userInteractionAction: () -> Void
 
     @State private var query = ""
@@ -612,7 +614,9 @@ struct NotesWorkspaceView: View {
                 updateBiometricAction: updateBiometricAction,
                 installedPluginsAction: installedPluginsAction,
                 setPluginEnabledAction: setPluginEnabledAction,
-                changePassphraseAction: changePassphraseAction
+                changePassphraseAction: changePassphraseAction,
+                exportArchiveAction: exportArchiveAction,
+                importArchiveAction: importArchiveAction
             )
         }
         .sheet(isPresented: $isShowingTrash) {

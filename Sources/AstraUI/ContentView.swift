@@ -103,6 +103,12 @@ struct ContentView: View {
                     changePassphraseAction: { current, next in
                         try await env.coordinator.changePassphrase(current: current, next: next)
                     },
+                    exportArchiveAction: {
+                        try await env.exportImportService.exportArchive()
+                    },
+                    importArchiveAction: { archive in
+                        try await env.exportImportService.importArchive(archive)
+                    },
                     userInteractionAction: {
                         env.coordinator.registerUserInteraction(now: Date())
                     }
