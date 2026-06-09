@@ -10,486 +10,565 @@
       --panel: #ffffff;
       --ink: #172033;
       --muted: #4b5563;
-      --ui-fill: #e8f2ff;
-      --ui-stroke: #3b82f6;
-      --core-fill: #eaf9ef;
-      --core-stroke: #16a34a;
-      --data-fill: #fff7e3;
-      --data-stroke: #d97706;
-      --platform-fill: #ffecef;
-      --platform-stroke: #dc2626;
-      --model-fill: #f3ecff;
-      --model-stroke: #7c3aed;
-      --memory-fill: #eef2ff;
-      --memory-stroke: #6366f1;
-      --actor: #6366f1;
-      --edge: #334155;
-      --edge-soft: #6b7280;
-      --edge-dashed: 6 4;
-      --decision: #fbbf24;
-      --decision-stroke: #b45309;
-      --action: #fff;
-      --action-stroke: #6366f1;
-      --start: #16a34a;
-      --end: #dc2626;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       background: radial-gradient(circle at 12% 10%, #dbeafe 0%, #eef2ff 20%, var(--bg) 55%);
       color: var(--ink);
       font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
     }
-    main {
-      max-width: 100%;
-      padding: 16px;
-    }
-    h1 {
-      margin: 0 0 10px 0;
-      font-size: 24px;
-      letter-spacing: 0.2px;
-    }
-    p.subtitle {
-      margin: 0 0 14px 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
+
+    main { max-width: 100%; padding: 16px; }
+    h1 { margin: 0 0 10px 0; font-size: 24px; letter-spacing: 0.2px; }
+    p.subtitle { margin: 0 0 14px 0; color: var(--muted); font-size: 14px; }
+
     .diagram-shell {
       border: 1px solid #d8deea;
       border-radius: 14px;
       background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 8px 28px rgba(15,23,42,0.08);
       overflow: auto;
       padding: 10px;
     }
-    .legend {
-      font: 12px "Segoe UI", Arial, sans-serif;
-      fill: #334155;
+
+    .notes {
+      margin-top: 14px;
+      border: 1px solid #d8deea;
+      border-radius: 12px;
+      background: var(--panel);
+      padding: 12px 14px;
+      font-size: 14px;
+      line-height: 1.45;
     }
+
+    .notes h2 { margin: 0 0 8px 0; font-size: 16px; }
+    .notes ul { margin: 0; padding-left: 20px; }
+
     @media (max-width: 900px) {
       h1 { font-size: 20px; }
       p.subtitle { font-size: 13px; }
+      .notes { font-size: 13px; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <h1>AstraNotes UML Activity Diagram</h1>
-    <p class="subtitle">Main user and system flows, expanded to cover biometric fallback policy, settings validation, plugin manifest checks, secure search behavior, and key rotation recovery.</p>
-    <div class="diagram-shell">
-      <svg viewBox="0 0 3200 2400" width="3200" height="2400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AstraNotes activity diagram">
-        <defs>
-          <style>
-            .start { fill: var(--start); stroke: var(--start); stroke-width: 2; }
-            .end { fill: var(--end); stroke: var(--end); stroke-width: 2; }
-            .action { fill: var(--action); stroke: var(--action-stroke); stroke-width: 2; }
-            .decision { fill: var(--decision); stroke: var(--decision-stroke); stroke-width: 2; }
-            .label { font: 13px 'Segoe UI', Arial, sans-serif; fill: #1e293b; }
-            .edge { stroke: var(--edge); stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
-            .edgeDashed { stroke: var(--edge-soft); stroke-width: 1.2; stroke-dasharray: var(--edge-dashed); fill: none; marker-end: url(#arrow); }
-          </style>
-          <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
-          </marker>
-        </defs>
-        <!-- Start and unlock -->
-        <circle class="start" cx="120" cy="100" r="24" />
-        <text class="label" x="120" y="95" text-anchor="middle">Start</text>
-        <rect class="action" x="200" y="70" width="180" height="48" rx="16" />
-        <text class="label" x="290" y="100" text-anchor="middle">App launch</text>
-        <polyline class="edge" points="144,100 200,94" />
-        <rect class="action" x="420" y="70" width="210" height="48" rx="16" />
-        <text class="label" x="525" y="100" text-anchor="middle">Check unlocked session</text>
-        <polyline class="edge" points="380,94 420,94" />
-        <polygon class="decision" points="680,94 700,70 720,94 700,118" />
-        <text class="label" x="700" y="65" text-anchor="middle">Unlocked?</text>
-        <polyline class="edge" points="630,94 680,94" />
-        <polygon class="decision" points="780,94 800,70 820,94 800,118" />
-        <text class="label" x="800" y="65" text-anchor="middle">Biometric enabled?</text>
-        <polyline class="edge" points="720,80 780,94" />
-        <rect class="action" x="900" y="20" width="190" height="48" rx="16" />
-        <text class="label" x="995" y="50" text-anchor="middle">Enter passphrase</text>
-        <polyline class="edge" points="820,82 900,44" />
-        <polygon class="decision" points="1120,44 1140,20 1160,44 1140,68" />
-        <text class="label" x="1140" y="15" text-anchor="middle">Correct?</text>
-        <polyline class="edge" points="1090,44 1120,44" />
-        <rect class="action" x="1200" y="0" width="150" height="38" rx="12" />
-        <text class="label" x="1275" y="25" text-anchor="middle">Retry unlock</text>
-        <polyline class="edge" points="1160,32 1200,19" />
-        <polyline class="edge" points="1350,19 900,44" />
-        <rect class="action" x="900" y="100" width="190" height="48" rx="16" />
-        <text class="label" x="995" y="130" text-anchor="middle">Attempt biometric unlock</text>
-        <polyline class="edge" points="820,106 900,124" />
-        <polygon class="decision" points="1120,124 1140,100 1160,124 1140,148" />
-        <text class="label" x="1140" y="95" text-anchor="middle">Biometric success?</text>
-        <polyline class="edge" points="1090,124 1120,124" />
-        <rect class="action" x="1200" y="80" width="220" height="48" rx="16" />
-        <text class="label" x="1310" y="110" text-anchor="middle">Reset biometric fail counter</text>
-        <polyline class="edge" points="1160,112 1200,104" />
-        <rect class="action" x="1200" y="160" width="220" height="48" rx="16" />
-        <text class="label" x="1310" y="190" text-anchor="middle">Increment biometric fail count</text>
-        <polyline class="edge" points="1160,136 1200,184" />
-        <polygon class="decision" points="1460,184 1480,160 1500,184 1480,208" />
-        <text class="label" x="1480" y="155" text-anchor="middle">Fails >= 3 or unavailable?</text>
-        <polyline class="edge" points="1420,184 1460,184" />
-        <polyline class="edge" points="1500,172 900,44" />
-        <polyline class="edge" points="1500,196 900,124" />
-        <rect class="action" x="1200" y="20" width="220" height="48" rx="16" />
-        <text class="label" x="1310" y="50" text-anchor="middle">Offer biometric enrollment</text>
-        <polyline class="edge" points="1160,56 1200,44" />
-        <rect class="action" x="780" y="140" width="220" height="48" rx="16" />
-        <text class="label" x="890" y="170" text-anchor="middle">Show notes workspace</text>
-        <polyline class="edge" points="720,108 780,164" />
-        <polyline class="edge" points="1420,44 780,164" />
-        <polyline class="edge" points="1420,104 780,164" />
-        <polygon class="decision" points="900,260 920,236 940,260 920,284" />
-        <text class="label" x="920" y="230" text-anchor="middle">User action</text>
-        <polyline class="edge" points="890,188 890,220 920,220 920,260" />
+<main>
+  <h1>AstraNotes UML Activity Diagram</h1>
+  <p class="subtitle">Activity overview aligned with the implemented app behavior, requirements, architecture, finalized class diagram, updated object diagram, and updated use case diagram. The flows below focus on the real product paths and separate them into clean scenario panels to avoid crossed connectors and blocked labels.</p>
 
-        <!-- Create and edit note -->
-        <rect class="action" x="1010" y="320" width="180" height="48" rx="16" />
-        <text class="label" x="1100" y="350" text-anchor="middle">Create note</text>
-        <polyline class="edge" points="940,272 1010,344" />
-        <polygon class="decision" points="1230,344 1250,320 1270,344 1250,368" />
-        <text class="label" x="1250" y="315" text-anchor="middle">Secure?</text>
-        <polyline class="edge" points="1190,344 1230,344" />
-        <rect class="action" x="1310" y="300" width="190" height="48" rx="16" />
-        <text class="label" x="1405" y="330" text-anchor="middle">Edit normal note</text>
-        <polyline class="edge" points="1270,332 1310,324" />
-        <rect class="action" x="1540" y="300" width="210" height="48" rx="16" />
-        <text class="label" x="1645" y="330" text-anchor="middle">Save plain text atomically</text>
-        <polyline class="edge" points="1500,324 1540,324" />
-        <polyline class="edgeDashed" points="1750,324 920,260" />
-        <rect class="action" x="1310" y="380" width="190" height="48" rx="16" />
-        <text class="label" x="1405" y="410" text-anchor="middle">Set date and time</text>
-        <polyline class="edge" points="1270,356 1310,404" />
-        <polygon class="decision" points="1540,404 1560,380 1580,404 1560,428" />
-        <text class="label" x="1560" y="375" text-anchor="middle">Future?</text>
-        <polyline class="edge" points="1500,404 1540,404" />
-        <rect class="action" x="1630" y="360" width="180" height="48" rx="16" />
-        <text class="label" x="1720" y="390" text-anchor="middle">Show expiry error</text>
-        <polyline class="edge" points="1580,392 1630,384" />
-        <polyline class="edge" points="1810,384 1310,404" />
-        <rect class="action" x="1630" y="440" width="190" height="48" rx="16" />
-        <text class="label" x="1725" y="470" text-anchor="middle">Encrypt title and content</text>
-        <polyline class="edge" points="1580,416 1630,464" />
-        <rect class="action" x="1860" y="440" width="210" height="48" rx="16" />
-        <text class="label" x="1965" y="470" text-anchor="middle">Save ciphertext atomically</text>
-        <polyline class="edge" points="1820,464 1860,464" />
-        <polyline class="edgeDashed" points="2070,464 920,260" />
-        <rect class="action" x="2150" y="300" width="210" height="48" rx="16" />
-        <text class="label" x="2255" y="330" text-anchor="middle">Open secure note</text>
-        <polyline class="edge" points="940,272 2150,324" />
-        <rect class="action" x="2400" y="300" width="210" height="48" rx="16" />
-        <text class="label" x="2505" y="330" text-anchor="middle">Decrypt payload</text>
-        <polyline class="edge" points="2360,324 2400,324" />
-        <polygon class="decision" points="2650,324 2670,300 2690,324 2670,348" />
-        <text class="label" x="2670" y="295" text-anchor="middle">Verified?</text>
-        <polyline class="edge" points="2610,324 2650,324" />
-        <rect class="action" x="2730" y="280" width="190" height="48" rx="16" />
-        <text class="label" x="2825" y="310" text-anchor="middle">Show decrypted editor</text>
-        <polyline class="edge" points="2690,312 2730,304" />
-        <polyline class="edgeDashed" points="2920,304 920,260" />
-        <rect class="action" x="2730" y="360" width="230" height="48" rx="16" />
-        <text class="label" x="2845" y="390" text-anchor="middle">Show error, preserve ciphertext</text>
-        <polyline class="edge" points="2690,336 2730,384" />
-        <polyline class="edgeDashed" points="2960,384 920,260" />
+  <div class="diagram-shell">
+    <svg viewBox="0 0 2880 2100" width="2880" height="2100"
+         xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="AstraNotes activity diagram">
+      <defs>
+        <style>
+          .title        { font: 700 22px "Segoe UI",Arial,sans-serif; fill:#0f172a; }
+          .panelTitle   { font: 700 16px "Segoe UI",Arial,sans-serif; fill:#0f172a; }
+          .panelSub     { font: 12px "Segoe UI",Arial,sans-serif; fill:#475569; }
+          .sliceTitle   { font: 700 12px "Segoe UI",Arial,sans-serif; fill:#1f2937; }
+          .label        { font: 11px "Segoe UI",Arial,sans-serif; fill:#1f2937; }
+          .small        { font: 10px "Segoe UI",Arial,sans-serif; fill:#475569; }
+          .tiny         { font: 9px "Segoe UI",Arial,sans-serif; fill:#64748b; }
+          .panel        { fill:#ffffff; stroke:#cbd5e1; stroke-width:1.6; }
+          .panelFill    { fill:#f8fbff; stroke:#dbe5f6; stroke-width:1; }
+          .slice        { fill:#ffffff; stroke:#d6deea; stroke-width:1.1; }
+          .divider      { stroke:#d6deea; stroke-width:1; stroke-dasharray:5 5; }
+          .startNode    { fill:#16a34a; stroke:#166534; stroke-width:1.5; }
+          .endNode      { fill:#0f172a; stroke:#0f172a; stroke-width:1.5; }
+          .actionBlue   { fill:#e8f2ff; stroke:#3b82f6; stroke-width:1.5; }
+          .actionGreen  { fill:#eaf9ef; stroke:#16a34a; stroke-width:1.5; }
+          .actionAmber  { fill:#fff7e3; stroke:#d97706; stroke-width:1.5; }
+          .actionRose   { fill:#ffecef; stroke:#dc2626; stroke-width:1.5; }
+          .decision     { fill:#f3ecff; stroke:#7c3aed; stroke-width:1.5; }
+          .noteBox      { fill:#fffbeb; stroke:#f59e0b; stroke-width:1.1; stroke-dasharray:4 3; }
+          .edge         { stroke:#334155; stroke-width:1.5; fill:none; marker-end:url(#arrow); }
+          .edgeBlue     { stroke:#2563eb; stroke-width:1.4; fill:none; marker-end:url(#arrowBlue); }
+          .edgeGreen    { stroke:#15803d; stroke-width:1.4; fill:none; marker-end:url(#arrowGreen); }
+          .edgeOrange   { stroke:#b45309; stroke-width:1.4; fill:none; marker-end:url(#arrowOrange); }
+          .edgePurple   { stroke:#7c3aed; stroke-width:1.4; fill:none; marker-end:url(#arrowPurple); }
+          .edgeDash     { stroke:#94a3b8; stroke-width:1.1; stroke-dasharray:5 4; fill:none; marker-end:url(#arrowSoft); }
+          .edgeLabel    { font: 10px "Segoe UI",Arial,sans-serif; fill:#334155; }
+        </style>
 
-        <!-- Search flow -->
-        <rect class="action" x="1010" y="560" width="180" height="48" rx="16" />
-        <text class="label" x="1100" y="590" text-anchor="middle">Search titles</text>
-        <polyline class="edge" points="920,284 1010,584" />
-        <polygon class="decision" points="1230,584 1250,560 1270,584 1250,608" />
-        <text class="label" x="1250" y="555" text-anchor="middle">Locked?</text>
-        <polyline class="edge" points="1190,584 1230,584" />
-        <rect class="action" x="1310" y="540" width="210" height="48" rx="16" />
-        <text class="label" x="1415" y="570" text-anchor="middle">Show normal-note matches</text>
-        <polyline class="edge" points="1270,572 1310,564" />
-        <polyline class="edgeDashed" points="1520,564 920,260" />
-        <rect class="action" x="1310" y="620" width="220" height="48" rx="16" />
-        <text class="label" x="1420" y="650" text-anchor="middle">Load secure titles in memory</text>
-        <polyline class="edge" points="1270,596 1310,644" />
-        <rect class="action" x="1570" y="620" width="220" height="48" rx="16" />
-        <text class="label" x="1680" y="650" text-anchor="middle">Show normal + secure matches</text>
-        <polyline class="edge" points="1530,644 1570,644" />
-        <polyline class="edgeDashed" points="1790,644 920,260" />
+        <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0L10 5L0 10z" fill="#334155"/>
+        </marker>
+        <marker id="arrowBlue" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0L10 5L0 10z" fill="#2563eb"/>
+        </marker>
+        <marker id="arrowGreen" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0L10 5L0 10z" fill="#15803d"/>
+        </marker>
+        <marker id="arrowOrange" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0L10 5L0 10z" fill="#b45309"/>
+        </marker>
+        <marker id="arrowPurple" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0L10 5L0 10z" fill="#7c3aed"/>
+        </marker>
+        <marker id="arrowSoft" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0L10 5L0 10z" fill="#94a3b8"/>
+        </marker>
+      </defs>
 
-        <!-- Voice capture -->
-        <rect class="action" x="1010" y="760" width="180" height="48" rx="16" />
-        <text class="label" x="1100" y="790" text-anchor="middle">Voice capture</text>
-        <polyline class="edge" points="920,284 1010,784" />
-        <rect class="action" x="1230" y="760" width="180" height="48" rx="16" />
-        <text class="label" x="1320" y="790" text-anchor="middle">Record audio</text>
-        <polyline class="edge" points="1190,784 1230,784" />
-        <polygon class="decision" points="1450,784 1470,760 1490,784 1470,808" />
-        <text class="label" x="1470" y="755" text-anchor="middle">Within 10m/50MB?</text>
-        <polyline class="edge" points="1410,784 1450,784" />
-        <rect class="action" x="1540" y="720" width="200" height="48" rx="16" />
-        <text class="label" x="1640" y="750" text-anchor="middle">Show limit error</text>
-        <polyline class="edge" points="1490,772 1540,744" />
-        <polyline class="edgeDashed" points="1740,744 920,260" />
-        <rect class="action" x="1540" y="800" width="200" height="48" rx="16" />
-        <text class="label" x="1640" y="830" text-anchor="middle">Transcribe asynchronously</text>
-        <polyline class="edge" points="1490,796 1540,824" />
-        <rect class="action" x="1780" y="800" width="180" height="48" rx="16" />
-        <text class="label" x="1870" y="830" text-anchor="middle">Insert text</text>
-        <polyline class="edge" points="1740,824 1780,824" />
-        <polyline class="edgeDashed" points="1960,824 920,260" />
+      <text x="18" y="28" class="title">AstraNotes activity diagram (current implementation and documentation scope)</text>
 
-        <!-- Image attach -->
-        <rect class="action" x="1010" y="940" width="190" height="48" rx="16" />
-        <text class="label" x="1105" y="970" text-anchor="middle">Attach image</text>
-        <polyline class="edge" points="920,284 1010,964" />
-        <polygon class="decision" points="1240,964 1260,940 1280,964 1260,988" />
-        <text class="label" x="1260" y="935" text-anchor="middle">Under 20MB?</text>
-        <polyline class="edge" points="1200,964 1240,964" />
-        <rect class="action" x="1320" y="900" width="200" height="48" rx="16" />
-        <text class="label" x="1420" y="930" text-anchor="middle">Show size error</text>
-        <polyline class="edge" points="1280,952 1320,924" />
-        <polyline class="edgeDashed" points="1520,924 920,260" />
-        <rect class="action" x="1320" y="980" width="230" height="48" rx="16" />
-        <text class="label" x="1435" y="1010" text-anchor="middle">Store image with file protection</text>
-        <polyline class="edge" points="1280,976 1320,1004" />
-        <rect class="action" x="1590" y="980" width="230" height="48" rx="16" />
-        <text class="label" x="1705" y="1010" text-anchor="middle">Link attachment to current note</text>
-        <polyline class="edge" points="1550,1004 1590,1004" />
-        <polyline class="edgeDashed" points="1820,1004 920,260" />
+      <!-- Panel A -->
+      <rect x="28" y="84" width="1370" height="860" rx="16" class="panel"/>
+      <rect x="44" y="104" width="1338" height="824" rx="14" class="panelFill"/>
+      <text x="64" y="134" class="panelTitle">A. Launch and secure-access authentication</text>
+      <text x="64" y="154" class="panelSub">Actual behavior: first launch creates credentials in UnlockView; later launches open the workspace in a locked session and prompt only when a secure operation needs key material.</text>
 
-        <!-- Plugin flow -->
-        <rect class="action" x="1010" y="1080" width="220" height="48" rx="16" />
-        <text class="label" x="1120" y="1110" text-anchor="middle">Install plugin package</text>
-        <polyline class="edge" points="920,284 1010,1104" />
-        <rect class="action" x="1270" y="1080" width="220" height="48" rx="16" />
-        <text class="label" x="1380" y="1110" text-anchor="middle">Validate plugin manifest</text>
-        <polyline class="edge" points="1230,1104 1270,1104" />
-        <polygon class="decision" points="1530,1104 1550,1080 1570,1104 1550,1128" />
-        <text class="label" x="1550" y="1075" text-anchor="middle">Manifest valid?</text>
-        <polyline class="edge" points="1490,1104 1530,1104" />
-        <rect class="action" x="1610" y="1040" width="240" height="48" rx="16" />
-        <text class="label" x="1730" y="1070" text-anchor="middle">Show manifest validation error</text>
-        <polyline class="edge" points="1570,1092 1610,1064" />
-        <polyline class="edgeDashed" points="1850,1064 920,260" />
-        <rect class="action" x="1010" y="1160" width="300" height="48" rx="16" />
-        <text class="label" x="1160" y="1190" text-anchor="middle">Run text-transform plugin action</text>
-        <polyline class="edge" points="1570,1116 1010,1184" />
-        <rect class="action" x="1350" y="1160" width="210" height="48" rx="16" />
-        <text class="label" x="1455" y="1190" text-anchor="middle">Run via host API</text>
-        <polyline class="edge" points="1310,1184 1350,1184" />
-        <polygon class="decision" points="1600,1184 1620,1160 1640,1184 1620,1208" />
-        <text class="label" x="1620" y="1155" text-anchor="middle">Success before timeout?</text>
-        <polyline class="edge" points="1560,1184 1600,1184" />
-        <rect class="action" x="1680" y="1140" width="220" height="48" rx="16" />
-        <text class="label" x="1790" y="1170" text-anchor="middle">Apply result through save flow</text>
-        <polyline class="edge" points="1640,1172 1680,1164" />
-        <polyline class="edgeDashed" points="1900,1164 920,260" />
-        <rect class="action" x="1680" y="1220" width="250" height="48" rx="16" />
-        <text class="label" x="1805" y="1250" text-anchor="middle">Preserve note state and show error</text>
-        <polyline class="edge" points="1640,1196 1680,1244" />
-        <polyline class="edgeDashed" points="1930,1244 920,260" />
+      <rect x="74" y="188" width="580" height="714" rx="12" class="slice"/>
+      <text x="96" y="214" class="sliceTitle">First launch setup</text>
 
-        <!-- Trash flow -->
-        <rect class="action" x="1010" y="1340" width="180" height="48" rx="16" />
-        <text class="label" x="1100" y="1370" text-anchor="middle">Delete note</text>
-        <polyline class="edge" points="920,284 1010,1364" />
-        <rect class="action" x="1230" y="1340" width="260" height="48" rx="16" />
-        <text class="label" x="1360" y="1370" text-anchor="middle">Move note + attachments to trash</text>
-        <polyline class="edge" points="1190,1364 1230,1364" />
-        <polygon class="decision" points="1530,1364 1550,1340 1570,1364 1550,1388" />
-        <text class="label" x="1550" y="1335" text-anchor="middle">Committed?</text>
-        <polyline class="edge" points="1490,1364 1530,1364" />
-        <rect class="action" x="1610" y="1320" width="220" height="48" rx="16" />
-        <text class="label" x="1720" y="1350" text-anchor="middle">Rollback and keep note intact</text>
-        <polyline class="edge" points="1570,1352 1610,1344" />
-        <polyline class="edgeDashed" points="1830,1344 920,260" />
-        <rect class="action" x="1610" y="1400" width="180" height="48" rx="16" />
-        <text class="label" x="1700" y="1430" text-anchor="middle">View trash</text>
-        <polyline class="edge" points="1570,1376 1610,1424" />
-        <polygon class="decision" points="1830,1424 1850,1400 1870,1424 1850,1448" />
-        <text class="label" x="1850" y="1395" text-anchor="middle">Restore or wipe?</text>
-        <polyline class="edge" points="1790,1424 1830,1424" />
-        <rect class="action" x="1910" y="1380" width="190" height="48" rx="16" />
-        <text class="label" x="2005" y="1410" text-anchor="middle">Permanently wipe record</text>
-        <polyline class="edge" points="1870,1412 1910,1404" />
-        <polyline class="edgeDashed" points="2100,1404 920,260" />
-        <rect class="action" x="1910" y="1460" width="180" height="48" rx="16" />
-        <text class="label" x="2000" y="1490" text-anchor="middle">Restore note</text>
-        <polyline class="edge" points="1870,1436 1910,1484" />
-        <polygon class="decision" points="2130,1484 2150,1460 2170,1484 2150,1508" />
-        <text class="label" x="2150" y="1455" text-anchor="middle">Secure and locked?</text>
-        <polyline class="edge" points="2090,1484 2130,1484" />
-        <rect class="action" x="2210" y="1420" width="210" height="48" rx="16" />
-        <text class="label" x="2315" y="1450" text-anchor="middle">Block restore until unlock</text>
-        <polyline class="edge" points="2170,1472 2210,1444" />
-        <polyline class="edgeDashed" points="2420,1444 920,260" />
-        <rect class="action" x="2210" y="1500" width="180" height="48" rx="16" />
-        <text class="label" x="2300" y="1530" text-anchor="middle">Return to active list</text>
-        <polyline class="edge" points="2170,1496 2210,1524" />
-        <polyline class="edgeDashed" points="2390,1524 920,260" />
+      <circle cx="152" cy="250" r="14" class="startNode"/>
+      <rect x="96" y="284" width="220" height="54" rx="12" class="actionBlue"/>
+      <text x="206" y="307" text-anchor="middle" class="label">AppCoordinator.start()</text>
+      <text x="206" y="322" text-anchor="middle" class="small">detects no stored passphrase</text>
 
-        <!-- Subject groups -->
-        <rect class="action" x="1010" y="1580" width="220" height="48" rx="16" />
-        <text class="label" x="1120" y="1610" text-anchor="middle">Manage subject groups</text>
-        <polyline class="edge" points="920,284 1010,1604" />
-        <polygon class="decision" points="1270,1604 1290,1580 1310,1604 1290,1628" />
-        <text class="label" x="1290" y="1575" text-anchor="middle">Create / rename / delete / move?</text>
-        <polyline class="edge" points="1230,1604 1270,1604" />
-        <rect class="action" x="1350" y="1540" width="210" height="48" rx="16" />
-        <text class="label" x="1455" y="1570" text-anchor="middle">Validate non-empty unique name</text>
-        <polyline class="edge" points="1310,1592 1350,1564" />
-        <rect class="action" x="1600" y="1540" width="200" height="48" rx="16" />
-        <text class="label" x="1700" y="1570" text-anchor="middle">Save subject change</text>
-        <polyline class="edge" points="1560,1564 1600,1564" />
-        <polyline class="edgeDashed" points="1800,1564 920,260" />
-        <rect class="action" x="1350" y="1620" width="220" height="48" rx="16" />
-        <text class="label" x="1460" y="1650" text-anchor="middle">Confirm delete if notes exist</text>
-        <polyline class="edge" points="1310,1616 1350,1644" />
-        <rect class="action" x="1610" y="1620" width="230" height="48" rx="16" />
-        <text class="label" x="1725" y="1650" text-anchor="middle">Ungroup notes and update sidebar</text>
-        <polyline class="edge" points="1570,1644 1610,1644" />
-        <polyline class="edgeDashed" points="1840,1644 920,260" />
-        <rect class="action" x="1870" y="1540" width="200" height="48" rx="16" />
-        <text class="label" x="1970" y="1570" text-anchor="middle">Select All Notes filter</text>
-        <polyline class="edge" points="1230,1604 1870,1564" />
-        <rect class="action" x="2110" y="1540" width="250" height="48" rx="16" />
-        <text class="label" x="2235" y="1570" text-anchor="middle">Show grouped + ungrouped notes</text>
-        <polyline class="edge" points="2070,1564 2110,1564" />
-        <polyline class="edgeDashed" points="2360,1564 920,260" />
+      <polygon points="206,364 272,420 206,476 140,420" class="decision"/>
+      <text x="206" y="416" text-anchor="middle" class="label">Passphrase</text>
+      <text x="206" y="431" text-anchor="middle" class="label">exists?</text>
 
-        <!-- Export and import -->
-        <rect class="action" x="1010" y="1780" width="180" height="48" rx="16" />
-        <text class="label" x="1100" y="1810" text-anchor="middle">Export</text>
-        <polyline class="edge" points="920,284 1010,1804" />
-        <rect class="action" x="1230" y="1780" width="220" height="48" rx="16" />
-        <text class="label" x="1340" y="1810" text-anchor="middle">Create encrypted archive</text>
-        <polyline class="edge" points="1190,1804 1230,1804" />
-        <polyline class="edgeDashed" points="1450,1804 920,260" />
-        <rect class="action" x="1010" y="1860" width="180" height="48" rx="16" />
-        <text class="label" x="1100" y="1890" text-anchor="middle">Import</text>
-        <polyline class="edge" points="920,284 1010,1884" />
-        <rect class="action" x="1230" y="1860" width="220" height="48" rx="16" />
-        <text class="label" x="1340" y="1890" text-anchor="middle">Load encrypted archive</text>
-        <polyline class="edge" points="1190,1884 1230,1884" />
-        <polygon class="decision" points="1490,1884 1510,1860 1530,1884 1510,1908" />
-        <text class="label" x="1510" y="1855" text-anchor="middle">Schema compatible?</text>
-        <polyline class="edge" points="1450,1884 1490,1884" />
-        <rect class="action" x="1570" y="1820" width="210" height="48" rx="16" />
-        <text class="label" x="1675" y="1850" text-anchor="middle">Show version mismatch</text>
-        <polyline class="edge" points="1530,1872 1570,1844" />
-        <polyline class="edgeDashed" points="1780,1844 920,260" />
-        <rect class="action" x="1570" y="1900" width="220" height="48" rx="16" />
-        <text class="label" x="1680" y="1930" text-anchor="middle">Assign new IDs on conflict</text>
-        <polyline class="edge" points="1530,1896 1570,1924" />
-        <rect class="action" x="1830" y="1900" width="220" height="48" rx="16" />
-        <text class="label" x="1940" y="1930" text-anchor="middle">Import in one transaction</text>
-        <polyline class="edge" points="1790,1924 1830,1924" />
-        <polygon class="decision" points="2090,1924 2110,1900 2130,1924 2110,1948" />
-        <text class="label" x="2110" y="1895" text-anchor="middle">All writes succeed?</text>
-        <polyline class="edge" points="2050,1924 2090,1924" />
-        <rect class="action" x="2170" y="1860" width="240" height="48" rx="16" />
-        <text class="label" x="2290" y="1890" text-anchor="middle">Rollback and show retry guidance</text>
-        <polyline class="edge" points="2130,1912 2170,1884" />
-        <polyline class="edgeDashed" points="2410,1884 920,260" />
-        <rect class="action" x="2170" y="1940" width="200" height="48" rx="16" />
-        <text class="label" x="2270" y="1970" text-anchor="middle">Complete import</text>
-        <polyline class="edge" points="2130,1936 2170,1964" />
-        <polyline class="edgeDashed" points="2370,1964 920,260" />
+      <rect x="96" y="516" width="220" height="54" rx="12" class="actionBlue"/>
+      <text x="206" y="539" text-anchor="middle" class="label">Render UnlockView</text>
+      <text x="206" y="554" text-anchor="middle" class="small">first-launch setup mode</text>
 
-        <!-- Passphrase rotation -->
-        <rect class="action" x="1010" y="2060" width="220" height="48" rx="16" />
-        <text class="label" x="1120" y="2090" text-anchor="middle">Change passphrase</text>
-        <polyline class="edge" points="920,284 1010,2084" />
-        <polygon class="decision" points="1270,2084 1290,2060 1310,2084 1290,2108" />
-        <text class="label" x="1290" y="2055" text-anchor="middle">Derived key identical?</text>
-        <polyline class="edge" points="1230,2084 1270,2084" />
-        <rect class="action" x="1350" y="2020" width="250" height="48" rx="16" />
-        <text class="label" x="1475" y="2050" text-anchor="middle">Reject and prompt for new passphrase</text>
-        <polyline class="edge" points="1310,2072 1350,2044" />
-        <polyline class="edgeDashed" points="1600,2044 920,260" />
-        <rect class="action" x="1350" y="2100" width="250" height="48" rx="16" />
-        <text class="label" x="1475" y="2130" text-anchor="middle">Re-encrypt secure notes + attachments</text>
-        <polyline class="edge" points="1310,2096 1350,2124" />
-        <polygon class="decision" points="1640,2124 1660,2100 1680,2124 1660,2148" />
-        <text class="label" x="1660" y="2095" text-anchor="middle">Completed?</text>
-        <polyline class="edge" points="1600,2124 1640,2124" />
-        <rect class="action" x="1720" y="2060" width="220" height="48" rx="16" />
-        <text class="label" x="1830" y="2090" text-anchor="middle">Activate new key and inform user</text>
-        <polyline class="edge" points="1680,2112 1720,2084" />
-        <polyline class="edgeDashed" points="1940,2084 920,260" />
-        <rect class="action" x="1720" y="2140" width="250" height="48" rx="16" />
-        <text class="label" x="1845" y="2170" text-anchor="middle">Detect partial migration on next launch</text>
-        <polyline class="edge" points="1680,2136 1720,2164" />
-        <rect class="action" x="2010" y="2140" width="220" height="48" rx="16" />
-        <text class="label" x="2120" y="2170" text-anchor="middle">Attempt remaining re-encryption</text>
-        <polyline class="edge" points="1970,2164 2010,2164" />
-        <polygon class="decision" points="2270,2164 2290,2140 2310,2164 2290,2188" />
-        <text class="label" x="2290" y="2135" text-anchor="middle">Completion succeeds?</text>
-        <polyline class="edge" points="2230,2164 2270,2164" />
-        <rect class="action" x="2350" y="2100" width="210" height="48" rx="16" />
-        <text class="label" x="2455" y="2130" text-anchor="middle">Activate new key and inform user</text>
-        <polyline class="edge" points="2310,2152 2350,2124" />
-        <polyline class="edgeDashed" points="2560,2124 920,260" />
-        <rect class="action" x="2350" y="2180" width="230" height="48" rx="16" />
-        <text class="label" x="2465" y="2210" text-anchor="middle">Rollback to old key and inform user</text>
-        <polyline class="edge" points="2310,2176 2350,2204" />
-        <polyline class="edgeDashed" points="2580,2204 920,260" />
+      <rect x="96" y="606" width="220" height="66" rx="12" class="actionGreen"/>
+      <text x="206" y="630" text-anchor="middle" class="label">User creates passphrase</text>
+      <text x="206" y="645" text-anchor="middle" class="small">store credentials + derive key</text>
+      <text x="206" y="660" text-anchor="middle" class="small">unlock session</text>
 
-        <!-- Settings flow -->
-        <rect class="action" x="1010" y="2260" width="180" height="48" rx="16" />
-        <text class="label" x="1100" y="2290" text-anchor="middle">Open settings</text>
-        <polyline class="edge" points="920,284 1010,2284" />
-        <rect class="action" x="1230" y="2260" width="290" height="48" rx="16" />
-        <text class="label" x="1375" y="2290" text-anchor="middle">Edit lock timeout, telemetry, plugin toggle</text>
-        <polyline class="edge" points="1190,2284 1230,2284" />
-        <polygon class="decision" points="1560,2284 1580,2260 1600,2284 1580,2308" />
-        <text class="label" x="1580" y="2255" text-anchor="middle">Values valid?</text>
-        <polyline class="edge" points="1520,2284 1560,2284" />
-        <rect class="action" x="1640" y="2240" width="220" height="48" rx="16" />
-        <text class="label" x="1750" y="2270" text-anchor="middle">Show validation message</text>
-        <polyline class="edge" points="1600,2272 1640,2264" />
-        <polyline class="edgeDashed" points="1860,2264 920,260" />
-        <rect class="action" x="1640" y="2320" width="220" height="48" rx="16" />
-        <text class="label" x="1750" y="2350" text-anchor="middle">Persist settings update</text>
-        <polyline class="edge" points="1600,2296 1640,2344" />
-        <polyline class="edgeDashed" points="1860,2344 920,260" />
+      <rect x="96" y="710" width="220" height="54" rx="12" class="actionGreen"/>
+      <text x="206" y="733" text-anchor="middle" class="label">Route to workspace</text>
+      <text x="206" y="748" text-anchor="middle" class="small">ContentView shows NotesWorkspaceView</text>
 
-        <!-- Auto-lock -->
-        <rect class="action" x="2700" y="140" width="220" height="48" rx="16" />
-        <text class="label" x="2810" y="170" text-anchor="middle">Idle timeout or background</text>
-        <polyline class="edge" points="940,272 2700,164" />
-        <polygon class="decision" points="2960,164 2980,140 3000,164 2980,188" />
-        <text class="label" x="2980" y="135" text-anchor="middle">Secure draft dirty?</text>
-        <polyline class="edge" points="2920,164 2960,164" />
-        <rect class="action" x="3040" y="100" width="120" height="48" rx="16" />
-        <text class="label" x="3100" y="130" text-anchor="middle">Persist draft</text>
-        <polyline class="edge" points="3000,152 3040,124" />
-        <rect class="action" x="3040" y="180" width="150" height="48" rx="16" />
-        <text class="label" x="3115" y="210" text-anchor="middle">Skip draft save</text>
-        <polyline class="edge" points="3000,176 3040,204" />
-        <rect class="action" x="2700" y="260" width="250" height="48" rx="16" />
-        <text class="label" x="2825" y="290" text-anchor="middle">Clear keys and secure title cache</text>
-        <polyline class="edge" points="3100,148 3100,220 2950,220 2950,284" />
-        <polyline class="edge" points="3115,228 3115,244 2950,244 2950,284" />
-        <rect class="action" x="2700" y="340" width="180" height="48" rx="16" />
-        <text class="label" x="2790" y="370" text-anchor="middle">Lock workspace UI</text>
-        <polyline class="edge" points="2825,308 2825,340" />
-        <rect class="end" x="2940" y="340" width="48" height="48" rx="24" />
-        <text class="label" x="2964" y="370" text-anchor="middle">End</text>
-        <polyline class="edge" points="2880,364 2940,364" />
-      </svg>
-    </div>
-    <div class="notes">
-      <h2>Notes</h2>
-      <ul>
-        <li>All flows are derived from the requirements and architecture documentation.</li>
-        <li>Search flow distinguishes locked results from unlocked in-memory secure-title matching.</li>
-        <li>Auto-lock explicitly persists secure drafts before clearing keys and secure-title cache.</li>
-        <li>Import and key-rotation flows now show conflict resolution, rollback behavior, and interrupted-rotation recovery.</li>
-        <li>Unlock flow now models biometric fail-count threshold fallback and unavailable-hardware fallback.</li>
-        <li>Plugin flow now models manifest validation and explicit text-transform action execution.</li>
-        <li>Settings flow now models validation and commit of lock timeout, telemetry, and plugin global toggle.</li>
-        <li>Secure-note open flow now includes authenticated-decryption failure with preserved stored record.</li>
-      </ul>
-    </div>
-  </main>
+      <circle cx="206" cy="812" r="15" class="endNode"/>
+
+      <path d="M152 264 V284" class="edge"/>
+      <path d="M206 338 V364" class="edge"/>
+      <path d="M206 476 V516" class="edgeGreen"/>
+      <path d="M206 570 V606" class="edgeGreen"/>
+      <path d="M206 672 V710" class="edgeGreen"/>
+      <path d="M206 764 V797" class="edgeGreen"/>
+      <text x="224" y="498" class="edgeLabel">No</text>
+
+      <rect x="360" y="368" width="250" height="80" rx="12" class="noteBox"/>
+      <text x="378" y="392" class="label">First launch is the only path that</text>
+      <text x="378" y="407" class="label">opens the setup-style UnlockView.</text>
+      <text x="378" y="422" class="small">Later launches do not return to a full-screen unlock gate.</text>
+      <path d="M272 420 H360" class="edgeDash"/>
+      <text x="296" y="409" class="edgeLabel">Yes</text>
+
+      <rect x="744" y="188" width="608" height="714" rx="12" class="slice"/>
+      <text x="766" y="214" class="sliceTitle">Later launch and step-up authentication</text>
+
+      <circle cx="832" cy="250" r="14" class="startNode"/>
+      <rect x="746" y="284" width="240" height="54" rx="12" class="actionBlue"/>
+      <text x="866" y="307" text-anchor="middle" class="label">AppCoordinator.start()</text>
+      <text x="866" y="322" text-anchor="middle" class="small">stored credentials found</text>
+
+      <rect x="746" y="376" width="240" height="66" rx="12" class="actionAmber"/>
+      <text x="866" y="400" text-anchor="middle" class="label">Initialize session as `.locked`</text>
+      <text x="866" y="415" text-anchor="middle" class="small">clear key material until needed</text>
+      <text x="866" y="430" text-anchor="middle" class="small">keep normal workspace available</text>
+
+      <rect x="746" y="480" width="240" height="54" rx="12" class="actionBlue"/>
+      <text x="866" y="503" text-anchor="middle" class="label">Render NotesWorkspaceView</text>
+      <text x="866" y="518" text-anchor="middle" class="small">standard notes remain visible</text>
+
+      <polygon points="866,566 946,628 866,690 786,628" class="decision"/>
+      <text x="866" y="624" text-anchor="middle" class="label">Secure action</text>
+      <text x="866" y="639" text-anchor="middle" class="label">requested?</text>
+
+      <rect x="1086" y="592" width="220" height="66" rx="12" class="actionRose"/>
+      <text x="1196" y="616" text-anchor="middle" class="label">Prompt secure access sheet</text>
+      <text x="1196" y="631" text-anchor="middle" class="small">passphrase or biometrics</text>
+      <text x="1196" y="646" text-anchor="middle" class="small">loads key when approved</text>
+
+      <polygon points="1196,700 1268,758 1196,816 1124,758" class="decision"/>
+      <text x="1196" y="754" text-anchor="middle" class="label">Auth</text>
+      <text x="1196" y="769" text-anchor="middle" class="label">success?</text>
+
+      <rect x="1040" y="842" width="240" height="54" rx="12" class="actionGreen"/>
+      <text x="1160" y="865" text-anchor="middle" class="label">Retry secure operation</text>
+      <text x="1160" y="880" text-anchor="middle" class="small">open / save / restore / export</text>
+
+      <rect x="744" y="734" width="220" height="66" rx="12" class="actionAmber"/>
+      <text x="854" y="758" text-anchor="middle" class="label">Keep ciphertext unchanged</text>
+      <text x="854" y="773" text-anchor="middle" class="small">show error or stay locked</text>
+      <text x="854" y="788" text-anchor="middle" class="small">normal notes still usable</text>
+
+      <circle cx="1160" cy="918" r="15" class="endNode"/>
+      <circle cx="854" cy="850" r="15" class="endNode"/>
+
+      <path d="M832 264 V284" class="edge"/>
+      <path d="M866 338 V376" class="edge"/>
+      <path d="M866 442 V480" class="edge"/>
+      <path d="M866 534 V566" class="edge"/>
+      <path d="M946 628 H1086" class="edgePurple"/>
+      <path d="M1196 658 V700" class="edgePurple"/>
+      <path d="M1196 816 V842" class="edgeGreen"/>
+      <path d="M1160 896 V903" class="edgeGreen"/>
+      <path d="M866 690 V734" class="edgeOrange"/>
+      <path d="M1124 758 H964 V734" class="edgeOrange"/>
+      <path d="M854 800 V835" class="edgeOrange"/>
+      <text x="979" y="752" class="edgeLabel">No</text>
+      <text x="1010" y="620" class="edgeLabel">Yes</text>
+      <text x="1218" y="833" class="edgeLabel">Yes</text>
+      <text x="1082" y="722" class="edgeLabel">No</text>
+
+      <!-- Panel B -->
+      <rect x="1450" y="84" width="1400" height="860" rx="16" class="panel"/>
+      <rect x="1466" y="104" width="1368" height="824" rx="14" class="panelFill"/>
+      <text x="1486" y="134" class="panelTitle">B. Notes, search, attachments, and protected trash</text>
+      <text x="1486" y="154" class="panelSub">The note workflow distinguishes plaintext notes from secure-note payload encryption, searches secure notes by alias only, enforces attachment size limits, and moves deletes into protected trash rather than removing them immediately.</text>
+
+      <rect x="1498" y="188" width="646" height="714" rx="12" class="slice"/>
+      <text x="1520" y="214" class="sliceTitle">Create, save, and open notes</text>
+
+      <circle cx="1586" cy="250" r="14" class="startNode"/>
+      <rect x="1510" y="284" width="232" height="54" rx="12" class="actionBlue"/>
+      <text x="1626" y="307" text-anchor="middle" class="label">Create or edit note</text>
+      <text x="1626" y="322" text-anchor="middle" class="small">title, body, subject, secure flag</text>
+
+      <polygon points="1626,366 1704,426 1626,486 1548,426" class="decision"/>
+      <text x="1626" y="422" text-anchor="middle" class="label">Secure</text>
+      <text x="1626" y="437" text-anchor="middle" class="label">note?</text>
+
+      <rect x="1510" y="520" width="232" height="66" rx="12" class="actionGreen"/>
+      <text x="1626" y="544" text-anchor="middle" class="label">Save plaintext note</text>
+      <text x="1626" y="559" text-anchor="middle" class="small">persist `plainTitle` + plain content</text>
+      <text x="1626" y="574" text-anchor="middle" class="small">update active notes list</text>
+
+      <polygon points="1898,366 1976,426 1898,486 1820,426" class="decision"/>
+      <text x="1898" y="422" text-anchor="middle" class="label">Key</text>
+      <text x="1898" y="437" text-anchor="middle" class="label">available?</text>
+
+      <rect x="1800" y="520" width="196" height="66" rx="12" class="actionRose"/>
+      <text x="1898" y="544" text-anchor="middle" class="label">Prompt secure access</text>
+      <text x="1898" y="559" text-anchor="middle" class="small">if content encryption or</text>
+      <text x="1898" y="574" text-anchor="middle" class="small">secure-note restore needs key</text>
+
+      <rect x="1800" y="620" width="196" height="82" rx="12" class="actionGreen"/>
+      <text x="1898" y="644" text-anchor="middle" class="label">Encrypt secure payload</text>
+      <text x="1898" y="659" text-anchor="middle" class="small">save alias + ciphertext + nonce</text>
+      <text x="1898" y="674" text-anchor="middle" class="small">existing alias-only updates may use</text>
+      <text x="1898" y="689" text-anchor="middle" class="small">metadata path without key</text>
+
+      <rect x="1800" y="736" width="196" height="66" rx="12" class="actionBlue"/>
+      <text x="1898" y="760" text-anchor="middle" class="label">Open secure note</text>
+      <text x="1898" y="775" text-anchor="middle" class="small">decrypt only after auth succeeds</text>
+      <text x="1898" y="790" text-anchor="middle" class="small">plaintext stays in memory only</text>
+
+      <circle cx="1626" cy="842" r="15" class="endNode"/>
+      <circle cx="1898" cy="842" r="15" class="endNode"/>
+
+      <path d="M1586 264 V284" class="edge"/>
+      <path d="M1626 338 V366" class="edge"/>
+      <path d="M1626 486 V520" class="edgeGreen"/>
+      <path d="M1704 426 H1820" class="edgePurple"/>
+      <path d="M1898 486 V520" class="edgePurple"/>
+      <path d="M1898 586 V620" class="edgeGreen"/>
+      <path d="M1898 702 V736" class="edgeGreen"/>
+      <path d="M1626 586 V827" class="edgeGreen"/>
+      <path d="M1898 802 V827" class="edgeGreen"/>
+      <text x="1650" y="505" class="edgeLabel">No</text>
+      <text x="1754" y="415" class="edgeLabel">Yes</text>
+
+      <rect x="2016" y="368" width="108" height="70" rx="12" class="noteBox"/>
+      <text x="2030" y="392" class="small">Decrypt failure</text>
+      <text x="2030" y="407" class="small">keeps stored</text>
+      <text x="2030" y="422" class="small">ciphertext intact.</text>
+      <path d="M1996 769 H2050 V438" class="edgeDash"/>
+
+      <rect x="2176" y="188" width="642" height="714" rx="12" class="slice"/>
+      <text x="2198" y="214" class="sliceTitle">Search, attachments, and trash</text>
+
+      <rect x="2204" y="250" width="182" height="54" rx="12" class="actionBlue"/>
+      <text x="2295" y="273" text-anchor="middle" class="label">Search notes</text>
+      <text x="2295" y="288" text-anchor="middle" class="small">user types query</text>
+
+      <rect x="2204" y="334" width="182" height="72" rx="12" class="actionAmber"/>
+      <text x="2295" y="358" text-anchor="middle" class="label">Match normal notes by</text>
+      <text x="2295" y="373" text-anchor="middle" class="small">`plainTitle` and secure notes by</text>
+      <text x="2295" y="388" text-anchor="middle" class="small">`secureTitleAlias` only</text>
+
+      <rect x="2204" y="440" width="182" height="54" rx="12" class="actionGreen"/>
+      <text x="2295" y="463" text-anchor="middle" class="label">Display results</text>
+      <text x="2295" y="478" text-anchor="middle" class="small">no secure-title cache</text>
+
+      <rect x="2440" y="250" width="182" height="54" rx="12" class="actionBlue"/>
+      <text x="2531" y="273" text-anchor="middle" class="label">Add attachment</text>
+      <text x="2531" y="288" text-anchor="middle" class="small">image or voice recording</text>
+
+      <polygon points="2531,326 2607,384 2531,442 2455,384" class="decision"/>
+      <text x="2531" y="380" text-anchor="middle" class="label">Within size</text>
+      <text x="2531" y="395" text-anchor="middle" class="label">limit?</text>
+
+      <rect x="2440" y="476" width="182" height="72" rx="12" class="actionGreen"/>
+      <text x="2531" y="500" text-anchor="middle" class="label">Write local file</text>
+      <text x="2531" y="515" text-anchor="middle" class="small">20 MB image / 50 MB voice</text>
+      <text x="2531" y="530" text-anchor="middle" class="small">create attachment record</text>
+
+      <rect x="2668" y="360" width="126" height="62" rx="12" class="actionRose"/>
+      <text x="2731" y="384" text-anchor="middle" class="label">Reject add</text>
+      <text x="2731" y="399" text-anchor="middle" class="small">show size error</text>
+
+      <rect x="2430" y="600" width="194" height="54" rx="12" class="actionBlue"/>
+      <text x="2527" y="623" text-anchor="middle" class="label">Delete note</text>
+      <text x="2527" y="638" text-anchor="middle" class="small">user moves note to trash</text>
+
+      <rect x="2430" y="690" width="194" height="72" rx="12" class="actionAmber"/>
+      <text x="2527" y="714" text-anchor="middle" class="label">Move note + attachments</text>
+      <text x="2527" y="729" text-anchor="middle" class="small">to protected trash atomically</text>
+      <text x="2527" y="744" text-anchor="middle" class="small">store alias for secure entries</text>
+
+      <polygon points="2527,786 2605,846 2527,906 2449,846" class="decision"/>
+      <text x="2527" y="842" text-anchor="middle" class="label">Restore secure</text>
+      <text x="2527" y="857" text-anchor="middle" class="label">note?</text>
+
+      <rect x="2212" y="812" width="184" height="70" rx="12" class="actionRose"/>
+      <text x="2304" y="836" text-anchor="middle" class="label">Require unlocked session</text>
+      <text x="2304" y="851" text-anchor="middle" class="small">blocks with error if locked;</text>
+      <text x="2304" y="866" text-anchor="middle" class="small">no step-up auth triggered here</text>
+
+      <rect x="2660" y="812" width="140" height="70" rx="12" class="actionGreen"/>
+      <text x="2730" y="836" text-anchor="middle" class="label">Restore or</text>
+      <text x="2730" y="851" text-anchor="middle" class="small">permanently delete</text>
+      <text x="2730" y="866" text-anchor="middle" class="small">selected trash item</text>
+
+      <path d="M2295 304 V334" class="edge"/>
+      <path d="M2295 406 V440" class="edge"/>
+      <path d="M2531 304 V326" class="edge"/>
+      <path d="M2531 442 V476" class="edgeGreen"/>
+      <path d="M2607 384 H2668" class="edgeOrange"/>
+      <path d="M2531 548 V600" class="edgeGreen"/>
+      <path d="M2527 654 V690" class="edge"/>
+      <path d="M2527 762 V786" class="edge"/>
+      <path d="M2449 846 H2396" class="edgePurple"/>
+      <path d="M2605 846 H2660" class="edgeGreen"/>
+      <text x="2477" y="461" class="edgeLabel">Yes</text>
+      <text x="2634" y="374" class="edgeLabel">No</text>
+      <text x="2415" y="838" class="edgeLabel">Yes</text>
+      <text x="2628" y="838" class="edgeLabel">No</text>
+
+      <!-- Panel C -->
+      <rect x="28" y="980" width="1370" height="1080" rx="16" class="panel"/>
+      <rect x="44" y="1000" width="1338" height="1044" rx="14" class="panelFill"/>
+      <text x="64" y="1030" class="panelTitle">C. Settings, passphrase rotation, backup, and plugins</text>
+      <text x="64" y="1050" class="panelSub">These flows capture the implemented settings model, the atomic secure-note passphrase rotation path, encrypted local backup/import, and plugin package management without inventing unsupported runtime execution behavior.</text>
+
+      <rect x="74" y="1084" width="580" height="420" rx="12" class="slice"/>
+      <text x="96" y="1110" class="sliceTitle">Settings and passphrase change</text>
+
+      <circle cx="156" cy="1150" r="14" class="startNode"/>
+      <rect x="96" y="1182" width="220" height="54" rx="12" class="actionBlue"/>
+      <text x="206" y="1205" text-anchor="middle" class="label">Open settings</text>
+      <text x="206" y="1220" text-anchor="middle" class="small">load AppSettings</text>
+
+      <rect x="96" y="1268" width="220" height="66" rx="12" class="actionAmber"/>
+      <text x="206" y="1292" text-anchor="middle" class="label">Edit available toggles only</text>
+      <text x="206" y="1307" text-anchor="middle" class="small">plugins enabled</text>
+      <text x="206" y="1322" text-anchor="middle" class="small">biometric unlock enabled</text>
+
+      <rect x="388" y="1182" width="220" height="54" rx="12" class="actionBlue"/>
+      <text x="498" y="1205" text-anchor="middle" class="label">Change passphrase</text>
+      <text x="498" y="1220" text-anchor="middle" class="small">while session is unlocked</text>
+
+      <polygon points="498,1264 576,1324 498,1384 420,1324" class="decision"/>
+      <text x="498" y="1320" text-anchor="middle" class="label">Same as</text>
+      <text x="498" y="1335" text-anchor="middle" class="label">current?</text>
+
+      <rect x="388" y="1410" width="220" height="66" rx="12" class="actionRose"/>
+      <text x="498" y="1434" text-anchor="middle" class="label">Reject update</text>
+      <text x="498" y="1449" text-anchor="middle" class="small">show "new passphrase must differ"</text>
+      <text x="498" y="1464" text-anchor="middle" class="small">keep current credentials</text>
+
+      <rect x="96" y="1384" width="220" height="92" rx="12" class="actionGreen"/>
+      <text x="206" y="1408" text-anchor="middle" class="label">Re-encrypt secure note payloads</text>
+      <text x="206" y="1423" text-anchor="middle" class="small">single database transaction</text>
+      <text x="206" y="1438" text-anchor="middle" class="small">replace credentials + refresh</text>
+      <text x="206" y="1453" text-anchor="middle" class="small">biometric enrollment state</text>
+
+      <path d="M156 1164 V1182" class="edge"/>
+      <path d="M206 1236 V1268" class="edge"/>
+      <path d="M316 1209 H388" class="edgeDash"/>
+      <path d="M498 1236 V1264" class="edge"/>
+      <path d="M420 1324 H316 V1384" class="edgeGreen"/>
+      <path d="M498 1384 V1410" class="edgeOrange"/>
+      <text x="351" y="1366" class="edgeLabel">No</text>
+      <text x="520" y="1400" class="edgeLabel">Yes</text>
+
+      <rect x="96" y="1090" width="220" height="40" rx="10" class="noteBox"/>
+      <text x="113" y="1115" class="small">No telemetry setting and no lock-timeout setting.</text>
+
+      <rect x="96" y="1528" width="512" height="66" rx="12" class="noteBox"/>
+      <text x="112" y="1552" class="label">Attachments are not re-encrypted during passphrase change.</text>
+      <text x="112" y="1567" class="small">The rotation path applies to secure-note payloads and credentials, plus recovery from the pending-rotation marker on the next unlock.</text>
+
+      <rect x="704" y="1084" width="654" height="420" rx="12" class="slice"/>
+      <text x="726" y="1110" class="sliceTitle">Encrypted backup export and import</text>
+
+      <rect x="742" y="1150" width="210" height="54" rx="12" class="actionBlue"/>
+      <text x="847" y="1173" text-anchor="middle" class="label">Export backup</text>
+      <text x="847" y="1188" text-anchor="middle" class="small">user chooses destination</text>
+
+      <polygon points="847,1230 923,1288 847,1346 771,1288" class="decision"/>
+      <text x="847" y="1284" text-anchor="middle" class="label">Key</text>
+      <text x="847" y="1299" text-anchor="middle" class="label">available?</text>
+
+      <rect x="742" y="1380" width="210" height="84" rx="12" class="actionGreen"/>
+      <text x="847" y="1404" text-anchor="middle" class="label">Strip runtime-only fields</text>
+      <text x="847" y="1419" text-anchor="middle" class="small">credentials, pending rotation,</text>
+      <text x="847" y="1434" text-anchor="middle" class="small">clock protection state</text>
+      <text x="847" y="1449" text-anchor="middle" class="small">encrypt archive and write file</text>
+
+      <rect x="1016" y="1150" width="220" height="54" rx="12" class="actionBlue"/>
+      <text x="1126" y="1173" text-anchor="middle" class="label">Import backup</text>
+      <text x="1126" y="1188" text-anchor="middle" class="small">read encrypted archive</text>
+
+      <polygon points="1126,1230 1202,1288 1126,1346 1050,1288" class="decision"/>
+      <text x="1126" y="1284" text-anchor="middle" class="label">Schema</text>
+      <text x="1126" y="1299" text-anchor="middle" class="label">compatible?</text>
+
+      <rect x="1016" y="1380" width="220" height="84" rx="12" class="actionGreen"/>
+      <text x="1126" y="1404" text-anchor="middle" class="label">Decrypt and merge data</text>
+      <text x="1126" y="1419" text-anchor="middle" class="small">default conflicts regenerate IDs</text>
+      <text x="1126" y="1434" text-anchor="middle" class="small">entire import is atomic</text>
+      <text x="1126" y="1449" text-anchor="middle" class="small">rollback on failure</text>
+
+      <path d="M847 1204 V1230" class="edge"/>
+      <path d="M847 1346 V1380" class="edgeGreen"/>
+      <path d="M1126 1204 V1230" class="edge"/>
+      <path d="M1126 1346 V1380" class="edgeGreen"/>
+
+      <rect x="726" y="1488" width="600" height="82" rx="12" class="noteBox"/>
+      <text x="744" y="1512" class="label">Export and import are local-only flows.</text>
+      <text x="744" y="1527" class="small">No cloud synchronization is modeled here, and import validation happens before commit so the database can roll back safely if any step fails.</text>
+
+      <rect x="74" y="1604" width="1284" height="372" rx="12" class="slice"/>
+      <text x="96" y="1630" class="sliceTitle">Plugin package management</text>
+
+      <circle cx="158" cy="1680" r="14" class="startNode"/>
+      <rect x="98" y="1712" width="220" height="54" rx="12" class="actionBlue"/>
+      <text x="208" y="1735" text-anchor="middle" class="label">Open plugin manager</text>
+      <text x="208" y="1750" text-anchor="middle" class="small">workspace settings section</text>
+
+      <rect x="392" y="1712" width="220" height="54" rx="12" class="actionBlue"/>
+      <text x="502" y="1735" text-anchor="middle" class="label">Choose local package</text>
+      <text x="502" y="1750" text-anchor="middle" class="small">zip or plugin bundle path</text>
+
+      <polygon points="682,1710 762,1770 682,1830 602,1770" class="decision"/>
+      <text x="682" y="1766" text-anchor="middle" class="label">Manifest and</text>
+      <text x="682" y="1781" text-anchor="middle" class="label">bundle valid?</text>
+
+      <rect x="830" y="1712" width="220" height="66" rx="12" class="actionGreen"/>
+      <text x="940" y="1736" text-anchor="middle" class="label">Install plugin metadata</text>
+      <text x="940" y="1751" text-anchor="middle" class="small">copy bundle and persist record</text>
+      <text x="940" y="1766" text-anchor="middle" class="small">reject duplicate IDs</text>
+
+      <rect x="1120" y="1712" width="220" height="66" rx="12" class="actionAmber"/>
+      <text x="1230" y="1736" text-anchor="middle" class="label">Enable, disable, or remove</text>
+      <text x="1230" y="1751" text-anchor="middle" class="small">refresh plugin availability</text>
+      <text x="1230" y="1766" text-anchor="middle" class="small">update stored settings</text>
+
+      <rect x="830" y="1852" width="508" height="70" rx="12" class="noteBox"/>
+      <text x="848" y="1876" class="label">Plugins are managed assets, not in-app action flows.</text>
+      <text x="848" y="1891" class="small">The implemented UI supports install / enable / disable / remove, but this diagram intentionally avoids inventing a plugin execution activity that the product does not expose.</text>
+
+      <rect x="392" y="1852" width="220" height="54" rx="12" class="actionRose"/>
+      <text x="502" y="1875" text-anchor="middle" class="label">Reject install</text>
+      <text x="502" y="1890" text-anchor="middle" class="small">show validation error</text>
+
+      <path d="M158 1694 V1712" class="edge"/>
+      <path d="M318 1739 H392" class="edge"/>
+      <path d="M612 1739 H682 V1710" class="edge"/>
+      <path d="M762 1770 H830" class="edgeGreen"/>
+      <path d="M1050 1745 H1120" class="edgeGreen"/>
+      <path d="M682 1830 V1852 H612" class="edgeOrange"/>
+      <text x="786" y="1760" class="edgeLabel">Yes</text>
+      <text x="640" y="1850" class="edgeLabel">No</text>
+
+      <!-- Panel D -->
+      <rect x="1450" y="980" width="1400" height="1048" rx="16" class="panel"/>
+      <rect x="1466" y="1000" width="1368" height="1012" rx="14" class="panelFill"/>
+      <text x="1486" y="1030" class="panelTitle">D. Background and sleep lock handling</text>
+      <text x="1486" y="1050" class="panelSub">The coordinator listens to lifecycle and power events, locks immediately when safe, and defers the lock only while a protected background operation such as export or passphrase rotation is still active.</text>
+
+      <rect x="1498" y="1084" width="1308" height="878" rx="12" class="slice"/>
+      <text x="1520" y="1110" class="sliceTitle">Immediate lock versus deferred lock</text>
+
+      <circle cx="1600" cy="1160" r="14" class="startNode"/>
+      <rect x="1528" y="1194" width="230" height="66" rx="12" class="actionBlue"/>
+      <text x="1643" y="1218" text-anchor="middle" class="label">App enters background or sleep</text>
+      <text x="1643" y="1233" text-anchor="middle" class="small">platform event reaches AppCoordinator</text>
+      <text x="1643" y="1248" text-anchor="middle" class="small">through lifecycle / power stream</text>
+
+      <polygon points="1643,1288 1725,1350 1643,1412 1561,1350" class="decision"/>
+      <text x="1643" y="1346" text-anchor="middle" class="label">Active protected</text>
+      <text x="1643" y="1361" text-anchor="middle" class="label">operation?</text>
+
+      <rect x="1516" y="1452" width="254" height="82" rx="12" class="actionGreen"/>
+      <text x="1643" y="1476" text-anchor="middle" class="label">Lock now</text>
+      <text x="1643" y="1491" text-anchor="middle" class="small">clear in-memory key material</text>
+      <text x="1643" y="1506" text-anchor="middle" class="small">secure actions require new auth</text>
+      <text x="1643" y="1521" text-anchor="middle" class="small">normal notes remain accessible</text>
+
+      <rect x="1908" y="1452" width="250" height="82" rx="12" class="actionAmber"/>
+      <text x="2033" y="1476" text-anchor="middle" class="label">Defer lock</text>
+      <text x="2033" y="1491" text-anchor="middle" class="small">mark pending lock until export or</text>
+      <text x="2033" y="1506" text-anchor="middle" class="small">rotation transaction finishes</text>
+      <text x="2033" y="1521" text-anchor="middle" class="small">avoid partial protected writes</text>
+
+      <rect x="1908" y="1600" width="250" height="66" rx="12" class="actionBlue"/>
+      <text x="2033" y="1624" text-anchor="middle" class="label">Background work completes</text>
+      <text x="2033" y="1639" text-anchor="middle" class="small">decrement active operation count</text>
+      <text x="2033" y="1654" text-anchor="middle" class="small">re-check pending lock flag</text>
+
+      <rect x="1908" y="1712" width="250" height="66" rx="12" class="actionGreen"/>
+      <text x="2033" y="1736" text-anchor="middle" class="label">Apply deferred lock</text>
+      <text x="2033" y="1751" text-anchor="middle" class="small">clear key and reset secure access state</text>
+      <text x="2033" y="1766" text-anchor="middle" class="small">future secure actions prompt again</text>
+
+      <circle cx="1643" cy="1828" r="15" class="endNode"/>
+      <circle cx="2033" cy="1828" r="15" class="endNode"/>
+
+      <path d="M1600 1174 V1194" class="edge"/>
+      <path d="M1643 1260 V1288" class="edge"/>
+      <path d="M1643 1412 V1452" class="edgeGreen"/>
+      <path d="M1725 1350 H2033 V1452" class="edgeOrange"/>
+      <path d="M2033 1534 V1600" class="edgeOrange"/>
+      <path d="M2033 1666 V1712" class="edgeGreen"/>
+      <path d="M1643 1534 V1813" class="edgeGreen"/>
+      <path d="M2033 1778 V1813" class="edgeGreen"/>
+      <text x="1670" y="1436" class="edgeLabel">No</text>
+      <text x="1798" y="1342" class="edgeLabel">Yes</text>
+
+      <rect x="2256" y="1188" width="492" height="136" rx="12" class="noteBox"/>
+      <text x="2274" y="1212" class="label">Scope guardrails reflected here</text>
+      <text x="2274" y="1232" class="small">No draft-persistence-on-lock flow is shown.</text>
+      <text x="2274" y="1247" class="small">No whole-app relaunch unlock screen is shown.</text>
+      <text x="2274" y="1262" class="small">No secure-note expiration or notification flow is shown.</text>
+      <text x="2274" y="1277" class="small">No voice transcription flow is shown; the app records audio attachments only.</text>
+      <path d="M2158 1218 H2256" class="edgeDash"/>
+    </svg>
+  </div>
+
+  <section class="notes">
+    <h2>Alignment Notes</h2>
+    <ul>
+      <li>This version follows the implemented session model: first launch uses passphrase setup, while later launches go directly to the workspace in a locked session and rely on step-up authentication only for secure operations.</li>
+      <li>Secure-note search is shown against <code>secureTitleAlias</code> only. The prior diagram's secure-title cache behavior was removed because the current search service does not maintain decrypted secure-title cache state.</li>
+      <li>Passphrase rotation is scoped to secure-note payloads and credentials. Attachment files are not re-encrypted in the current implementation, so that unsupported branch was intentionally removed.</li>
+      <li>Plugin management is limited to install, validate, enable, disable, and remove. The diagram does not invent plugin-execution activities that are not surfaced by the app.</li>
+      <li>Unsupported or undocumented behaviors from the old draft were omitted on purpose, including secure-note expiration, telemetry configuration, lock-timeout settings, voice transcription, and draft persistence when locking.</li>
+      <li><strong>Fixed in this revision:</strong> The trash-restore action box previously read "Require unlocked session or step-up auth to restore secure note content," which implied a step-up authentication prompt. The actual <code>ProtectedTrashService.restore()</code> implementation simply throws <code>restoreRequiresUnlockedSession</code> — it is a hard error block, not a prompt. The box now reads "blocks with error if locked; no step-up auth triggered here."</li>
+    </ul>
+  </section>
+</main>
 </body>
 </html>

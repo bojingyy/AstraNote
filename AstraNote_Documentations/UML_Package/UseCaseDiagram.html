@@ -20,187 +20,327 @@
       --platform-stroke: #dc2626;
       --model-fill: #f3ecff;
       --model-stroke: #7c3aed;
-      --memory-fill: #eef2ff;
-      --memory-stroke: #6366f1;
-      --actor: #6366f1;
-      --usecase: #fff;
-      --usecase-stroke: #6366f1;
-      --edge: #334155;
-      --edge-soft: #6b7280;
-      --edge-dashed: 6 4;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       background: radial-gradient(circle at 12% 10%, #dbeafe 0%, #eef2ff 20%, var(--bg) 55%);
       color: var(--ink);
       font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
     }
-    main {
-      max-width: 100%;
-      padding: 16px;
-    }
-    h1 {
-      margin: 0 0 10px 0;
-      font-size: 24px;
-      letter-spacing: 0.2px;
-    }
-    p.subtitle {
-      margin: 0 0 14px 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
+
+    main { max-width: 100%; padding: 16px; }
+    h1 { margin: 0 0 10px 0; font-size: 24px; letter-spacing: 0.2px; }
+    p.subtitle { margin: 0 0 14px 0; color: var(--muted); font-size: 14px; }
+
     .diagram-shell {
       border: 1px solid #d8deea;
       border-radius: 14px;
       background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 8px 28px rgba(15,23,42,0.08);
       overflow: auto;
       padding: 10px;
     }
-    .legend {
-      font: 12px "Segoe UI", Arial, sans-serif;
-      fill: #334155;
+
+    .notes {
+      margin-top: 14px;
+      border: 1px solid #d8deea;
+      border-radius: 12px;
+      background: var(--panel);
+      padding: 12px 14px;
+      font-size: 14px;
+      line-height: 1.45;
     }
+
+    .notes h2 { margin: 0 0 8px 0; font-size: 16px; }
+    .notes ul { margin: 0; padding-left: 20px; }
+
     @media (max-width: 900px) {
       h1 { font-size: 20px; }
       p.subtitle { font-size: 13px; }
+      .notes { font-size: 13px; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <h1>AstraNotes UML Use Case Diagram</h1>
-    <p class="subtitle">Major user and system use cases, expanded to cover subject groups, image attachment, lock-time protections, and interrupted key-rotation recovery.</p>
-    <div class="diagram-shell">
-      <svg viewBox="0 0 1800 1120" width="1800" height="1120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AstraNotes use case diagram">
-        <defs>
-          <style>
-            .actor { fill: var(--actor); stroke: var(--actor); stroke-width: 2; }
-            .actor-label { font: 700 15px 'Segoe UI', Arial, sans-serif; fill: #3730a3; }
-            .usecase { fill: var(--usecase); stroke: var(--usecase-stroke); stroke-width: 2; }
-            .usecase-label { font: 13px 'Segoe UI', Arial, sans-serif; fill: #1e293b; }
-            .edge { stroke: var(--edge); stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
-            .edgeDashed { stroke: var(--edge-soft); stroke-width: 1.2; stroke-dasharray: var(--edge-dashed); fill: none; marker-end: url(#arrow); }
-            .include { stroke: #6366f1; stroke-width: 1.2; stroke-dasharray: 4 3; fill: none; marker-end: url(#arrow); }
-          </style>
-          <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
-          </marker>
-        </defs>
-        <!-- Actors -->
-        <ellipse class="actor" cx="120" cy="200" rx="36" ry="36" />
-        <text class="actor-label" x="120" y="205" text-anchor="middle">User</text>
-        <ellipse class="actor" cx="120" cy="700" rx="36" ry="36" />
-        <text class="actor-label" x="120" y="705" text-anchor="middle">System</text>
-        <!-- Use Cases (User) -->
-        <g>
-          <rect class="usecase" x="320" y="80" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="110" text-anchor="middle">Unlock with passphrase</text>
-          <rect class="usecase" x="320" y="150" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="180" text-anchor="middle">Unlock with biometric</text>
-          <rect class="usecase" x="320" y="220" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="250" text-anchor="middle">Create/edit normal note</text>
-          <rect class="usecase" x="320" y="290" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="320" text-anchor="middle">Enable secure mode</text>
-          <rect class="usecase" x="320" y="360" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="390" text-anchor="middle">Set expiration date/time</text>
-          <rect class="usecase" x="320" y="430" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="460" text-anchor="middle">Search notes by title</text>
-          <rect class="usecase" x="320" y="500" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="530" text-anchor="middle">Capture voice & transcribe</text>
-          <rect class="usecase" x="320" y="570" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="600" text-anchor="middle">Attach image to note</text>
-          <rect class="usecase" x="320" y="640" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="670" text-anchor="middle">Manage subject groups</text>
-          <rect class="usecase" x="320" y="710" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="740" text-anchor="middle">View/restore trash</text>
-          <rect class="usecase" x="320" y="780" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="810" text-anchor="middle">Permanently delete trash</text>
-          <rect class="usecase" x="320" y="850" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="430" y="880" text-anchor="middle">Install/manage plugins</text>
-          <rect class="usecase" x="320" y="920" rx="32" ry="32" width="260" height="48" />
-          <text class="usecase-label" x="450" y="950" text-anchor="middle">Apply text-transform action</text>
-          <rect class="usecase" x="600" y="80" rx="32" ry="32" width="260" height="48" />
-          <text class="usecase-label" x="730" y="110" text-anchor="middle">Change passphrase & rotate keys</text>
-          <rect class="usecase" x="600" y="150" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="710" y="180" text-anchor="middle">Export backup</text>
-          <rect class="usecase" x="600" y="220" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="710" y="250" text-anchor="middle">Import backup</text>
-          <rect class="usecase" x="600" y="290" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="710" y="320" text-anchor="middle">Configure settings</text>
-          <rect class="usecase" x="600" y="360" rx="32" ry="32" width="220" height="48" />
-          <text class="usecase-label" x="710" y="390" text-anchor="middle">Select All Notes filter</text>
-          <rect class="usecase" x="600" y="430" rx="32" ry="32" width="240" height="48" />
-          <text class="usecase-label" x="720" y="460" text-anchor="middle">Validate plugin manifest</text>
-        </g>
-        <!-- Use Cases (System) -->
-        <g>
-          <rect class="usecase" x="1050" y="120" rx="32" ry="32" width="320" height="48" />
-          <text class="usecase-label" x="1210" y="150" text-anchor="middle">Auto-lock, persist draft, clear secrets</text>
-          <rect class="usecase" x="1050" y="200" rx="32" ry="32" width="260" height="48" />
-          <text class="usecase-label" x="1180" y="230" text-anchor="middle">Expire & move secure note</text>
-          <rect class="usecase" x="1050" y="280" rx="32" ry="32" width="260" height="48" />
-          <text class="usecase-label" x="1180" y="310" text-anchor="middle">Schedule expiry notification</text>
-          <rect class="usecase" x="1050" y="360" rx="32" ry="32" width="320" height="48" />
-          <text class="usecase-label" x="1210" y="390" text-anchor="middle">Recover interrupted key rotation</text>
-        </g>
-        <!-- Relationships: User to Use Cases -->
-        <polyline class="edge" points="156,200 320,104" />
-        <polyline class="edge" points="156,200 320,174" />
-        <polyline class="edge" points="156,200 320,244" />
-        <polyline class="edge" points="156,200 320,314" />
-        <polyline class="edge" points="156,200 320,384" />
-        <polyline class="edge" points="156,200 320,454" />
-        <polyline class="edge" points="156,200 320,524" />
-        <polyline class="edge" points="156,200 320,594" />
-        <polyline class="edge" points="156,200 320,664" />
-        <polyline class="edge" points="156,200 320,734" />
-        <polyline class="edge" points="156,200 320,804" />
-        <polyline class="edge" points="156,200 320,874" />
-        <polyline class="edge" points="156,200 320,944" />
-        <polyline class="edge" points="156,200 600,104" />
-        <polyline class="edge" points="156,200 600,174" />
-        <polyline class="edge" points="156,200 600,244" />
-        <polyline class="edge" points="156,200 600,314" />
-        <polyline class="edge" points="156,200 600,384" />
-        <polyline class="edge" points="156,200 600,454" />
-        <!-- Relationships: System to Use Cases -->
-        <polyline class="edge" points="156,700 1050,144" />
-        <polyline class="edge" points="156,700 1050,224" />
-        <polyline class="edge" points="156,700 1050,304" />
-        <polyline class="edge" points="156,700 1050,384" />
-        <!-- Include relationships -->
-        <polyline class="include" points="430,174 430,104" />
-        <polyline class="include" points="430,314 430,384" />
-        <polyline class="include" points="1180,224 1180,304" />
-        <polyline class="include" points="730,104 1210,384" />
-        <polyline class="include" points="430,874 720,454" />
-        <polyline class="include" points="430,664 710,384" />
-        <!-- Legend -->
-        <rect x="1450" y="900" width="320" height="160" rx="14" fill="#f8fafc" stroke="#cbd5e1" />
-        <text class="legend" x="1470" y="930">Legend:</text>
-        <rect class="actor" x="1470" y="950" rx="18" ry="18" width="36" height="36" />
-        <text class="legend" x="1515" y="973">Actor</text>
-        <rect class="usecase" x="1470" y="990" rx="18" ry="18" width="36" height="36" />
-        <text class="legend" x="1515" y="1013">Use Case</text>
-        <line class="edge" x1="1470" y1="1030" x2="1506" y2="1030" />
-        <text class="legend" x="1515" y="1035">Association</text>
-        <line class="include" x1="1470" y1="1050" x2="1506" y2="1050" />
-        <text class="legend" x="1515" y="1055">«include»</text>
-      </svg>
-    </div>
-    <div class="notes">
-      <h2>Notes</h2>
-      <ul>
-        <li>All use cases are derived from the requirements and architecture documentation.</li>
-        <li>Actors: <b>User</b> (person using the app), <b>System</b> (automated app/system actions).</li>
-        <li>Dashed blue lines represent «include» relationships.</li>
-        <li>User-visible coverage now includes image attachment, subject groups with All Notes filtering, and explicit settings configuration.</li>
-        <li>Plugin coverage now distinguishes manifest validation and text-transform action execution.</li>
-        <li>System coverage includes lock-time secret clearing and interrupted key-rotation recovery.</li>
-      </ul>
-    </div>
-  </main>
+<main>
+  <h1>AstraNotes UML Use Case Diagram</h1>
+  <p class="subtitle">Use cases aligned with the current code, requirements, architecture, class diagram, and object diagram. The diagram reflects the real product scope: first-launch passphrase setup, direct workspace access on later launches, secure-note step-up authentication, local backup/import, subject groups, protected trash, attachments, and plugin management only.</p>
+
+  <div class="diagram-shell">
+    <svg viewBox="0 0 2520 1360" width="2520" height="1360"
+         xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="AstraNotes use case diagram">
+      <defs>
+        <style>
+          .title      { font: 700 22px "Segoe UI",Arial,sans-serif; fill:#0f172a; }
+          .section    { font: 700 15px "Segoe UI",Arial,sans-serif; fill:#1f2937; }
+          .subsection { font: 600 12px "Segoe UI",Arial,sans-serif; fill:#475569; }
+          .actorLabel { font: 700 13px "Segoe UI",Arial,sans-serif; fill:#3730a3; }
+          .cardTitle  { font: 700 12px "Segoe UI",Arial,sans-serif; fill:#0f172a; }
+          .ucLabel    { font: 12px "Segoe UI",Arial,sans-serif; fill:#1f2937; }
+          .legend     { font: 11px "Segoe UI",Arial,sans-serif; fill:#334155; }
+          .boundary   { fill:#ffffff; stroke:#cbd5e1; stroke-width:1.6; }
+          .boundaryFill { fill:#f8fbff; stroke:#d7e4fb; stroke-width:1; }
+          .actorLine  { stroke:#6366f1; stroke-width:2.2; stroke-linecap:round; fill:none; }
+          .actorHead  { fill:#eef2ff; stroke:#6366f1; stroke-width:2.2; }
+          .usecase    { fill:#ffffff; stroke:#7c3aed; stroke-width:1.8; }
+          .assoc      { stroke:#334155; stroke-width:1.5; fill:none; }
+          .include    { stroke:#2563eb; stroke-width:1.3; stroke-dasharray:5 4; fill:none; marker-end:url(#aBlue); }
+          .extend     { stroke:#7c3aed; stroke-width:1.3; stroke-dasharray:5 4; fill:none; marker-end:url(#aPurple); }
+          .external   { stroke:#b91c1c; stroke-width:1.4; fill:none; marker-end:url(#aRed); }
+          .edgeLabel  { font: 10px "Segoe UI",Arial,sans-serif; fill:#334155; }
+        </style>
+
+        <marker id="aBlue" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0L10 5L0 10z" fill="#2563eb"/>
+        </marker>
+        <marker id="aPurple" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0L10 5L0 10z" fill="#7c3aed"/>
+        </marker>
+        <marker id="aRed" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0L10 5L0 10z" fill="#b91c1c"/>
+        </marker>
+      </defs>
+
+      <text x="16" y="28" class="title">AstraNotes use case diagram (actual product behavior)</text>
+
+      <!-- System boundary -->
+      <rect x="300" y="88" width="1580" height="1135" rx="16" class="boundary"/>
+      <rect x="318" y="108" width="1544" height="1095" rx="14" class="boundaryFill"/>
+      <text x="340" y="130" class="section">AstraNotes System</text>
+      <text x="505" y="160" class="subsection">Session, Settings, and Backup</text>
+      <text x="985" y="160" class="subsection">Notes, Search, Subjects, and Trash</text>
+      <text x="1440" y="160" class="subsection">Attachments, Plugins, and Secure Access</text>
+
+      <!-- Left actors -->
+      <!-- user A -->
+      <circle cx="120" cy="260" r="18" class="actorHead"/>
+      <path d="M120 278 V326 M95 292 H145 M120 326 L96 356 M120 326 L144 356" class="actorLine"/>
+      <text x="120" y="380" text-anchor="middle" class="actorLabel">User</text>
+
+      <!-- user B -->
+      <circle cx="120" cy="585" r="18" class="actorHead"/>
+      <path d="M120 603 V651 M95 617 H145 M120 651 L96 681 M120 651 L144 681" class="actorLine"/>
+      <text x="120" y="705" text-anchor="middle" class="actorLabel">User</text>
+
+      <!-- user C -->
+      <circle cx="120" cy="900" r="18" class="actorHead"/>
+      <path d="M120 918 V966 M95 932 H145 M120 966 L96 996 M120 966 L144 996" class="actorLine"/>
+      <text x="120" y="1020" text-anchor="middle" class="actorLabel">User</text>
+
+      <!-- Right actors -->
+      <circle cx="2215" cy="420" r="18" class="actorHead"/>
+      <path d="M2215 438 V486 M2190 452 H2240 M2215 486 L2191 516 M2215 486 L2239 516" class="actorLine"/>
+      <text x="2215" y="540" text-anchor="middle" class="actorLabel">Local File System</text>
+
+      <circle cx="2215" cy="760" r="18" class="actorHead"/>
+      <path d="M2215 778 V826 M2190 792 H2240 M2215 826 L2191 856 M2215 826 L2239 856" class="actorLine"/>
+      <text x="2215" y="880" text-anchor="middle" class="actorLabel">Local Authentication</text>
+      <text x="2215" y="896" text-anchor="middle" class="actorLabel">and Keychain</text>
+
+      <circle cx="2215" cy="1035" r="18" class="actorHead"/>
+      <path d="M2215 1053 V1101 M2190 1067 H2240 M2215 1101 L2191 1131 M2215 1101 L2239 1131" class="actorLine"/>
+      <text x="2215" y="1155" text-anchor="middle" class="actorLabel">macOS Lifecycle /</text>
+      <text x="2215" y="1171" text-anchor="middle" class="actorLabel">Power Events</text>
+
+      <!-- Use cases: column 1 -->
+      <ellipse cx="620" cy="195" rx="150" ry="36" class="usecase"/>
+      <text x="620" y="190" text-anchor="middle" class="ucLabel">
+        <tspan x="620" dy="0">Create Initial</tspan>
+        <tspan x="620" dy="14">Passphrase</tspan>
+      </text>
+
+      <ellipse cx="620" cy="305" rx="140" ry="34" class="usecase"/>
+      <text x="620" y="310" text-anchor="middle" class="ucLabel">Open Workspace</text>
+
+      <ellipse cx="620" cy="415" rx="155" ry="36" class="usecase"/>
+      <text x="620" y="410" text-anchor="middle" class="ucLabel">
+        <tspan x="620" dy="0">Configure Settings</tspan>
+        <tspan x="620" dy="14">(plugins + biometrics)</tspan>
+      </text>
+
+      <ellipse cx="620" cy="525" rx="150" ry="36" class="usecase"/>
+      <text x="620" y="520" text-anchor="middle" class="ucLabel">
+        <tspan x="620" dy="0">Change</tspan>
+        <tspan x="620" dy="14">Passphrase</tspan>
+      </text>
+
+      <ellipse cx="620" cy="635" rx="170" ry="36" class="usecase"/>
+      <text x="620" y="630" text-anchor="middle" class="ucLabel">
+        <tspan x="620" dy="0">Export Encrypted</tspan>
+        <tspan x="620" dy="14">Backup</tspan>
+      </text>
+
+      <ellipse cx="620" cy="745" rx="160" ry="36" class="usecase"/>
+      <text x="620" y="740" text-anchor="middle" class="ucLabel">
+        <tspan x="620" dy="0">Import Encrypted</tspan>
+        <tspan x="620" dy="14">Backup</tspan>
+      </text>
+
+      <!-- Use cases: column 2 -->
+      <ellipse cx="1095" cy="195" rx="170" ry="36" class="usecase"/>
+      <text x="1095" y="190" text-anchor="middle" class="ucLabel">
+        <tspan x="1095" dy="0">Create / Edit</tspan>
+        <tspan x="1095" dy="14">Normal Note</tspan>
+      </text>
+
+      <ellipse cx="1095" cy="305" rx="145" ry="34" class="usecase"/>
+      <text x="1095" y="310" text-anchor="middle" class="ucLabel">Save Secure Note</text>
+
+      <ellipse cx="1095" cy="415" rx="145" ry="34" class="usecase"/>
+      <text x="1095" y="420" text-anchor="middle" class="ucLabel">Open Secure Note</text>
+
+      <ellipse cx="1095" cy="525" rx="165" ry="36" class="usecase"/>
+      <text x="1095" y="520" text-anchor="middle" class="ucLabel">
+        <tspan x="1095" dy="0">Search Notes</tspan>
+        <tspan x="1095" dy="14">by Title</tspan>
+      </text>
+
+      <ellipse cx="1095" cy="635" rx="165" ry="36" class="usecase"/>
+      <text x="1095" y="630" text-anchor="middle" class="ucLabel">
+        <tspan x="1095" dy="0">Manage Subject</tspan>
+        <tspan x="1095" dy="14">Groups</tspan>
+      </text>
+
+      <ellipse cx="1095" cy="745" rx="170" ry="36" class="usecase"/>
+      <text x="1095" y="740" text-anchor="middle" class="ucLabel">
+        <tspan x="1095" dy="0">Manage Protected</tspan>
+        <tspan x="1095" dy="14">Trash</tspan>
+      </text>
+
+      <!-- Use cases: column 3 -->
+      <ellipse cx="1570" cy="195" rx="190" ry="36" class="usecase"/>
+      <text x="1570" y="190" text-anchor="middle" class="ucLabel">
+        <tspan x="1570" dy="0">Attach Image from</tspan>
+        <tspan x="1570" dy="14">Local File</tspan>
+      </text>
+
+      <ellipse cx="1570" cy="305" rx="170" ry="36" class="usecase"/>
+      <text x="1570" y="300" text-anchor="middle" class="ucLabel">
+        <tspan x="1570" dy="0">Record Voice</tspan>
+        <tspan x="1570" dy="14">Attachment</tspan>
+      </text>
+
+      <ellipse cx="1570" cy="415" rx="180" ry="36" class="usecase"/>
+      <text x="1570" y="410" text-anchor="middle" class="ucLabel">
+        <tspan x="1570" dy="0">Manage Installed</tspan>
+        <tspan x="1570" dy="14">Plugins</tspan>
+      </text>
+
+      <ellipse cx="1570" cy="525" rx="210" ry="36" class="usecase"/>
+      <text x="1570" y="520" text-anchor="middle" class="ucLabel">
+        <tspan x="1570" dy="0">Install Plugin from</tspan>
+        <tspan x="1570" dy="14">Local Package</tspan>
+      </text>
+
+      <ellipse cx="1570" cy="635" rx="220" ry="36" class="usecase"/>
+      <text x="1570" y="630" text-anchor="middle" class="ucLabel">
+        <tspan x="1570" dy="0">Enable / Disable /</tspan>
+        <tspan x="1570" dy="14">Remove Plugin</tspan>
+      </text>
+
+      <ellipse cx="1570" cy="760" rx="210" ry="36" class="usecase"/>
+      <text x="1570" y="755" text-anchor="middle" class="ucLabel">
+        <tspan x="1570" dy="0">Authenticate for</tspan>
+        <tspan x="1570" dy="14">Secure Action</tspan>
+      </text>
+
+      <ellipse cx="1570" cy="870" rx="145" ry="34" class="usecase"/>
+      <text x="1570" y="875" text-anchor="middle" class="ucLabel">Use Biometrics</text>
+
+      <ellipse cx="1570" cy="1010" rx="245" ry="40" class="usecase"/>
+      <text x="1570" y="1005" text-anchor="middle" class="ucLabel">
+        <tspan x="1570" dy="0">Handle Background / Sleep</tspan>
+        <tspan x="1570" dy="14">Lock Event</tspan>
+      </text>
+
+      <!-- Associations from repeated User actors -->
+      <line x1="144" y1="286" x2="470" y2="195" class="assoc"/>
+      <line x1="144" y1="296" x2="480" y2="305" class="assoc"/>
+      <line x1="144" y1="306" x2="465" y2="415" class="assoc"/>
+      <line x1="144" y1="316" x2="470" y2="525" class="assoc"/>
+      <line x1="144" y1="326" x2="450" y2="635" class="assoc"/>
+      <line x1="140" y1="336" x2="460" y2="745" class="assoc"/>
+
+      <line x1="144" y1="611" x2="925" y2="195" class="assoc"/>
+      <line x1="144" y1="621" x2="950" y2="305" class="assoc"/>
+      <line x1="144" y1="631" x2="950" y2="415" class="assoc"/>
+      <line x1="144" y1="641" x2="930" y2="525" class="assoc"/>
+      <line x1="144" y1="651" x2="930" y2="635" class="assoc"/>
+      <line x1="144" y1="661" x2="925" y2="745" class="assoc"/>
+
+      <line x1="144" y1="926" x2="1380" y2="195" class="assoc"/>
+      <line x1="144" y1="936" x2="1400" y2="305" class="assoc"/>
+      <line x1="144" y1="946" x2="1390" y2="415" class="assoc"/>
+
+      <!-- External actors -->
+      <path d="M2200 448 H1960 V195 H1760" class="external"/>
+      <path d="M2200 456 H1935 V525 H1780" class="external"/>
+      <path d="M2200 464 H2380 V1180 H790 V635" class="external"/>
+      <path d="M2200 472 H2400 V1195 H780 V745" class="external"/>
+
+      <path d="M2195 786 H1950 V870 H1715" class="external"/>
+
+      <path d="M2195 1060 H1940 V1010 H1815" class="external"/>
+
+      <!-- Include / extend relations -->
+      <path d="M1240 305 H1320 V736 H1360" class="include"/>
+      <text x="1326" y="522" class="edgeLabel">«include»</text>
+
+      <path d="M1240 415 H1345 V760 H1360" class="include"/>
+      <text x="1351" y="598" class="edgeLabel">«include»</text>
+
+      <path d="M1570 489 V451" class="extend"/>
+      <text x="1582" y="475" class="edgeLabel">«extend»</text>
+
+      <path d="M1570 599 V451" class="extend"/>
+      <text x="1582" y="555" class="edgeLabel">«extend»</text>
+
+      <path d="M1570 836 V796" class="extend"/>
+      <text x="1584" y="820" class="edgeLabel">«extend»</text>
+
+      <!-- Legend -->
+      <g transform="translate(340,1250)">
+        <circle cx="16" cy="16" r="8" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+        <line x1="16" y1="24" x2="16" y2="42" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
+        <text x="40" y="20" class="legend">Actor</text>
+
+        <ellipse cx="140" cy="16" rx="26" ry="14" fill="#ffffff" stroke="#7c3aed" stroke-width="1.8"/>
+        <text x="176" y="20" class="legend">Use case</text>
+
+        <line x1="280" y1="16" x2="325" y2="16" class="assoc"/>
+        <text x="335" y="20" class="legend">Association</text>
+
+        <line x1="450" y1="16" x2="495" y2="16" class="include"/>
+        <text x="505" y="20" class="legend">«include»</text>
+
+        <line x1="610" y1="16" x2="655" y2="16" class="extend"/>
+        <text x="665" y="20" class="legend">«extend»</text>
+
+        <line x1="780" y1="16" x2="825" y2="16" class="external"/>
+        <text x="835" y="20" class="legend">External service interaction</text>
+      </g>
+
+      <text x="16" y="1340" class="legend">Key alignment decisions: there is no whole-app unlock screen on later launches, no secure-note expiration flow, no expiry notification, no draft-persistence-on-lock use case, no transcription use case, no plugin execution UI use case, and no lock-timeout or telemetry settings use case.</text>
+    </svg>
+  </div>
+
+  <section class="notes">
+    <h2>Alignment Notes</h2>
+    <ul>
+      <li>The diagram now matches the current architecture and source code: later launches go directly to the workspace, while secure-note open/save flows reuse an in-context authentication use case.</li>
+      <li><code>Authenticate for Secure Action</code> is included by secure-note open and secure-note save, and <code>Use Biometrics</code> is modeled as an extension of that authentication path rather than as a separate whole-app unlock flow.</li>
+      <li><code>Manage Installed Plugins</code> is the base use case. <code>Install Plugin from Local Package</code> and <code>Enable / Disable / Remove Plugin</code> each optionally extend it via <code>«extend»</code>, meaning these sub-actions are triggered only when the user explicitly chooses them — they are not mandatory inclusions. UI-triggered plugin execution is intentionally omitted because the code exposes <code>PluginService.execute</code> only at the service layer, not through the UI.</li>
+      <li><strong>Fixed in this revision:</strong> The two arrows from <code>Manage Installed Plugins</code> to its sub-use-cases were previously marked <code>«include»</code> pointing downward from the base. They are now correctly marked <code>«extend»</code> with the arrowhead pointing upward (extension → base), because the install and enable/disable/remove sub-actions are optional, user-initiated extensions, not mandatory behaviors that the base always calls.</li>
+      <li>The external actors mirror the real boundaries in the codebase: local files for image/plugin/archive I/O, local authentication and Keychain for biometric unlock, and macOS lifecycle/power events for background/sleep lock behavior.</li>
+      <li>The repeated <code>User</code> actor glyphs are the same actor shown multiple times purely to keep associations readable and prevent line overlap.</li>
+      <li>Secure-note expiration, scheduling notifications, secure-title caching, transcription, lock-timeout settings, telemetry settings, and draft persistence on lock were removed because they do not exist in the current requirements, implementation, class diagram, or object diagram.</li>
+      <li>Title search is represented as a user use case, but it should be interpreted consistently with the docs: normal notes match plaintext titles and secure notes match <code>secureTitleAlias</code> only.</li>
+    </ul>
+  </section>
+</main>
 </body>
 </html>

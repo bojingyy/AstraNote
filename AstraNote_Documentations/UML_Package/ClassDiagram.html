@@ -3,542 +3,991 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AstraNotes Complete Class Diagram</title>
+  <title>AstraNotes Class Diagram</title>
   <style>
     :root {
       --bg: #f5f7fb;
       --panel: #ffffff;
       --ink: #172033;
       --muted: #4b5563;
-
-      --ui-fill: #e8f2ff;
-      --ui-stroke: #3b82f6;
-      --core-fill: #eaf9ef;
-      --core-stroke: #16a34a;
-      --data-fill: #fff7e3;
-      --data-stroke: #d97706;
-      --platform-fill: #ffecef;
-      --platform-stroke: #dc2626;
-      --model-fill: #f3ecff;
-      --model-stroke: #7c3aed;
-      --memory-fill: #eef2ff;
-      --memory-stroke: #6366f1;
-
-      --edge: #334155;
-      --edge-soft: #6b7280;
-      --edge-dashed: 6 4;
+      --ui-fill: #e8f2ff;       --ui-stroke: #3b82f6;
+      --core-fill: #eaf9ef;     --core-stroke: #16a34a;
+      --data-fill: #fff7e3;     --data-stroke: #d97706;
+      --platform-fill: #ffecef; --platform-stroke: #dc2626;
+      --model-fill: #f3ecff;    --model-stroke: #7c3aed;
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       background: radial-gradient(circle at 12% 10%, #dbeafe 0%, #eef2ff 20%, var(--bg) 55%);
       color: var(--ink);
       font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
     }
-
-    main {
-      max-width: 100%;
-      padding: 16px;
-    }
-
-    h1 {
-      margin: 0 0 10px 0;
-      font-size: 24px;
-      letter-spacing: 0.2px;
-    }
-
-    p.subtitle {
-      margin: 0 0 14px 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
+    main { max-width: 100%; padding: 16px; }
+    h1 { margin: 0 0 10px 0; font-size: 24px; letter-spacing: 0.2px; }
+    p.subtitle { margin: 0 0 14px 0; color: var(--muted); font-size: 14px; }
     .diagram-shell {
-      border: 1px solid #d8deea;
-      border-radius: 14px;
+      border: 1px solid #d8deea; border-radius: 14px;
       background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
-      overflow: auto;
-      padding: 10px;
+      box-shadow: 0 8px 28px rgba(15,23,42,0.08);
+      overflow: auto; padding: 10px;
     }
-
     .notes {
-      margin-top: 14px;
-      border: 1px solid #d8deea;
-      border-radius: 12px;
-      background: var(--panel);
-      padding: 12px 14px;
-      font-size: 14px;
-      line-height: 1.45;
+      margin-top: 14px; border: 1px solid #d8deea; border-radius: 12px;
+      background: var(--panel); padding: 12px 14px; font-size: 14px; line-height: 1.45;
     }
-
-    .notes h2 {
-      margin: 0 0 8px 0;
-      font-size: 16px;
-    }
-
-    .notes ul {
-      margin: 0;
-      padding-left: 20px;
-    }
-
-    @media (max-width: 900px) {
-      h1 { font-size: 20px; }
-      p.subtitle { font-size: 13px; }
-      .notes { font-size: 13px; }
-    }
+    .notes h2 { margin: 0 0 8px 0; font-size: 16px; }
+    .notes ul { margin: 0; padding-left: 20px; }
   </style>
 </head>
 <body>
-  <main>
-    <h1>AstraNotes UML Class Diagram</h1>
-    <p class="subtitle">Complete architecture-level class view from Architecture.md, including UI, Core, Data, Platform, Models, and in-memory session cache.</p>
-
-    <div class="diagram-shell">
-      <svg viewBox="0 0 2820 2060" width="2820" height="2060" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Complete UML class diagram for AstraNotes architecture">
-        <defs>
-          <style>
-            .title { font: 700 24px "Segoe UI", Arial, sans-serif; fill: #0f172a; }
-            .lane { font: 700 16px "Segoe UI", Arial, sans-serif; fill: #1f2937; }
-            .cardTitle { font: 700 14px "Segoe UI", Arial, sans-serif; fill: #0f172a; }
-            .text { font: 12px "Segoe UI", Arial, sans-serif; fill: #334155; }
-            .legend { font: 12px "Segoe UI", Arial, sans-serif; fill: #334155; }
-
-            .ui { fill: var(--ui-fill); stroke: var(--ui-stroke); stroke-width: 1.4; }
-            .core { fill: var(--core-fill); stroke: var(--core-stroke); stroke-width: 1.4; }
-            .data { fill: var(--data-fill); stroke: var(--data-stroke); stroke-width: 1.4; }
-            .platform { fill: var(--platform-fill); stroke: var(--platform-stroke); stroke-width: 1.4; }
-            .model { fill: var(--model-fill); stroke: var(--model-stroke); stroke-width: 1.4; }
-            .memory { fill: var(--memory-fill); stroke: var(--memory-stroke); stroke-width: 1.4; }
-
-            .edge { stroke: var(--edge); stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
-            .edgeSoft { stroke: var(--edge-soft); stroke-width: 1.3; fill: none; marker-end: url(#arrow); }
-            .edgeDashed { stroke: var(--edge-soft); stroke-width: 1.2; stroke-dasharray: var(--edge-dashed); fill: none; marker-end: url(#arrow); }
-            .edgeCompose { stroke: var(--edge); stroke-width: 1.5; fill: none; marker-end: url(#diamondFilled); }
-            .edgeInMemory { stroke: #4f46e5; stroke-width: 1.3; stroke-dasharray: 3 3; fill: none; marker-end: url(#arrow); }
-
-            .edgeLabel { font: 11px "Segoe UI", Arial, sans-serif; fill: #1f2937; }
-          </style>
-
-          <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
-          </marker>
-
-          <marker id="diamondFilled" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto">
-            <path d="M 0 6 L 4 0 L 8 6 L 4 12 Z" fill="#334155" />
-          </marker>
-        </defs>
-
-        <text x="16" y="28" class="title">AstraNotes complete class diagram (logical architecture)</text>
-
-        <text x="26" y="68" class="lane">AstraUI</text>
-        <text x="560" y="68" class="lane">AstraCore</text>
-        <text x="1230" y="68" class="lane">AstraData</text>
-        <text x="1820" y="68" class="lane">AstraPlatform</text>
-        <text x="2250" y="68" class="lane">Core Models + Memory</text>
-
-        <rect x="20" y="90" width="500" height="1800" rx="12" fill="#f8fbff" stroke="#cdddfc" />
-        <rect x="550" y="90" width="650" height="1800" rx="12" fill="#f7fff9" stroke="#cdeed8" />
-        <rect x="1220" y="90" width="560" height="1800" rx="12" fill="#fffdf6" stroke="#f7dfb5" />
-        <rect x="1810" y="90" width="410" height="1800" rx="12" fill="#fff8f8" stroke="#f7c9c9" />
-        <rect x="2240" y="90" width="560" height="1800" rx="12" fill="#faf7ff" stroke="#d9ccfb" />
-
-        <rect x="40" y="120" width="220" height="116" rx="9" class="ui" />
-        <text x="52" y="143" class="cardTitle">AppState</text>
-        <text x="52" y="162" class="text">+selectedSubjectId</text>
-        <text x="52" y="180" class="text">+selectedNoteId</text>
-        <text x="52" y="198" class="text">+paneCollapseState</text>
-
-        <rect x="280" y="120" width="220" height="116" rx="9" class="ui" />
-        <text x="292" y="143" class="cardTitle">UnlockView</text>
-        <text x="292" y="162" class="text">+submitPassphrase()</text>
-        <text x="292" y="180" class="text">+requestBiometric()</text>
-        <text x="292" y="198" class="text">+showLockoutState()</text>
-
-        <rect x="40" y="270" width="460" height="130" rx="9" class="ui" />
-        <text x="52" y="293" class="cardTitle">NotesWorkspaceView</text>
-        <text x="52" y="312" class="text">+selectNote(id)</text>
-        <text x="52" y="330" class="text">+saveDraft()</text>
-        <text x="52" y="348" class="text">+searchTitles(query)</text>
-        <text x="52" y="366" class="text">Composition root for panes</text>
-
-        <rect x="40" y="425" width="220" height="110" rx="9" class="ui" />
-        <text x="52" y="448" class="cardTitle">WorkspaceTopBar</text>
-        <text x="52" y="467" class="text">+newNote()</text>
-        <text x="52" y="485" class="text">+voiceCaptureTrigger()</text>
-        <text x="52" y="503" class="text">+titleSearchInput()</text>
-
-        <rect x="280" y="425" width="220" height="110" rx="9" class="ui" />
-        <text x="292" y="448" class="cardTitle">SubjectSidebarPane</text>
-        <text x="292" y="467" class="text">+createGroup()</text>
-        <text x="292" y="485" class="text">+renameGroup()</text>
-        <text x="292" y="503" class="text">+deleteGroup()</text>
-
-        <rect x="40" y="560" width="220" height="110" rx="9" class="ui" />
-        <text x="52" y="583" class="cardTitle">NoteCollectionPane</text>
-        <text x="52" y="602" class="text">+listNotes()</text>
-        <text x="52" y="620" class="text">+selectCard()</text>
-        <text x="52" y="638" class="text">+filterBySubject()</text>
-
-        <rect x="280" y="560" width="220" height="110" rx="9" class="ui" />
-        <text x="292" y="583" class="cardTitle">NoteEditorPane</text>
-        <text x="292" y="602" class="text">+editContent()</text>
-        <text x="292" y="620" class="text">+toggleSecureMode()</text>
-        <text x="292" y="638" class="text">+setExpirationDateTime()</text>
-
-        <rect x="40" y="700" width="220" height="110" rx="9" class="ui" />
-        <text x="52" y="723" class="cardTitle">TrashView</text>
-        <text x="52" y="742" class="text">+restore(itemId)</text>
-        <text x="52" y="760" class="text">+permanentDelete(itemId)</text>
-        <text x="52" y="778" class="text">+showLockBadge()</text>
-
-        <rect x="280" y="700" width="220" height="110" rx="9" class="ui" />
-        <text x="292" y="723" class="cardTitle">SettingsView</text>
-        <text x="292" y="742" class="text">+updateSettings()</text>
-        <text x="292" y="760" class="text">+changePassphrase()</text>
-        <text x="292" y="778" class="text">+startExportImport()</text>
-
-        <rect x="40" y="840" width="220" height="110" rx="9" class="ui" />
-        <text x="52" y="863" class="cardTitle">PluginStoreView</text>
-        <text x="52" y="882" class="text">+installLocalPackage()</text>
-        <text x="52" y="900" class="text">+togglePlugin()</text>
-        <text x="52" y="918" class="text">+removePlugin()</text>
-
-        <rect x="570" y="120" width="290" height="116" rx="9" class="core" />
-        <text x="582" y="143" class="cardTitle">AppCoordinator</text>
-        <text x="582" y="162" class="text">+routeOnLaunch()</text>
-        <text x="582" y="180" class="text">+handleLockTransition()</text>
-        <text x="582" y="198" class="text">+handoffNavigationState()</text>
-
-        <rect x="890" y="120" width="290" height="134" rx="9" class="core" />
-        <text x="902" y="143" class="cardTitle">KeyManager</text>
-        <text x="902" y="162" class="text">+unlockWithPassphrase()</text>
-        <text x="902" y="180" class="text">+unlockWithBiometric()</text>
-        <text x="902" y="198" class="text">+deriveAndRotateKey()</text>
-        <text x="902" y="216" class="text">+clearKeys()</text>
-
-        <rect x="570" y="290" width="290" height="130" rx="9" class="core" />
-        <text x="582" y="313" class="cardTitle">NoteService</text>
-        <text x="582" y="332" class="text">+saveNote(draft)</text>
-        <text x="582" y="350" class="text">+deleteNote(noteId)</text>
-        <text x="582" y="368" class="text">+restoreNote(itemId)</text>
-        <text x="582" y="386" class="text">+persistSecureDraftOnLock()</text>
-
-        <rect x="890" y="290" width="290" height="116" rx="9" class="core" />
-        <text x="902" y="313" class="cardTitle">EncryptionService</text>
-        <text x="902" y="332" class="text">+encrypt(plain, key)</text>
-        <text x="902" y="350" class="text">+decrypt(payload, key)</text>
-        <text x="902" y="368" class="text">+reencrypt(payload, oldKey, newKey)</text>
-
-        <rect x="570" y="450" width="290" height="116" rx="9" class="core" />
-        <text x="582" y="473" class="cardTitle">SubjectService</text>
-        <text x="582" y="492" class="text">+createSubject(name)</text>
-        <text x="582" y="510" class="text">+renameSubject()</text>
-        <text x="582" y="528" class="text">+deleteSubjectWithRules()</text>
-
-        <rect x="890" y="450" width="290" height="116" rx="9" class="core" />
-        <text x="902" y="473" class="cardTitle">NoteSearchService</text>
-        <text x="902" y="492" class="text">+searchTitles(query)</text>
-        <text x="902" y="510" class="text">+loadSecureTitleCache()</text>
-        <text x="902" y="528" class="text">+clearSecureTitleCacheOnLock()</text>
-
-        <rect x="570" y="610" width="290" height="116" rx="9" class="core" />
-        <text x="582" y="633" class="cardTitle">SecureNotePolicyService</text>
-        <text x="582" y="652" class="text">+validateExpiration()</text>
-        <text x="582" y="670" class="text">+evaluateDeleteEligibility()</text>
-        <text x="582" y="688" class="text">+scanForExpiredNotes()</text>
-
-        <rect x="890" y="610" width="290" height="116" rx="9" class="core" />
-        <text x="902" y="633" class="cardTitle">ProtectedTrashService</text>
-        <text x="902" y="652" class="text">+moveToTrash(noteId)</text>
-        <text x="902" y="670" class="text">+restore(itemId)</text>
-        <text x="902" y="688" class="text">+permanentDelete(itemId)</text>
-
-        <rect x="570" y="770" width="290" height="116" rx="9" class="core" />
-        <text x="582" y="793" class="cardTitle">SettingsService</text>
-        <text x="582" y="812" class="text">+validateAndUpdateSettings()</text>
-        <text x="582" y="830" class="text">+changePassphraseWithRotation()</text>
-        <text x="582" y="848" class="text">+updatePluginGlobalToggle()</text>
-
-        <rect x="890" y="770" width="290" height="116" rx="9" class="core" />
-        <text x="902" y="793" class="cardTitle">ExportImportService</text>
-        <text x="902" y="812" class="text">+exportEncryptedArchive()</text>
-        <text x="902" y="830" class="text">+importAtomicArchive()</text>
-        <text x="902" y="848" class="text">+resolveImportedIdConflicts()</text>
-
-        <rect x="570" y="930" width="290" height="116" rx="9" class="core" />
-        <text x="582" y="953" class="cardTitle">PluginService</text>
-        <text x="582" y="972" class="text">+validateManifest()</text>
-        <text x="582" y="990" class="text">+enableDisablePlugin()</text>
-        <text x="582" y="1008" class="text">+executeActionWithTimeout()</text>
-
-        <rect x="1240" y="120" width="250" height="110" rx="9" class="data" />
-        <text x="1252" y="143" class="cardTitle">DatabaseProvider</text>
-        <text x="1252" y="162" class="text">+connect()</text>
-        <text x="1252" y="180" class="text">+migrate()</text>
-        <text x="1252" y="198" class="text">+transaction(block)</text>
-
-        <rect x="1510" y="120" width="250" height="110" rx="9" class="data" />
-        <text x="1522" y="143" class="cardTitle">SubjectRepository</text>
-        <text x="1522" y="162" class="text">+save(SubjectGroup)</text>
-        <text x="1522" y="180" class="text">+rename(id, name)</text>
-        <text x="1522" y="198" class="text">+deleteAndUngroupNotes()</text>
-
-        <rect x="1240" y="260" width="250" height="110" rx="9" class="data" />
-        <text x="1252" y="283" class="cardTitle">NoteRepository</text>
-        <text x="1252" y="302" class="text">+save(Note)</text>
-        <text x="1252" y="320" class="text">+findByTitle()</text>
-        <text x="1252" y="338" class="text">+delete(noteId)</text>
-
-        <rect x="1510" y="260" width="250" height="110" rx="9" class="data" />
-        <text x="1522" y="283" class="cardTitle">AttachmentRepository</text>
-        <text x="1522" y="302" class="text">+save(Attachment)</text>
-        <text x="1522" y="320" class="text">+deleteByNoteId()</text>
-        <text x="1522" y="338" class="text">+listByNoteId()</text>
-
-        <rect x="1240" y="400" width="250" height="110" rx="9" class="data" />
-        <text x="1252" y="423" class="cardTitle">ProtectedTrashRepository</text>
-        <text x="1252" y="442" class="text">+save(TrashItem)</text>
-        <text x="1252" y="460" class="text">+restore(itemId)</text>
-        <text x="1252" y="478" class="text">+permanentDelete(itemId)</text>
-
-        <rect x="1510" y="400" width="250" height="110" rx="9" class="data" />
-        <text x="1522" y="423" class="cardTitle">SettingsRepository</text>
-        <text x="1522" y="442" class="text">+load()</text>
-        <text x="1522" y="460" class="text">+save(AppSettings)</text>
-        <text x="1522" y="478" class="text">+saveLockTimeout()</text>
-
-        <rect x="1240" y="540" width="250" height="110" rx="9" class="data" />
-        <text x="1252" y="563" class="cardTitle">PluginMetadataRepository</text>
-        <text x="1252" y="582" class="text">+save(PluginMetadata)</text>
-        <text x="1252" y="600" class="text">+setEnabled(pluginId)</text>
-        <text x="1252" y="618" class="text">+updateLastRunStatus()</text>
-
-        <rect x="1510" y="540" width="250" height="110" rx="9" class="data" />
-        <text x="1522" y="563" class="cardTitle">PluginBundleRepository</text>
-        <text x="1522" y="582" class="text">+addPackage(path, hash)</text>
-        <text x="1522" y="600" class="text">+removePackage(pluginId)</text>
-        <text x="1522" y="618" class="text">+findPackage(pluginId)</text>
-
-        <rect x="1830" y="120" width="370" height="110" rx="9" class="platform" />
-        <text x="1842" y="143" class="cardTitle">PlatformIntegration</text>
-        <text x="1842" y="162" class="text">+onBackground()</text>
-        <text x="1842" y="180" class="text">+onSleep()</text>
-        <text x="1842" y="198" class="text">+onForeground()</text>
-
-        <rect x="1830" y="260" width="370" height="110" rx="9" class="platform" />
-        <text x="1842" y="283" class="cardTitle">LocalAuthService</text>
-        <text x="1842" y="302" class="text">+isBiometricAvailable()</text>
-        <text x="1842" y="320" class="text">+authenticateBiometric()</text>
-        <text x="1842" y="338" class="text">+disableBiometricAfterFailure()</text>
-
-        <rect x="1830" y="400" width="370" height="110" rx="9" class="platform" />
-        <text x="1842" y="423" class="cardTitle">StorageProtection</text>
-        <text x="1842" y="442" class="text">+ensureProtectedDirectories()</text>
-        <text x="1842" y="460" class="text">+verifyFileProtection(path)</text>
-        <text x="1842" y="478" class="text">+safeDelete(path)</text>
-
-        <rect x="1830" y="540" width="370" height="110" rx="9" class="platform" />
-        <text x="1842" y="563" class="cardTitle">NotificationService</text>
-        <text x="1842" y="582" class="text">+scheduleExpiryNotification()</text>
-        <text x="1842" y="600" class="text">+notifyExpiredNote()</text>
-        <text x="1842" y="618" class="text">+cancelForDeletedNote()</text>
-
-        <rect x="1830" y="680" width="370" height="110" rx="9" class="platform" />
-        <text x="1842" y="703" class="cardTitle">TimeProvider</text>
-        <text x="1842" y="722" class="text">+utcNow()</text>
-        <text x="1842" y="740" class="text">+lastKnownTime()</text>
-        <text x="1842" y="758" class="text">+isRollbackDetected()</text>
-
-        <rect x="1830" y="820" width="370" height="110" rx="9" class="platform" />
-        <text x="1842" y="843" class="cardTitle">Logging</text>
-        <text x="1842" y="862" class="text">+audit(event)</text>
-        <text x="1842" y="880" class="text">+warn(message)</text>
-        <text x="1842" y="898" class="text">+error(message)</text>
-
-        <rect x="2260" y="120" width="250" height="122" rx="9" class="model" />
-        <text x="2272" y="143" class="cardTitle">Note</text>
-        <text x="2272" y="162" class="text">+id: UUID</text>
-        <text x="2272" y="180" class="text">+subjectId: UUID?</text>
-        <text x="2272" y="198" class="text">+isSecure: Bool</text>
-        <text x="2272" y="216" class="text">+expiresAtUtc: Date?</text>
-
-        <rect x="2525" y="120" width="250" height="104" rx="9" class="model" />
-        <text x="2537" y="143" class="cardTitle">EncryptedPayload</text>
-        <text x="2537" y="162" class="text">+ciphertext: Data</text>
-        <text x="2537" y="180" class="text">+nonce: Data</text>
-        <text x="2537" y="198" class="text">+salt: Data</text>
-
-        <rect x="2260" y="260" width="250" height="104" rx="9" class="model" />
-        <text x="2272" y="283" class="cardTitle">Attachment</text>
-        <text x="2272" y="302" class="text">+id: UUID</text>
-        <text x="2272" y="320" class="text">+noteId: UUID</text>
-        <text x="2272" y="338" class="text">+type: image | recording</text>
-
-        <rect x="2525" y="260" width="250" height="104" rx="9" class="model" />
-        <text x="2537" y="283" class="cardTitle">SubjectGroup</text>
-        <text x="2537" y="302" class="text">+id: UUID</text>
-        <text x="2537" y="320" class="text">+name: String</text>
-        <text x="2537" y="338" class="text">+displayOrder: Int</text>
-
-        <rect x="2260" y="400" width="250" height="104" rx="9" class="model" />
-        <text x="2272" y="423" class="cardTitle">TrashItem</text>
-        <text x="2272" y="442" class="text">+sourceNoteId: UUID</text>
-        <text x="2272" y="460" class="text">+isSecure: Bool</text>
-        <text x="2272" y="478" class="text">+deletedAtUtc: Date</text>
-
-        <rect x="2525" y="400" width="250" height="104" rx="9" class="model" />
-        <text x="2537" y="423" class="cardTitle">AppSettings</text>
-        <text x="2537" y="442" class="text">+lockTimeoutSeconds: Int</text>
-        <text x="2537" y="460" class="text">+telemetryOptIn: Bool</text>
-        <text x="2537" y="478" class="text">+pluginsEnabled: Bool</text>
-
-        <rect x="2260" y="540" width="250" height="104" rx="9" class="model" />
-        <text x="2272" y="563" class="cardTitle">PluginManifest</text>
-        <text x="2272" y="582" class="text">+pluginId</text>
-        <text x="2272" y="600" class="text">+version</text>
-        <text x="2272" y="618" class="text">+supportedAppVersion</text>
-
-        <rect x="2525" y="540" width="250" height="122" rx="9" class="model" />
-        <text x="2537" y="563" class="cardTitle">PluginMetadata</text>
-        <text x="2537" y="582" class="text">+pluginId</text>
-        <text x="2537" y="600" class="text">+installPathHash</text>
-        <text x="2537" y="618" class="text">+enabled</text>
-        <text x="2537" y="636" class="text">+lastRunStatus / lastError</text>
-
-        <rect x="2260" y="680" width="250" height="104" rx="9" class="model" />
-        <text x="2272" y="703" class="cardTitle">KeyMaterial</text>
-        <text x="2272" y="722" class="text">+activeKey</text>
-        <text x="2272" y="740" class="text">+oldKey (during rotation)</text>
-        <text x="2272" y="758" class="text">+clear()</text>
-
-        <rect x="2525" y="680" width="250" height="104" rx="9" class="memory" />
-        <text x="2537" y="703" class="cardTitle">SecureTitleCache</text>
-        <text x="2537" y="722" class="text">+sessionTitles: [String]</text>
-        <text x="2537" y="740" class="text">+loadOnUnlock()</text>
-        <text x="2537" y="758" class="text">+clearOnLock()</text>
-
-        <path d="M 500 333 H 540 V 355 H 570" class="edge" />
-        <path d="M 500 743 H 540 V 665 H 890" class="edge" />
-        <path d="M 500 743 H 535 V 988 H 570" class="edge" />
-        <path d="M 260 883 H 300 V 988 H 570" class="edge" />
-        <path d="M 500 162 H 570" class="edge" />
-        <path d="M 260 162 V 146 H 570 V 162" class="edge" />
-
-        <path d="M 150 425 V 400" class="edgeCompose" />
-        <path d="M 390 425 V 400" class="edgeCompose" />
-        <path d="M 150 560 V 400" class="edgeCompose" />
-        <path d="M 390 560 V 400" class="edgeCompose" />
-
-        <path d="M 860 345 H 890" class="edge" />
-        <path d="M 860 373 H 980 V 313 H 1240" class="edge" />
-        <path d="M 860 386 H 1030 V 313 H 1510" class="edge" />
-        <path d="M 860 390 H 875 V 665 H 890" class="edge" />
-
-        <path d="M 1180 332 H 1210 V 313 H 1240" class="edge" />
-        <path d="M 1180 350 H 1205 V 95 H 2230 V 173 H 2260" class="edge" />
-        <path d="M 1180 368 H 1210 V 80 H 2510 V 173 H 2525" class="edge" />
-        <path d="M 1180 385 H 1210 V 1040 H 2230 V 733 H 2260" class="edge" />
-
-        <path d="M 860 508 H 1195 V 70 H 1500 V 173 H 1510" class="edge" />
-        <path d="M 860 526 H 1200 V 1090 H 2510 V 313 H 2525" class="edge" />
-
-        <path d="M 1180 508 H 1210 V 313 H 1240" class="edge" />
-        <path d="M 1180 528 H 1210 V 1110 H 2510 V 733 H 2525" class="edgeInMemory" />
-
-        <path d="M 860 652 H 890" class="edge" />
-        <path d="M 860 670 H 1210 V 593 H 1830" class="edge" />
-        <path d="M 860 688 H 1215 V 733 H 1830" class="edge" />
-
-        <path d="M 1180 652 H 1210 V 453 H 1240" class="edge" />
-        <path d="M 1180 670 H 1200 V 313 H 1240" class="edge" />
-        <path d="M 1180 688 H 1495 V 313 H 1510" class="edge" />
-
-        <path d="M 860 812 H 1210 V 453 H 1510" class="edge" />
-        <path d="M 860 830 H 875 V 185 H 890" class="edge" />
-        <path d="M 860 848 H 540 V 355 H 570" class="edge" />
-
-        <path d="M 1180 812 H 1210 V 313 H 1240" class="edge" />
-        <path d="M 1180 830 H 1220 V 453 H 1240" class="edge" />
-        <path d="M 1180 848 H 1230 V 173 H 1240" class="edge" />
-
-        <path d="M 860 972 H 1210 V 593 H 1240" class="edge" />
-        <path d="M 860 990 H 1495 V 593 H 1510" class="edge" />
-        <path d="M 860 1008 H 530 V 355 H 570" class="edge" />
-        <path d="M 860 1008 H 1210 V 1140 H 2510 V 593 H 2525" class="edge" />
-
-        <path d="M 860 162 H 880 V 100 H 1820 V 173 H 1830" class="edge" />
-        <path d="M 860 180 H 890" class="edge" />
-        <path d="M 860 198 H 875 V 185 H 890" class="edge" />
-
-        <path d="M 1180 185 H 1790 V 313 H 1830" class="edge" />
-        <path d="M 1180 215 H 1790 V 733 H 2260" class="edge" />
-
-        <path d="M 860 162 H 530 V 130 H 260 V 162" class="edgeSoft" />
-        <path d="M 860 198 H 520 V 220 H 260 V 198" class="edgeSoft" />
-
-        <path d="M 2200 173 H 2260" class="edge" />
-        <path d="M 2200 453 H 2260" class="edge" />
-        <path d="M 2200 593 H 2260" class="edge" />
-        <path d="M 2200 453 H 1830" class="edgeSoft" />
-
-        <path d="M 1490 173 H 1240" class="edgeDashed" />
-        <path d="M 1490 313 H 1460 V 173 H 1240" class="edgeDashed" />
-        <path d="M 1490 453 H 1440 V 173 H 1240" class="edgeDashed" />
-        <path d="M 1490 593 H 1420 V 173 H 1240" class="edgeDashed" />
-        <path d="M 1760 173 H 1240" class="edgeDashed" />
-
-        <text x="935" y="338" class="edgeLabel">uses</text>
-        <text x="1260" y="290" class="edgeLabel">persists</text>
-        <text x="1290" y="438" class="edgeLabel">trash storage</text>
-        <text x="1190" y="516" class="edgeLabel">in-memory only</text>
-        <text x="630" y="341" class="edgeLabel">policy + orchestration</text>
-        <text x="570" y="320" class="edgeLabel">composition</text>
-
-        <g transform="translate(2260, 1820)">
-          <rect x="0" y="0" width="16" height="16" class="ui" />
-          <text x="22" y="12" class="legend">UI</text>
-
-          <rect x="86" y="0" width="16" height="16" class="core" />
-          <text x="108" y="12" class="legend">Core service</text>
-
-          <rect x="214" y="0" width="16" height="16" class="data" />
-          <text x="236" y="12" class="legend">Repository/data</text>
-
-          <rect x="364" y="0" width="16" height="16" class="platform" />
-          <text x="386" y="12" class="legend">Platform wrapper</text>
-
-          <rect x="0" y="28" width="16" height="16" class="model" />
-          <text x="22" y="40" class="legend">Domain model</text>
-
-          <rect x="130" y="28" width="16" height="16" class="memory" />
-          <text x="152" y="40" class="legend">Session memory object</text>
-
-          <line x1="320" y1="8" x2="350" y2="8" class="edge" />
-          <text x="356" y="12" class="legend">dependency</text>
-
-          <line x1="320" y1="36" x2="350" y2="36" class="edgeDashed" />
-          <text x="356" y="40" class="legend">repository -> database</text>
-        </g>
-
-        <text x="18" y="2036" class="legend">Constraints captured: UI never encrypts or writes DB directly; secure title search remains memory-only and is cleared on lock; secure note data is encrypted at persistence boundary.</text>
-      </svg>
-    </div>
-
-    <section class="notes">
-      <h2>Relationship notes</h2>
-      <ul>
-        <li>UI classes depend only on core services and AppCoordinator; they do not call repositories or encryption directly.</li>
-        <li>NotesWorkspaceView composes WorkspaceTopBar, SubjectSidebarPane, NoteCollectionPane, and NoteEditorPane.</li>
-        <li>NoteService delegates secure data transformation to EncryptionService and persistence to NoteRepository and AttachmentRepository.</li>
-        <li>SecureNotePolicyService collaborates with ProtectedTrashService, NotificationService, and TimeProvider for expiration flow.</li>
-        <li>SettingsService drives passphrase rotation through KeyManager and updates settings through SettingsRepository.</li>
-        <li>PluginService validates manifests and stores plugin runtime state through PluginMetadataRepository and PluginBundleRepository.</li>
-        <li>All repositories depend on DatabaseProvider transaction boundaries.</li>
-      </ul>
-    </section>
-  </main>
+<main>
+  <h1>AstraNotes UML Class Diagram</h1>
+  <p class="subtitle">Architecture-level class view derived from source code. All types, method names, and fields reflect the actual implementation.</p>
+
+  <div class="diagram-shell">
+    <!-- ─────────────────────────────────────────────────────────────────
+         Layout constants (columns / gutters)
+         AstraUI      : x=  15 … 570   (w=555)
+         AstraCore    : x= 590 … 1335  (w=745)
+           left col   : x= 605, right edge 910
+           GUTTER     : x= 910 … 1015  (105px – arrows routed here)
+           right col  : x=1015, right edge 1320
+         AstraData    : x=1475 … 2030  (w=555)
+           left col   : x=1490, right edge 1745
+           right col  : x=1765, right edge 1995
+         AstraPlatform: x=2050 … 2450  (w=400)
+         Models       : x=2350 … 3895  (w=1545)
+           domain     : col1 x=2360, col2 x=2513, col3 x=2669
+           persist    : col1 x=2840, col2 x=3170, col3 x=3505
+    ───────────────────────────────────────────────────────────────── -->
+    <svg viewBox="0 0 4040 1120" width="4040" height="1120"
+         xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="AstraNotes UML class diagram">
+      <defs>
+        <style>
+          .title    { font: 700 22px "Segoe UI",Arial,sans-serif; fill:#0f172a; }
+          .lane     { font: 700 15px "Segoe UI",Arial,sans-serif; fill:#1f2937; }
+          .sublane  { font: 600 12px "Segoe UI",Arial,sans-serif; fill:#374151; }
+          .cardTitle{ font: 700 12px "Segoe UI",Arial,sans-serif; fill:#0f172a; }
+          .text     { font: 11px "Segoe UI",Arial,sans-serif; fill:#334155; }
+          .small    { font: 9px "Segoe UI",Arial,sans-serif; fill:#475569; }
+          .textItal { font: italic 11px "Segoe UI",Arial,sans-serif; fill:#4b5563; }
+          .legend   { font: 11px "Segoe UI",Arial,sans-serif; fill:#334155; }
+          .divLine  { stroke:#cbd5e1; stroke-width:0.8; }
+          .ui       { fill:#e8f2ff; stroke:#3b82f6; stroke-width:1.4; rx:8; }
+          .core     { fill:#eaf9ef; stroke:#16a34a; stroke-width:1.4; }
+          .data     { fill:#fff7e3; stroke:#d97706; stroke-width:1.4; }
+          .platform { fill:#ffecef; stroke:#dc2626; stroke-width:1.4; }
+          .model    { fill:#f3ecff; stroke:#7c3aed; stroke-width:1.4; }
+          /* arrows */
+          .eBlue    { stroke:#2563eb; stroke-width:1.6; fill:none; marker-end:url(#aBlue); }
+          .eGreen   { stroke:#15803d; stroke-width:1.5; fill:none; marker-end:url(#aGreen); }
+          .eOrange  { stroke:#b45309; stroke-width:1.5; fill:none; marker-end:url(#aOrange); }
+          .eRed     { stroke:#b91c1c; stroke-width:1.4; fill:none; marker-end:url(#aRed); }
+          .eDash    { stroke:#9ca3af; stroke-width:1.1; stroke-dasharray:5 3; fill:none; marker-end:url(#aSoft); }
+          .eLabel   { font: 10px "Segoe UI",Arial,sans-serif; fill:#374151; }
+        </style>
+        <!-- arrowheads -->
+        <marker id="aBlue"   viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2563eb"/></marker>
+        <marker id="aGreen"  viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15803d"/></marker>
+        <marker id="aOrange" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b45309"/></marker>
+        <marker id="aRed"    viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b91c1c"/></marker>
+        <marker id="aSoft"   viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#9ca3af"/></marker>
+      </defs>
+
+      <!-- ══════════════════════ TITLE ══════════════════════ -->
+      <text x="16" y="28" class="title">AstraNotes — complete class diagram (derived from source code)</text>
+
+      <!-- ══════════════════════ LANE LABELS ══════════════════════ -->
+      <text x="35"   y="68" class="lane">AstraUI</text>
+      <text x="615"  y="68" class="lane">AstraCore</text>
+      <text x="1495" y="68" class="lane">AstraData</text>
+      <text x="2065" y="68" class="lane">AstraPlatform</text>
+      <text x="2490" y="68" class="lane">Domain + Persistence Models</text>
+
+      <!-- ══════════════════════ LANE BACKGROUNDS ══════════════════════ -->
+      <rect x="15"   y="80" width="555"  height="916" rx="12" fill="#f8fbff" stroke="#cdddfc"/>
+      <rect x="590"  y="80" width="745"  height="916" rx="12" fill="#f7fff9" stroke="#cdeed8"/>
+      <!-- gutter highlight inside AstraCore -->
+      <rect x="910"  y="84" width="105"  height="912" rx="0" fill="#f0fdf4" opacity="0.55"/>
+      <rect x="1475" y="80" width="555"  height="916" rx="12" fill="#fffdf6" stroke="#f7dfb5"/>
+      <rect x="2050" y="80" width="400"  height="916" rx="12" fill="#fff8f8" stroke="#f7c9c9"/>
+      <rect x="2470" y="80" width="1545" height="916" rx="12" fill="#faf7ff" stroke="#d9ccfb"/>
+      <!-- models sub-lane divider -->
+      <line x1="2945" y1="95" x2="2945" y2="992" stroke="#c4b5fd" stroke-width="1" stroke-dasharray="4 4"/>
+      <text x="2480" y="100" class="sublane">«Core Domain Models»</text>
+      <text x="2960" y="100" class="sublane">«Persistence Models»</text>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           ASTRAUI
+      ══════════════════════════════════════════════════════════════════ -->
+
+      <!-- AstraNotesApp -->
+      <rect x="35" y="108" width="235" height="90" rx="8" class="ui"/>
+      <text x="47" y="126" class="cardTitle">AstraNotesApp</text>
+      <line x1="35" y1="132" x2="270" y2="132" class="divLine"/>
+      <text x="47" y="145" class="textItal">NSApplicationDelegate</text>
+      <text x="47" y="158" class="text">+applicationWillFinishLaunching()</text>
+      <text x="47" y="171" class="text">Sets activation + app icon policy</text>
+      <text x="47" y="184" class="text">Creates AppEnvironment</text>
+
+      <!-- AppEnvironment -->
+      <rect x="285" y="108" width="265" height="90" rx="8" class="ui"/>
+      <text x="297" y="126" class="cardTitle">AppEnvironment</text>
+      <line x1="285" y1="132" x2="550" y2="132" class="divLine"/>
+      <text x="297" y="145" class="textItal">Composition root (@StateObject)</text>
+      <text x="297" y="158" class="text">Instantiates all repos, services,</text>
+      <text x="297" y="171" class="text">AppCoordinator; injects via env</text>
+      <text x="297" y="184" class="text">Single owner of the object graph</text>
+
+      <!-- ContentView -->
+      <rect x="35" y="218" width="515" height="90" rx="8" class="ui"/>
+      <text x="47" y="236" class="cardTitle">ContentView</text>
+      <line x1="35" y1="242" x2="550" y2="242" class="divLine"/>
+      <text x="47" y="255" class="text">Routes on AppCoordinator.sessionState</text>
+      <text x="47" y="268" class="text">.firstLaunchSetup → UnlockView</text>
+      <text x="47" y="281" class="text">.locked / .unlocked → NotesWorkspaceView</text>
+      <text x="47" y="294" class="text">Calls coordinator.start() + bind(platformIntegration:)</text>
+
+      <!-- UnlockView -->
+      <rect x="35" y="328" width="235" height="90" rx="8" class="ui"/>
+      <text x="47" y="346" class="cardTitle">UnlockView</text>
+      <line x1="35" y1="352" x2="270" y2="352" class="divLine"/>
+      <text x="47" y="365" class="textItal">First-launch only (never shown on re-launch)</text>
+      <text x="47" y="378" class="text">+submitPassphrase()</text>
+      <text x="47" y="391" class="text">+requestBiometric()</text>
+      <text x="47" y="404" class="text">+showLockoutState(remainingSeconds:)</text>
+
+      <!-- NotesWorkspaceView -->
+      <rect x="35" y="438" width="515" height="130" rx="8" class="ui"/>
+      <text x="47" y="456" class="cardTitle">NotesWorkspaceView</text>
+      <line x1="35" y1="462" x2="550" y2="462" class="divLine"/>
+      <text x="47" y="475" class="textItal">Single composition root (~1,300 lines)</text>
+      <text x="47" y="488" class="text">Inline: sidebar, note list, editor pane (no separate sub-types)</text>
+      <text x="47" y="501" class="text">.sheet: trashSheet, secureAccessPrompt; toast overlay</text>
+      <text x="47" y="514" class="text">Private @State: NoteListItem, SubjectGroup, ToastMessage,</text>
+      <text x="47" y="527" class="text">  PendingAttachment, PendingSecureAccessAction</text>
+      <text x="47" y="540" class="text">+saveDraftAction / +secureNoteActions / +searchAction</text>
+      <text x="47" y="553" class="text">+trashActions / +subjectActions / +attachmentActions</text>
+
+      <!-- SettingsView -->
+      <rect x="35" y="590" width="235" height="120" rx="8" class="ui"/>
+      <text x="47" y="608" class="cardTitle">SettingsView</text>
+      <line x1="35" y1="614" x2="270" y2="614" class="divLine"/>
+      <text x="47" y="627" class="text">Plugin + biometric toggle settings</text>
+      <text x="47" y="640" class="text">Change Passphrase section</text>
+      <text x="47" y="653" class="text">Backup &amp; Restore (export/import)</text>
+      <text x="47" y="666" class="text">+updateSettings() / +changePassphrase()</text>
+      <text x="47" y="679" class="text">+exportBackup() / +importBackup()</text>
+      <text x="47" y="692" class="text">Embeds PluginStoreView</text>
+
+      <!-- PluginStoreView -->
+      <rect x="285" y="590" width="265" height="120" rx="8" class="ui"/>
+      <text x="297" y="608" class="cardTitle">PluginStoreView</text>
+      <line x1="285" y1="614" x2="550" y2="614" class="divLine"/>
+      <text x="297" y="627" class="text">Lists InstalledPlugin rows</text>
+      <text x="297" y="640" class="text">+installPlugin() via NSOpenPanel</text>
+      <text x="297" y="653" class="text">  (reads bundle bytes, calls PluginService.install)</text>
+      <text x="297" y="666" class="text">+toggleEnabled(pluginId:isEnabled:)</text>
+      <text x="297" y="679" class="text">+removePlugin() — confirmation alert</text>
+      <text x="297" y="692" class="text">No plugin execution UI surface</text>
+
+      <!-- RichTextEditor -->
+      <rect x="35" y="730" width="235" height="80" rx="8" class="ui"/>
+      <text x="47" y="748" class="cardTitle">RichTextEditor</text>
+      <line x1="35" y1="754" x2="270" y2="754" class="divLine"/>
+      <text x="47" y="767" class="textItal">NSViewRepresentable</text>
+      <text x="47" y="780" class="text">Wraps NSTextView + formatting toolbar</text>
+      <text x="47" y="793" class="text">Used by NotesWorkspaceView editor pane</text>
+
+      <!-- WorkspaceAttachmentSupport -->
+      <rect x="285" y="730" width="265" height="80" rx="8" class="ui"/>
+      <text x="297" y="748" class="cardTitle">WorkspaceAttachmentSupport</text>
+      <line x1="285" y1="754" x2="550" y2="754" class="divLine"/>
+      <text x="297" y="767" class="text">WorkspaceAttachmentImport: file pick + copy</text>
+      <text x="297" y="780" class="text">  Open/Reveal via NSWorkspace</text>
+      <text x="297" y="793" class="text">AudioRecordingController: mic + AVAudioRecorder</text>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           ASTRACORE — left column (x=605, right edge=910)
+      ══════════════════════════════════════════════════════════════════ -->
+
+      <!-- AppCoordinator -->
+      <rect x="605" y="108" width="305" height="215" rx="8" class="core"/>
+      <text x="617" y="126" class="cardTitle">AppCoordinator</text>
+      <line x1="605" y1="132" x2="910" y2="132" class="divLine"/>
+      <text x="617" y="145" class="textItal">@MainActor final class ObservableObject</text>
+      <text x="617" y="158" class="text">@Published sessionState: SessionState</text>
+      <text x="617" y="171" class="text">  enum SessionState { firstLaunchSetup, locked, unlocked }</text>
+      <text x="617" y="184" class="text">+start() / +createInitialPassphraseAndUnlock()</text>
+      <text x="617" y="197" class="text">+unlock(passphrase:) / +unlockWithBiometrics()</text>
+      <text x="617" y="210" class="text">+reauthenticateForSecureNote(passphrase:)</text>
+      <text x="617" y="223" class="text">+reauthenticateForSecureNoteWithBiometrics()</text>
+      <text x="617" y="236" class="text">+lockNow() / +handleImmediateLockEvent()</text>
+      <text x="617" y="249" class="text">+beginBackgroundOperation() / +endBackgroundOperation()</text>
+      <text x="617" y="262" class="text">+bind(platformIntegration:) / +changePassphrase()</text>
+      <text x="617" y="275" class="text">+updateBiometricUnlock(enabled:)</text>
+      <text x="617" y="288" class="text">+registerUserInteraction()</text>
+
+      <!-- NoteService -->
+      <rect x="605" y="343" width="305" height="215" rx="8" class="core"/>
+      <text x="617" y="361" class="cardTitle">NoteService</text>
+      <line x1="605" y1="367" x2="910" y2="367" class="divLine"/>
+      <text x="617" y="380" class="textItal">actor</text>
+      <text x="617" y="393" class="text">+save(draft: NoteDraft) → UUID</text>
+      <text x="617" y="406" class="text">+load(id: UUID) → NoteView</text>
+      <text x="617" y="419" class="text">+listSummaries() → [NoteSummary]</text>
+      <text x="617" y="432" class="text">+delete(noteId:) → Bool (→ protected trash)</text>
+      <text x="617" y="445" class="text">+addVoiceAttachment() — 50 MB limit</text>
+      <text x="617" y="458" class="text">+addImageAttachment() — 20 MB limit</text>
+      <text x="617" y="471" class="text">+listAttachments(noteId:) → [Attachment]</text>
+      <text x="617" y="484" class="text">+deleteAttachment(noteId:attachmentId:)</text>
+      <text x="617" y="497" class="text">+assignSubject(noteId:subjectId:)</text>
+      <text x="617" y="510" class="text">+updateSecureMetadata(noteId:alias:subjectId:)</text>
+      <text x="617" y="523" class="text">  (no key needed — alias/subject only)</text>
+      <text x="617" y="536" class="text">Default secureTitleAlias: "Locked Note"</text>
+
+      <!-- SubjectService -->
+      <rect x="605" y="578" width="305" height="110" rx="8" class="core"/>
+      <text x="617" y="596" class="cardTitle">SubjectService</text>
+      <line x1="605" y1="602" x2="910" y2="602" class="divLine"/>
+      <text x="617" y="615" class="textItal">actor</text>
+      <text x="617" y="628" class="text">+create(name:) → Subject (validates non-empty/unique)</text>
+      <text x="617" y="641" class="text">+rename(id:newName:) → Subject</text>
+      <text x="617" y="654" class="text">+delete(id:) → Bool (ungroups notes; does not delete them)</text>
+      <text x="617" y="667" class="text">+list() → [Subject]</text>
+
+      <!-- ProtectedTrashService -->
+      <rect x="605" y="708" width="305" height="110" rx="8" class="core"/>
+      <text x="617" y="726" class="cardTitle">ProtectedTrashService</text>
+      <line x1="605" y1="732" x2="910" y2="732" class="divLine"/>
+      <text x="617" y="745" class="textItal">actor</text>
+      <text x="617" y="758" class="text">+listTrashItems() → [TrashItemView]</text>
+      <text x="617" y="771" class="text">+secureTitlePreviewMessage(trashId:) → String?</text>
+      <text x="617" y="784" class="text">+restore(trashId:) — requires unlocked session for secure</text>
+      <text x="617" y="797" class="text">+permanentlyDelete(trashId:)</text>
+
+      <!-- ExportImportService -->
+      <rect x="605" y="838" width="305" height="125" rx="8" class="core"/>
+      <text x="617" y="856" class="cardTitle">ExportImportService</text>
+      <line x1="605" y1="862" x2="910" y2="862" class="divLine"/>
+      <text x="617" y="875" class="textItal">actor; schema-versioned AES-GCM encrypted archive</text>
+      <text x="617" y="888" class="text">+exportArchive() → Data</text>
+      <text x="617" y="901" class="text">  Strips credentials/rotation/clock before encrypt</text>
+      <text x="617" y="914" class="text">+importArchive(_:resolution:) → ImportResult</text>
+      <text x="617" y="927" class="text">  Validates schemaVersion before decrypt</text>
+      <text x="617" y="940" class="text">  resolution: .reject | .regenerateIncomingIdentifiers</text>
+      <text x="617" y="953" class="text">  Single atomic transaction; rolls back on any failure</text>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           ASTRACORE — right column (x=1015, right edge=1320)
+           GUTTER between columns: x=910…1015  (105 px)
+      ══════════════════════════════════════════════════════════════════ -->
+
+      <!-- KeyManager -->
+      <rect x="1015" y="108" width="305" height="200" rx="8" class="core"/>
+      <text x="1027" y="126" class="cardTitle">KeyManager</text>
+      <line x1="1015" y1="132" x2="1320" y2="132" class="divLine"/>
+      <text x="1027" y="145" class="textItal">actor; PBKDF2-HMAC-SHA256, 100k iterations</text>
+      <text x="1027" y="158" class="text">Lockout: 5 fails/30s → 30s→3600s (doubling)</text>
+      <text x="1027" y="171" class="text">+createInitialPassphrase(_:)</text>
+      <text x="1027" y="184" class="text">+unlock(passphrase:) → KeyMaterial</text>
+      <text x="1027" y="197" class="text">+unlockWithRecoveredKey(_:) → KeyMaterial</text>
+      <text x="1027" y="210" class="text">+changePassphrase(current:next:)</text>
+      <text x="1027" y="223" class="text">+clearInMemoryKeyMaterial()</text>
+      <text x="1027" y="236" class="text">+currentKeyMaterial() → KeyMaterial?</text>
+      <text x="1027" y="249" class="text">+hasPassphrase() → Bool</text>
+      <text x="1027" y="262" class="text">+recoverPendingRotationIfNeeded()</text>
+      <text x="1027" y="275" class="text">Key material never persisted to disk</text>
+
+      <!-- EncryptionService -->
+      <rect x="1015" y="328" width="305" height="100" rx="8" class="core"/>
+      <text x="1027" y="346" class="cardTitle">EncryptionService</text>
+      <line x1="1015" y1="352" x2="1320" y2="352" class="divLine"/>
+      <text x="1027" y="365" class="text">AES-256-GCM; HKDF per-note key derivation</text>
+      <text x="1027" y="378" class="text">+encrypt(plaintext:keyMaterial:) → EncryptedPayload</text>
+      <text x="1027" y="391" class="text">+decrypt(payload:keyMaterial:) → Data</text>
+      <text x="1027" y="404" class="text">All failures → EncryptionError.authenticationFailed</text>
+
+      <!-- SecurePayloadCodec -->
+      <rect x="1015" y="448" width="305" height="80" rx="8" class="core"/>
+      <text x="1027" y="466" class="cardTitle">SecurePayloadCodec</text>
+      <line x1="1015" y1="472" x2="1320" y2="472" class="divLine"/>
+      <text x="1027" y="485" class="text">Encodes/decodes {title, content} JSON bundle</text>
+      <text x="1027" y="498" class="text">+encode(title:content:) → Data</text>
+      <text x="1027" y="511" class="text">+decode(_: Data) → (title: String, content: String)</text>
+
+      <!-- NoteSearchService -->
+      <rect x="1015" y="548" width="305" height="115" rx="8" class="core"/>
+      <text x="1027" y="566" class="cardTitle">NoteSearchService</text>
+      <line x1="1015" y1="572" x2="1320" y2="572" class="divLine"/>
+      <text x="1027" y="585" class="textItal">actor; no decrypted-title cache</text>
+      <text x="1027" y="598" class="text">+searchTitle(query:isUnlocked:) → [NoteSearchResult]</text>
+      <text x="1027" y="611" class="text">  Normal: matches plainTitle</text>
+      <text x="1027" y="624" class="text">  Secure: matches secureTitleAlias only</text>
+      <text x="1027" y="637" class="text">clearSecureCacheOnLock() — intentional no-op</text>
+      <text x="1027" y="650" class="text">secureCacheCount() → 0 (always)</text>
+
+      <!-- SettingsService -->
+      <rect x="1015" y="683" width="305" height="100" rx="8" class="core"/>
+      <text x="1027" y="701" class="cardTitle">SettingsService</text>
+      <line x1="1015" y1="707" x2="1320" y2="707" class="divLine"/>
+      <text x="1027" y="720" class="textItal">actor</text>
+      <text x="1027" y="733" class="text">+load() → AppSettings</text>
+      <text x="1027" y="746" class="text">+update(pluginsEnabled:biometricUnlockEnabled:)</text>
+      <text x="1027" y="759" class="text">+setBiometricUnlockEnabled(_: Bool)</text>
+      <text x="1027" y="772" class="text">Model: exactly two Bool settings; no timeout/telemetry</text>
+
+      <!-- PluginService -->
+      <rect x="1015" y="803" width="305" height="155" rx="8" class="core"/>
+      <text x="1027" y="821" class="cardTitle">PluginService</text>
+      <line x1="1015" y1="827" x2="1320" y2="827" class="divLine"/>
+      <text x="1027" y="840" class="textItal">actor</text>
+      <text x="1027" y="853" class="text">+install(manifest:bundleData:)</text>
+      <text x="1027" y="866" class="text">  Validates: non-empty pluginId/displayName/version</text>
+      <text x="1027" y="879" class="text">  Rejects: empty bundle; duplicate pluginId</text>
+      <text x="1027" y="892" class="text">+listInstalled() → [InstalledPlugin]</text>
+      <text x="1027" y="905" class="text">+setEnabled(pluginId:isEnabled:)</text>
+      <text x="1027" y="918" class="text">+remove(pluginId:)</text>
+      <text x="1027" y="931" class="text">+registerHandler(pluginId:handler:)</text>
+      <text x="1027" y="944" class="text">+execute(pluginId:request:timeout:) — 2s race</text>
+      <text x="1027" y="957" class="text">  No UI entry point for execute()</text>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           ASTRADATA — left column (x=1370, right edge=1625)
+                      right column (x=1645, right edge=1875)
+      ══════════════════════════════════════════════════════════════════ -->
+
+      <!-- DatabaseProvider -->
+      <rect x="1490" y="108" width="255" height="130" rx="8" class="data"/>
+      <text x="1502" y="126" class="cardTitle">DatabaseProvider</text>
+      <line x1="1490" y1="132" x2="1745" y2="132" class="divLine"/>
+      <text x="1502" y="145" class="textItal">actor; JSON snapshot on disk (copy-on-write)</text>
+      <text x="1502" y="158" class="text">Persists to ~/Library/AppSupport/AstraNotes/</text>
+      <text x="1502" y="171" class="text">+read(_:) → T (read-only closure)</text>
+      <text x="1502" y="184" class="text">+transaction(_:) → T (clone→mutate→commit)</text>
+      <text x="1502" y="197" class="text">  Commits only on success; discards on throw</text>
+      <text x="1502" y="210" class="text">+schemaVersion() → Int</text>
+      <text x="1502" y="223" class="text">+exportState() → DatabaseState</text>
+
+      <!-- NoteRepository -->
+      <rect x="1765" y="108" width="230" height="125" rx="8" class="data"/>
+      <text x="1777" y="126" class="cardTitle">NoteRepository</text>
+      <line x1="1765" y1="132" x2="1995" y2="132" class="divLine"/>
+      <text x="1777" y="145" class="textItal">protocol + actor impl</text>
+      <text x="1777" y="158" class="text">+upsert(_: StoredNoteRecord)</text>
+      <text x="1777" y="171" class="text">+fetch(id:) → StoredNoteRecord?</text>
+      <text x="1777" y="184" class="text">+fetchAllActive() → [StoredNoteRecord]</text>
+      <text x="1777" y="197" class="text">+deleteToTrash(noteId:deletedAt:) → Bool</text>
+      <text x="1777" y="210" class="text">+setSubject(noteId:subjectId:)</text>
+
+      <!-- SubjectRepository -->
+      <rect x="1490" y="258" width="255" height="123" rx="8" class="data"/>
+      <text x="1502" y="276" class="cardTitle">SubjectRepository</text>
+      <line x1="1490" y1="282" x2="1745" y2="282" class="divLine"/>
+      <text x="1502" y="295" class="textItal">protocol + actor impl</text>
+      <text x="1502" y="308" class="text">+create(name:) → StoredSubjectRecord</text>
+      <text x="1502" y="321" class="text">+rename(id:newName:) → StoredSubjectRecord?</text>
+      <text x="1502" y="334" class="text">+deleteAndUngroupNotes(id:) → Bool</text>
+      <text x="1502" y="347" class="text">+listAll() / +existsName(_:excluding:)</text>
+      <text x="1502" y="360" class="text">+fetch(id:)</text>
+
+      <!-- AttachmentRepository -->
+      <rect x="1765" y="253" width="230" height="100" rx="8" class="data"/>
+      <text x="1777" y="271" class="cardTitle">AttachmentRepository</text>
+      <line x1="1765" y1="277" x2="1995" y2="277" class="divLine"/>
+      <text x="1777" y="290" class="textItal">protocol + actor impl</text>
+      <text x="1777" y="303" class="text">+add(_: StoredAttachmentRecord)</text>
+      <text x="1777" y="316" class="text">+list(noteId:) → [StoredAttachmentRecord]</text>
+      <text x="1777" y="329" class="text">+fetch(id:) → StoredAttachmentRecord?</text>
+      <text x="1777" y="342" class="text">+remove(id: UUID)</text>
+
+      <!-- ProtectedTrashRepository -->
+      <rect x="1490" y="401" width="255" height="100" rx="8" class="data"/>
+      <text x="1502" y="419" class="cardTitle">ProtectedTrashRepository</text>
+      <line x1="1490" y1="425" x2="1745" y2="425" class="divLine"/>
+      <text x="1502" y="438" class="textItal">protocol + actor impl</text>
+      <text x="1502" y="451" class="text">+listAll() → [StoredTrashRecord]</text>
+      <text x="1502" y="464" class="text">+restore(trashId:) → Bool</text>
+      <text x="1502" y="477" class="text">+permanentlyDelete(trashId:) → Bool</text>
+
+      <!-- SettingsRepository -->
+      <rect x="1765" y="373" width="260" height="160" rx="8" class="data"/>
+      <text x="1777" y="391" class="cardTitle">SettingsRepository</text>
+      <line x1="1765" y1="397" x2="2025" y2="397" class="divLine"/>
+      <text x="1777" y="410" class="textItal">protocol + actor impl</text>
+      <text x="1777" y="423" class="text">+getSettings() → StoredSettingsRecord</text>
+      <text x="1777" y="436" class="text">+updateSettings(_: StoredSettingsRecord)</text>
+      <text x="1777" y="449" class="small">+loadCredentials() → StoredCredentialState?</text>
+      <text x="1777" y="461" class="small">+saveCredentials(_: StoredCredentialState)</text>
+      <text x="1777" y="473" class="small">+loadLastKnownUTC() → Date?</text>
+      <text x="1777" y="485" class="small">+saveLastKnownUTC(_: Date?)</text>
+      <text x="1777" y="497" class="small">+loadRollbackGuardUntilUTC() → Date?</text>
+      <text x="1777" y="509" class="small">+saveRollbackGuardUntilUTC(_: Date?)</text>
+
+      <!-- PluginMetadataRepository -->
+      <rect x="1490" y="521" width="255" height="110" rx="8" class="data"/>
+      <text x="1502" y="539" class="cardTitle">PluginMetadataRepository</text>
+      <line x1="1490" y1="545" x2="1745" y2="545" class="divLine"/>
+      <text x="1502" y="558" class="textItal">protocol + actor impl</text>
+      <text x="1502" y="571" class="text">+listAll() → [StoredPluginMetadataRecord]</text>
+      <text x="1502" y="584" class="text">+fetch(pluginId:) → StoredPluginMetadataRecord?</text>
+      <text x="1502" y="597" class="text">+upsert(_: StoredPluginMetadataRecord)</text>
+      <text x="1502" y="610" class="text">+setEnabled(pluginId:isEnabled:) / +remove(pluginId:)</text>
+
+      <!-- PluginBundleRepository -->
+      <rect x="1765" y="543" width="230" height="100" rx="8" class="data"/>
+      <text x="1777" y="561" class="cardTitle">PluginBundleRepository</text>
+      <line x1="1765" y1="567" x2="1995" y2="567" class="divLine"/>
+      <text x="1777" y="580" class="textItal">protocol + actor impl</text>
+      <text x="1777" y="593" class="text">+upsert(_: StoredPluginBundleRecord)</text>
+      <text x="1777" y="606" class="text">+fetch(pluginId:) → StoredPluginBundleRecord?</text>
+      <text x="1777" y="619" class="text">+remove(pluginId:) → Bool</text>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           ASTRAPLATFORM (x=2050)
+      ══════════════════════════════════════════════════════════════════ -->
+
+      <!-- AuditLogging -->
+      <rect x="2053" y="108" width="372" height="120" rx="8" class="platform"/>
+      <text x="2065" y="126" class="cardTitle">AuditLogging (protocol) + InMemoryAuditLogger</text>
+      <line x1="2053" y1="132" x2="2425" y2="132" class="divLine"/>
+      <text x="2065" y="145" class="textItal">«protocol» AuditLogging: Sendable</text>
+      <text x="2065" y="158" class="text">+log(level:event:metadata:) — sanitizes sensitive keys</text>
+      <text x="2065" y="171" class="text">  Redacts: title, content, passphrase, archive, cipherkey</text>
+      <text x="2065" y="184" class="text">+entries() → [AuditLogEntry]</text>
+      <text x="2065" y="197" class="text">InMemoryAuditLogger: actor; event store for tests</text>
+      <text x="2065" y="210" class="text">Events: unlock_failed, unlock_lockout, passphrase_rotated,</text>
+      <text x="2065" y="222" class="text">  plugin_installed/removed/executed, export/import_completed</text>
+
+      <!-- TimeProvider -->
+      <rect x="2053" y="248" width="372" height="105" rx="8" class="platform"/>
+      <text x="2065" y="266" class="cardTitle">TimeProvider (protocol) + Implementations</text>
+      <line x1="2053" y1="272" x2="2425" y2="272" class="divLine"/>
+      <text x="2065" y="285" class="textItal">«protocol» TimeProvider: Sendable</text>
+      <text x="2065" y="298" class="text">+now() → Date</text>
+      <text x="2065" y="311" class="text">SystemTimeProvider: UTC wall-clock (production)</text>
+      <text x="2065" y="324" class="text">MutableTimeProvider: +advance(seconds:) — for tests</text>
+      <text x="2065" y="337" class="text">  Used by KeyManager to drive lockout escalation tests</text>
+
+      <!-- LocalAuthServiceProtocol -->
+      <rect x="2053" y="373" width="372" height="110" rx="8" class="platform"/>
+      <text x="2065" y="391" class="cardTitle">LocalAuthServiceProtocol + SystemLocalAuthService</text>
+      <line x1="2053" y1="397" x2="2425" y2="397" class="divLine"/>
+      <text x="2065" y="410" class="textItal">«protocol» LocalAuthServiceProtocol: Sendable</text>
+      <text x="2065" y="423" class="text">+enroll(secret: Data) — Keychain, deviceOwnerOnly</text>
+      <text x="2065" y="436" class="text">+authenticate(reason:) → Data — Touch ID / Face ID</text>
+      <text x="2065" y="449" class="text">+clearEnrollment()</text>
+      <text x="2065" y="462" class="text">SystemLocalAuthService: actor; Keychain + LAContext</text>
+      <text x="2065" y="475" class="text">InMemoryLocalAuthService: actor; test double</text>
+
+      <!-- PlatformIntegrationProtocol -->
+      <rect x="2053" y="503" width="372" height="115" rx="8" class="platform"/>
+      <text x="2065" y="521" class="cardTitle">PlatformIntegrationProtocol + InMemoryPlatformIntegration</text>
+      <line x1="2053" y1="527" x2="2425" y2="527" class="divLine"/>
+      <text x="2065" y="540" class="textItal">«protocol» PlatformIntegrationProtocol: Sendable</text>
+      <text x="2065" y="553" class="text">+publish(_: PlatformEvent)</text>
+      <text x="2065" y="566" class="text">+stream() → AsyncStream&lt;PlatformEvent&gt;</text>
+      <text x="2065" y="579" class="text">Events: appDidBackground / osWillSleep → lockNow()</text>
+      <text x="2065" y="592" class="text">Events: appDidForeground / osDidWake / userInteraction</text>
+      <text x="2065" y="605" class="text">InMemoryPlatformIntegration: actor; pub-sub for tests</text>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           CORE DOMAIN MODELS  col1=2360, col2=2513, col3=2669
+      ══════════════════════════════════════════════════════════════════ -->
+
+      <!-- NoteDraft -->
+      <rect x="2480" y="108" width="145" height="125" rx="7" class="model"/>
+      <text x="2487" y="125" class="cardTitle">NoteDraft</text>
+      <line x1="2480" y1="131" x2="2625" y2="131" class="divLine"/>
+      <text x="2487" y="143" class="text">id: UUID?</text>
+      <text x="2487" y="155" class="text">title: String</text>
+      <text x="2487" y="167" class="text">content: String</text>
+      <text x="2487" y="179" class="text">subjectId: UUID?</text>
+      <text x="2487" y="191" class="text">secureModeEnabled: Bool</text>
+      <text x="2487" y="203" class="text">secureTitleAlias: String?</text>
+
+      <!-- NoteView -->
+      <rect x="2633" y="108" width="148" height="140" rx="7" class="model"/>
+      <text x="2640" y="125" class="cardTitle">NoteView</text>
+      <line x1="2633" y1="131" x2="2781" y2="131" class="divLine"/>
+      <text x="2640" y="143" class="textItal">Decrypted read result</text>
+      <text x="2640" y="155" class="text">id: UUID</text>
+      <text x="2640" y="167" class="text">title: String</text>
+      <text x="2640" y="179" class="text">content: String</text>
+      <text x="2640" y="191" class="text">subjectId: UUID?</text>
+      <text x="2640" y="203" class="text">isSecure: Bool</text>
+      <text x="2640" y="215" class="text">secureTitleAlias: String?</text>
+      <text x="2640" y="227" class="text">createdAt / updatedAt: Date</text>
+
+      <!-- NoteSummary -->
+      <rect x="2789" y="108" width="148" height="110" rx="7" class="model"/>
+      <text x="2796" y="125" class="cardTitle">NoteSummary</text>
+      <line x1="2789" y1="131" x2="2937" y2="131" class="divLine"/>
+      <text x="2796" y="143" class="text">id: UUID</text>
+      <text x="2796" y="155" class="text">title: String</text>
+      <text x="2796" y="167" class="text">isSecure: Bool</text>
+      <text x="2796" y="179" class="text">subjectId: UUID?</text>
+      <text x="2796" y="191" class="text">updatedAt: Date</text>
+
+      <!-- Attachment -->
+      <rect x="2480" y="253" width="145" height="143" rx="7" class="model"/>
+      <text x="2487" y="270" class="cardTitle">Attachment</text>
+      <line x1="2480" y1="276" x2="2625" y2="276" class="divLine"/>
+      <text x="2487" y="288" class="textItal">AttachmentType: image | recording</text>
+      <text x="2487" y="300" class="text">id: UUID</text>
+      <text x="2487" y="312" class="text">noteId: UUID</text>
+      <text x="2487" y="324" class="text">type: AttachmentType</text>
+      <text x="2487" y="336" class="text">storagePath: String</text>
+      <text x="2487" y="348" class="text">byteSize: Int</text>
+      <text x="2487" y="360" class="text">isEncrypted: Bool (intent only)</text>
+      <text x="2487" y="372" class="text">createdAt: Date</text>
+
+      <!-- Subject -->
+      <rect x="2633" y="268" width="148" height="100" rx="7" class="model"/>
+      <text x="2640" y="285" class="cardTitle">Subject</text>
+      <line x1="2633" y1="291" x2="2781" y2="291" class="divLine"/>
+      <text x="2640" y="303" class="text">id: UUID</text>
+      <text x="2640" y="315" class="text">name: String</text>
+      <text x="2640" y="327" class="text">displayOrder: Int</text>
+      <text x="2640" y="339" class="text">createdAt: Date</text>
+
+      <!-- AppSettings -->
+      <rect x="2789" y="253" width="148" height="85" rx="7" class="model"/>
+      <text x="2796" y="270" class="cardTitle">AppSettings</text>
+      <line x1="2789" y1="276" x2="2937" y2="276" class="divLine"/>
+      <text x="2796" y="288" class="textItal">Exactly two boolean settings</text>
+      <text x="2796" y="300" class="text">pluginsEnabled: Bool</text>
+      <text x="2796" y="312" class="text">biometricUnlockEnabled: Bool</text>
+
+      <!-- EncryptedPayload -->
+      <rect x="2480" y="403" width="145" height="100" rx="7" class="model"/>
+      <text x="2487" y="420" class="cardTitle">EncryptedPayload</text>
+      <line x1="2480" y1="426" x2="2625" y2="426" class="divLine"/>
+      <text x="2487" y="438" class="textItal">In-memory AES-GCM payload</text>
+      <text x="2487" y="450" class="text">ciphertext: Data</text>
+      <text x="2487" y="462" class="text">nonce: Data</text>
+      <text x="2487" y="474" class="text">tag: Data</text>
+      <text x="2487" y="486" class="text">salt: Data</text>
+
+      <!-- KeyMaterial -->
+      <rect x="2633" y="388" width="148" height="80" rx="7" class="model"/>
+      <text x="2640" y="405" class="cardTitle">KeyMaterial</text>
+      <line x1="2633" y1="411" x2="2781" y2="411" class="divLine"/>
+      <text x="2640" y="423" class="textItal">In-memory only; never persisted</text>
+      <text x="2640" y="435" class="text">encryptionKey: Data (32 bytes)</text>
+
+      <!-- NoteSearchResult -->
+      <rect x="2789" y="358" width="148" height="85" rx="7" class="model"/>
+      <text x="2796" y="375" class="cardTitle">NoteSearchResult</text>
+      <line x1="2789" y1="381" x2="2937" y2="381" class="divLine"/>
+      <text x="2796" y="393" class="text">noteId: UUID</text>
+      <text x="2796" y="405" class="text">matchedTitle: String</text>
+      <text x="2796" y="417" class="text">isSecure: Bool</text>
+
+      <!-- TrashItemView -->
+      <rect x="2480" y="523" width="145" height="125" rx="7" class="model"/>
+      <text x="2487" y="540" class="cardTitle">TrashItemView</text>
+      <line x1="2480" y1="546" x2="2625" y2="546" class="divLine"/>
+      <text x="2487" y="558" class="text">trashId: UUID</text>
+      <text x="2487" y="570" class="text">sourceNoteId: UUID</text>
+      <text x="2487" y="582" class="text">isSecure: Bool</text>
+      <text x="2487" y="594" class="text">displayTitle: String? (normal)</text>
+      <text x="2487" y="606" class="text">secureTitleAlias: String?</text>
+      <text x="2487" y="618" class="text">deletionTime: Date</text>
+      <text x="2487" y="630" class="text">lockBadgeVisible: Bool</text>
+
+      <!-- PluginManifest -->
+      <rect x="2633" y="488" width="148" height="100" rx="7" class="model"/>
+      <text x="2640" y="505" class="cardTitle">PluginManifest</text>
+      <line x1="2633" y1="511" x2="2781" y2="511" class="divLine"/>
+      <text x="2640" y="523" class="text">pluginId: String</text>
+      <text x="2640" y="535" class="text">displayName: String</text>
+      <text x="2640" y="547" class="text">version: String</text>
+      <text x="2640" y="559" class="text">capabilities: [String]</text>
+
+      <!-- InstalledPlugin -->
+      <rect x="2789" y="463" width="148" height="90" rx="7" class="model"/>
+      <text x="2796" y="480" class="cardTitle">InstalledPlugin</text>
+      <line x1="2789" y1="486" x2="2937" y2="486" class="divLine"/>
+      <text x="2796" y="498" class="text">manifest: PluginManifest</text>
+      <text x="2796" y="510" class="text">isEnabled: Bool</text>
+      <text x="2796" y="522" class="text">installedAt: Date</text>
+
+      <!-- ImportConflictResolution -->
+      <rect x="2480" y="668" width="145" height="80" rx="7" class="model"/>
+      <text x="2487" y="685" class="cardTitle">ImportConflictResolution</text>
+      <line x1="2480" y1="691" x2="2625" y2="691" class="divLine"/>
+      <text x="2487" y="703" class="textItal">«enum»</text>
+      <text x="2487" y="715" class="text">.reject</text>
+      <text x="2487" y="727" class="text">.regenerateIncomingIdentifiers</text>
+
+      <!-- ImportResult -->
+      <rect x="2633" y="608" width="148" height="90" rx="7" class="model"/>
+      <text x="2640" y="625" class="cardTitle">ImportResult</text>
+      <line x1="2633" y1="631" x2="2781" y2="631" class="divLine"/>
+      <text x="2640" y="643" class="text">importedNotes: Int</text>
+      <text x="2640" y="655" class="text">importedSubjects: Int</text>
+      <text x="2640" y="667" class="text">importedPlugins: Int</text>
+
+      <!-- PluginActionRequest/Result -->
+      <rect x="2789" y="573" width="148" height="95" rx="7" class="model"/>
+      <text x="2796" y="590" class="cardTitle">PluginAction Request/Result</text>
+      <line x1="2789" y1="596" x2="2937" y2="596" class="divLine"/>
+      <text x="2796" y="608" class="textItal">PluginActionRequest:</text>
+      <text x="2796" y="620" class="text">  action: String / input: String</text>
+      <text x="2796" y="632" class="textItal">PluginActionResult:</text>
+      <text x="2796" y="644" class="text">  output: String</text>
+
+      <!-- AuditLogEntry -->
+      <rect x="2480" y="768" width="145" height="100" rx="7" class="model"/>
+      <text x="2487" y="785" class="cardTitle">AuditLogEntry</text>
+      <line x1="2480" y1="791" x2="2625" y2="791" class="divLine"/>
+      <text x="2487" y="803" class="text">timestamp: Date</text>
+      <text x="2487" y="815" class="text">level: AuditLevel</text>
+      <text x="2487" y="827" class="text">  (.info | .warning | .error)</text>
+      <text x="2487" y="839" class="text">event: String</text>
+      <text x="2487" y="851" class="text">metadata: [String: String]</text>
+
+      <!-- PlatformEvent -->
+      <rect x="2633" y="718" width="148" height="100" rx="7" class="model"/>
+      <text x="2640" y="735" class="cardTitle">PlatformEvent</text>
+      <line x1="2633" y1="741" x2="2781" y2="741" class="divLine"/>
+      <text x="2640" y="753" class="textItal">«enum» Sendable</text>
+      <text x="2640" y="765" class="text">appDidBackground</text>
+      <text x="2640" y="777" class="text">appDidForeground</text>
+      <text x="2640" y="789" class="text">osWillSleep / osDidWake</text>
+      <text x="2640" y="801" class="text">userInteraction</text>
+
+      <!-- Error Types -->
+      <rect x="2789" y="688" width="148" height="210" rx="7" class="model"/>
+      <text x="2796" y="705" class="cardTitle">Error Types (key enums)</text>
+      <line x1="2789" y1="711" x2="2937" y2="711" class="divLine"/>
+      <text x="2796" y="723" class="textItal">KeyManagerError:</text>
+      <text x="2796" y="735" class="text"> lockoutActive(remainingSeconds:)</text>
+      <text x="2796" y="747" class="text"> invalidPassphrase / identicalPassphrase</text>
+      <text x="2796" y="759" class="textItal">NoteServiceError:</text>
+      <text x="2796" y="771" class="text"> keyMaterialUnavailable / invalidSecurePayload</text>
+      <text x="2796" y="783" class="text"> voiceAttachmentTooLarge / imageAttachmentTooLarge</text>
+      <text x="2796" y="795" class="text"> titleRequired / recordNotFound</text>
+      <text x="2796" y="807" class="textItal">ExportImportServiceError:</text>
+      <text x="2796" y="819" class="text"> unsupportedSchemaVersion / importConflict</text>
+      <text x="2796" y="831" class="textItal">PluginServiceError:</text>
+      <text x="2796" y="843" class="text"> invalidManifest/Bundle / executionTimedOut</text>
+      <text x="2796" y="855" class="text"> pluginNotFound / disabled / handlerUnavailable</text>
+      <text x="2796" y="867" class="textItal">SubjectServiceError:</text>
+      <text x="2796" y="879" class="text"> emptyName / duplicateName / notFound</text>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           PERSISTENCE MODELS  col1=2840, col2=3170, col3=3505
+      ══════════════════════════════════════════════════════════════════ -->
+
+      <!-- DatabaseState -->
+      <rect x="2960" y="108" width="315" height="200" rx="7" class="data"/>
+      <text x="2968" y="125" class="cardTitle">DatabaseState</text>
+      <line x1="2960" y1="131" x2="3275" y2="131" class="divLine"/>
+      <text x="2968" y="143" class="textItal">Codable, Sendable; loaded/saved as JSON snapshot</text>
+      <text x="2968" y="155" class="text">schemaVersion: Int</text>
+      <text x="2968" y="167" class="text">notes: [UUID: StoredNoteRecord]</text>
+      <text x="2968" y="179" class="text">attachments: [UUID: StoredAttachmentRecord]</text>
+      <text x="2968" y="191" class="text">subjects: [UUID: StoredSubjectRecord]</text>
+      <text x="2968" y="203" class="text">trash: [UUID: StoredTrashRecord]</text>
+      <text x="2968" y="215" class="text">pluginMetadata: [String: StoredPluginMetadataRecord]</text>
+      <text x="2968" y="227" class="text">pluginBundles: [String: StoredPluginBundleRecord]</text>
+      <text x="2968" y="239" class="text">settings: StoredSettingsRecord</text>
+      <text x="2968" y="251" class="text">credentials: StoredCredentialState? (runtime-only)</text>
+      <text x="2968" y="263" class="text">pendingCredentialRotation: StoredCredentialRotationState?</text>
+      <text x="2968" y="275" class="text">lastKnownUTC / rollbackGuardUntilUTC: Date?</text>
+      <text x="2968" y="287" class="textItal">  ↑ Last 4 fields stripped on export</text>
+
+      <!-- StoredNoteRecord -->
+      <rect x="3290" y="108" width="320" height="185" rx="7" class="data"/>
+      <text x="3298" y="125" class="cardTitle">StoredNoteRecord</text>
+      <line x1="3290" y1="131" x2="3610" y2="131" class="divLine"/>
+      <text x="3298" y="143" class="textItal">Codable, Sendable, Equatable</text>
+      <text x="3298" y="155" class="text">id: UUID</text>
+      <text x="3298" y="167" class="text">subjectId: UUID?</text>
+      <text x="3298" y="179" class="text">isSecure: Bool</text>
+      <text x="3298" y="191" class="text">plainTitle: String?   (normal notes; nil if secure)</text>
+      <text x="3298" y="203" class="text">plainContent: String? (normal notes; nil if secure)</text>
+      <text x="3298" y="215" class="text">securePayload: StoredEncryptedPayload? (secure only)</text>
+      <text x="3298" y="227" class="text">secureTitleAlias: String?  (secure only; persisted)</text>
+      <text x="3298" y="239" class="text">createdAt: Date</text>
+      <text x="3298" y="251" class="text">updatedAt: Date</text>
+
+      <!-- StoredEncryptedPayload -->
+      <rect x="3625" y="108" width="265" height="110" rx="7" class="data"/>
+      <text x="3633" y="125" class="cardTitle">StoredEncryptedPayload</text>
+      <line x1="3625" y1="131" x2="3890" y2="131" class="divLine"/>
+      <text x="3633" y="143" class="textItal">Codable, Sendable, Equatable</text>
+      <text x="3633" y="155" class="text">ciphertext: Data</text>
+      <text x="3633" y="167" class="text">nonce: Data</text>
+      <text x="3633" y="179" class="text">tag: Data</text>
+      <text x="3633" y="191" class="text">salt: Data</text>
+
+      <!-- StoredAttachmentRecord -->
+      <rect x="2960" y="328" width="315" height="130" rx="7" class="data"/>
+      <text x="2968" y="345" class="cardTitle">StoredAttachmentRecord</text>
+      <line x1="2960" y1="351" x2="3275" y2="351" class="divLine"/>
+      <text x="2968" y="363" class="textItal">Codable, Sendable, Equatable</text>
+      <text x="2968" y="375" class="text">id: UUID</text>
+      <text x="2968" y="387" class="text">noteId: UUID</text>
+      <text x="2968" y="399" class="text">type: StoredAttachmentType (.image | .recording)</text>
+      <text x="2968" y="411" class="text">storagePath: String</text>
+      <text x="2968" y="423" class="text">byteSize: Int</text>
+      <text x="2968" y="435" class="text">isEncrypted: Bool (records owning note's secure intent)</text>
+      <text x="2968" y="447" class="text">createdAt: Date</text>
+
+      <!-- StoredSubjectRecord -->
+      <rect x="3290" y="313" width="320" height="100" rx="7" class="data"/>
+      <text x="3298" y="330" class="cardTitle">StoredSubjectRecord</text>
+      <line x1="3290" y1="336" x2="3610" y2="336" class="divLine"/>
+      <text x="3298" y="348" class="textItal">Codable, Sendable, Equatable</text>
+      <text x="3298" y="360" class="text">id: UUID</text>
+      <text x="3298" y="372" class="text">name: String</text>
+      <text x="3298" y="384" class="text">displayOrder: Int</text>
+      <text x="3298" y="396" class="text">createdAt: Date</text>
+
+      <!-- StoredSettingsRecord -->
+      <rect x="3625" y="238" width="265" height="80" rx="7" class="data"/>
+      <text x="3633" y="255" class="cardTitle">StoredSettingsRecord</text>
+      <line x1="3625" y1="261" x2="3890" y2="261" class="divLine"/>
+      <text x="3633" y="273" class="textItal">Exactly two fields; no telemetry/timeout</text>
+      <text x="3633" y="285" class="text">pluginsEnabled: Bool</text>
+      <text x="3633" y="297" class="text">biometricUnlockEnabled: Bool</text>
+
+      <!-- StoredTrashRecord -->
+      <rect x="2960" y="478" width="315" height="100" rx="7" class="data"/>
+      <text x="2968" y="495" class="cardTitle">StoredTrashRecord</text>
+      <line x1="2960" y1="501" x2="3275" y2="501" class="divLine"/>
+      <text x="2968" y="513" class="textItal">Codable, Sendable, Equatable</text>
+      <text x="2968" y="525" class="text">id: UUID</text>
+      <text x="2968" y="537" class="text">sourceNote: StoredNoteRecord (full record, incl. alias)</text>
+      <text x="2968" y="549" class="text">attachments: [StoredAttachmentRecord]</text>
+      <text x="2968" y="561" class="text">deletedAt: Date</text>
+
+      <!-- StoredCredentialState / RotationState -->
+      <rect x="3290" y="430" width="320" height="115" rx="7" class="data"/>
+      <text x="3298" y="447" class="cardTitle">StoredCredentialState / RotationState</text>
+      <line x1="3290" y1="453" x2="3610" y2="453" class="divLine"/>
+      <text x="3298" y="465" class="textItal">StoredCredentialState:</text>
+      <text x="3298" y="477" class="text">  salt: Data / hash: Data / iterations: Int</text>
+      <text x="3298" y="489" class="text">  PBKDF2-HMAC-SHA256 credential blob</text>
+      <text x="3298" y="501" class="textItal">StoredCredentialRotationState:</text>
+      <text x="3298" y="513" class="text">  startedAt: Date (transient in-flight marker)</text>
+      <text x="3298" y="525" class="text">  Cleared on next unlock if process was interrupted</text>
+
+      <!-- StoredPluginMetadataRecord -->
+      <rect x="2960" y="598" width="315" height="130" rx="7" class="data"/>
+      <text x="2968" y="615" class="cardTitle">StoredPluginMetadataRecord</text>
+      <line x1="2960" y1="621" x2="3275" y2="621" class="divLine"/>
+      <text x="2968" y="633" class="textItal">Codable, Sendable, Equatable</text>
+      <text x="2968" y="645" class="text">pluginId: String</text>
+      <text x="2968" y="657" class="text">displayName: String</text>
+      <text x="2968" y="669" class="text">version: String</text>
+      <text x="2968" y="681" class="text">capabilities: [String]</text>
+      <text x="2968" y="693" class="text">isEnabled: Bool</text>
+      <text x="2968" y="705" class="text">installedAt: Date</text>
+
+      <!-- StoredPluginBundleRecord -->
+      <rect x="3290" y="563" width="320" height="80" rx="7" class="data"/>
+      <text x="3298" y="580" class="cardTitle">StoredPluginBundleRecord</text>
+      <line x1="3290" y1="586" x2="3610" y2="586" class="divLine"/>
+      <text x="3298" y="598" class="textItal">Stored separately from metadata</text>
+      <text x="3298" y="610" class="text">pluginId: String</text>
+      <text x="3298" y="622" class="text">bundleData: Data</text>
+
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           DEPENDENCY ARROWS
+           Color key:
+             eBlue   (#2563eb) — UI observes/calls coordinator
+             eGreen  (#15803d) — intra-AstraCore (service→service/key/crypto)
+             eOrange (#b45309) — AstraCore → AstraData repo
+             eRed    (#b91c1c) — AstraCore → AstraPlatform
+             eDash              — repo → DatabaseProvider (structural)
+
+           Intra-AstraCore gutter (x=910…1015, 105px wide):
+             x=916  AppCoordinator → KeyManager (direct horizontal)
+             x=918  AppCoordinator → SettingsService (down)
+             x=926  AppCoordinator → NoteSearchService (down)
+             x=934  AppCoordinator → LocalAuthServiceProtocol (right)
+             x=938  NoteService → KeyManager (up)
+             x=946  ProtectedTrashService → KeyManager (up)
+             x=954  ExportImportService → KeyManager (up)
+             x=962  ExportImportService → EncryptionService (up)
+             x=970  NoteService → EncryptionService (direct horizontal)
+
+           AstraCore→AstraData boundary (AstraCore edge 1320, AstraData left col 1490; 170px corridor):
+             x=1326  ExportImportService → DatabaseProvider
+             x=1342  NoteService → SubjectRepository (via bottom)
+             x=1358  SubjectService → SubjectRepository
+             x=1374  ProtectedTrashService → ProtectedTrashRepository
+             x=1390  PluginService → PluginMetadataRepository (from right col)
+             x=1406  NoteService → NoteRepository
+             x=1422  NoteService → AttachmentRepository (to right col)
+             x=1438  SettingsService → SettingsRepository (to right col)
+             x=1454  NoteSearchService → NoteRepository (from right col)
+             x=1470  PluginService → PluginBundleRepository (to right col)
+      ══════════════════════════════════════════════════════════════════ -->
+
+      <!-- ── UI layer ──────────────────────────── -->
+      <!-- ContentView → AppCoordinator (blue, observes) -->
+      <path d="M 550 263 H 575 V 215 H 605" class="eBlue"/>
+      <text x="558" y="256" class="eLabel" fill="#2563eb">observes</text>
+
+      <!-- NotesWorkspaceView → AppCoordinator (blue, calls) -->
+      <path d="M 550 505 H 568 V 238 H 605" class="eBlue"/>
+
+      <!-- NotesWorkspaceView → NoteService (blue, calls) -->
+      <path d="M 550 521 H 572 V 445 H 605" class="eBlue"/>
+
+      <!-- SettingsView → ExportImportService (blue) -->
+      <path d="M 270 652 H 582 V 898 H 605" class="eBlue"/>
+
+      <!-- ── Intra-AstraCore: AppCoordinator → right col ──────────── -->
+
+      <!-- AppCoordinator → KeyManager  (green, direct horizontal at y=178) -->
+      <path d="M 910 178 H 1015" class="eGreen"/>
+      <text x="918" y="172" class="eLabel" fill="#15803d">uses</text>
+
+      <!-- AppCoordinator → SettingsService  (green, down gutter x=918) -->
+      <path d="M 910 242 H 918 V 736 H 1015" class="eGreen"/>
+
+      <!-- AppCoordinator → NoteSearchService  (green, down gutter x=926) -->
+      <path d="M 910 258 H 926 V 608 H 1015" class="eGreen"/>
+
+      <!-- ── Intra-AstraCore: NoteService → right col ──────────── -->
+
+      <!-- NoteService → EncryptionService  (green, direct horizontal at y=380) -->
+      <path d="M 910 380 H 1015" class="eGreen"/>
+
+      <!-- NoteService → KeyManager  (green, up gutter x=938) -->
+      <path d="M 910 405 H 938 V 205 H 1015" class="eGreen"/>
+      <text x="940" y="300" class="eLabel" fill="#15803d">uses</text>
+
+      <!-- ── Intra-AstraCore: lower services → right col ──────────── -->
+
+      <!-- ProtectedTrashService → KeyManager  (green, up gutter x=946) -->
+      <path d="M 910 745 H 946 V 218 H 1015" class="eGreen"/>
+
+      <!-- ExportImportService → KeyManager  (green, up gutter x=954) -->
+      <path d="M 910 913 H 954 V 225 H 1015" class="eGreen"/>
+
+      <!-- ExportImportService → EncryptionService  (green, up gutter x=962) -->
+      <path d="M 910 930 H 962 V 383 H 1015" class="eGreen"/>
+
+      <!-- PluginService → SettingsService  (green, vertical same column) -->
+      <path d="M 1015 810 V 783" class="eGreen"/>
+
+      <!-- ── AppCoordinator → AstraPlatform ───────────────────────── -->
+
+      <!-- AppCoordinator → LocalAuthServiceProtocol  (red, gutter x=934, then long horizontal) -->
+      <path d="M 910 270 H 934 V 428 H 2053" class="eRed"/>
+      <text x="1340" y="422" class="eLabel" fill="#b91c1c">uses LocalAuth</text>
+
+      <!-- AppCoordinator → PlatformIntegrationProtocol  (red, dashed bind) -->
+      <path d="M 760 323 V 355 H 2053 V 555" class="eDash"/>
+      <text x="1330" y="350" class="eLabel">bind(platformIntegration:)</text>
+
+      <!-- ── AstraCore → AstraData (orange) ──────────────────────── -->
+
+      <!-- NoteService → NoteRepository  (gutter x=1328) -->
+      <path d="M 910 455 H 1406 V 168 H 1765" class="eOrange"/>
+      <text x="1416" y="320" class="eLabel" fill="#b45309">uses</text>
+
+      <!-- NoteService → AttachmentRepository  (gutter x=1340, to right col) -->
+      <path d="M 910 471 H 1422 V 303 H 1765" class="eOrange"/>
+
+      <!-- NoteService → SubjectRepository  (via bottom, gutter x=1352) -->
+      <path d="M 760 558 V 585 H 1342 V 313 H 1490" class="eOrange"/>
+
+      <!-- SubjectService → SubjectRepository  (gutter x=1352) -->
+      <path d="M 910 628 H 1358 V 313 H 1490" class="eOrange"/>
+
+      <!-- NoteSearchService → NoteRepository  (from right col, gutter x=1364) -->
+      <path d="M 1320 603 H 1454 V 168 H 1765" class="eOrange"/>
+
+      <!-- ProtectedTrashService → ProtectedTrashRepository  (gutter x=1358) -->
+      <path d="M 910 762 H 1374 V 438 H 1490" class="eOrange"/>
+
+      <!-- SettingsService → SettingsRepository  (from right col, gutter x=1346, to right col) -->
+      <path d="M 1320 733 H 1438 V 410 H 1765" class="eOrange"/>
+
+      <!-- ExportImportService → DatabaseProvider  (gutter x=1334) -->
+      <path d="M 910 898 H 1326 V 175 H 1490" class="eOrange"/>
+      <text x="1332" y="550" class="eLabel" fill="#b45309">uses</text>
+
+      <!-- PluginService → PluginMetadataRepository  (from right col, gutter x=1370) -->
+      <path d="M 1320 853 H 1390 V 563 H 1490" class="eOrange"/>
+
+      <!-- PluginService → PluginBundleRepository  (from right col, gutter x=1376, to right col) -->
+      <path d="M 1320 870 H 1470 V 593 H 1765" class="eOrange"/>
+
+      <!-- ── Repos → DatabaseProvider (dashed, left-ward within AstraData) ── -->
+      <!-- NoteRepository → DatabaseProvider -->
+      <path d="M 1765 155 H 1753 V 158 H 1745" class="eDash" marker-end="url(#aSoft)"/>
+      <!-- AttachmentRepository → DatabaseProvider -->
+      <path d="M 1765 295 H 1757 V 175 H 1745" class="eDash" marker-end="url(#aSoft)"/>
+      <!-- SettingsRepository → DatabaseProvider -->
+      <path d="M 1765 410 H 1761 V 190 H 1745" class="eDash" marker-end="url(#aSoft)"/>
+      <!-- PluginBundleRepository → DatabaseProvider -->
+      <path d="M 1765 590 H 1763 V 205 H 1745" class="eDash" marker-end="url(#aSoft)"/>
+
+      <!-- DatabaseProvider → DatabaseState (holds/persists)
+           Route: exit DatabaseProvider right side → climb above all cards (y=94)
+           → travel right to DatabaseState top-centre → descend into card.
+           y=94 is the clear corridor between lane-label text (y=100) and card tops (y=108). -->
+      <path d="M 1745 173 V 94 H 3117 V 108" class="eDash" marker-end="url(#aSoft)"/>
+      <text x="2990" y="88" class="eLabel">holds in memory / persists as JSON</text>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           LEGEND
+      ══════════════════════════════════════════════════════════════════ -->
+      <g transform="translate(35,1006)">
+        <rect x="0"   y="0" width="14" height="14" fill="#e8f2ff" stroke="#3b82f6"/>
+        <text x="18"  y="11" class="legend">AstraUI</text>
+        <rect x="90"  y="0" width="14" height="14" fill="#eaf9ef" stroke="#16a34a"/>
+        <text x="108" y="11" class="legend">AstraCore service</text>
+        <rect x="240" y="0" width="14" height="14" fill="#fff7e3" stroke="#d97706"/>
+        <text x="258" y="11" class="legend">AstraData repo / persistence model</text>
+        <rect x="480" y="0" width="14" height="14" fill="#ffecef" stroke="#dc2626"/>
+        <text x="498" y="11" class="legend">AstraPlatform</text>
+        <rect x="600" y="0" width="14" height="14" fill="#f3ecff" stroke="#7c3aed"/>
+        <text x="618" y="11" class="legend">Core domain model</text>
+        <line x1="740" y1="7" x2="780" y2="7" stroke="#2563eb" stroke-width="1.6" fill="none" marker-end="url(#aBlue)"/>
+        <text x="784" y="11" class="legend">UI calls / observes</text>
+        <line x1="900" y1="7" x2="940" y2="7" stroke="#15803d" stroke-width="1.5" fill="none" marker-end="url(#aGreen)"/>
+        <text x="944" y="11" class="legend">intra-core dependency</text>
+        <line x1="1080" y1="7" x2="1120" y2="7" stroke="#b45309" stroke-width="1.5" fill="none" marker-end="url(#aOrange)"/>
+        <text x="1124" y="11" class="legend">core → repository</text>
+        <line x1="1240" y1="7" x2="1280" y2="7" stroke="#b91c1c" stroke-width="1.4" fill="none" marker-end="url(#aRed)"/>
+        <text x="1284" y="11" class="legend">core → platform</text>
+        <line x1="1380" y1="7" x2="1420" y2="7" stroke="#9ca3af" stroke-width="1.1" stroke-dasharray="5 3" fill="none" marker-end="url(#aSoft)"/>
+        <text x="1424" y="11" class="legend">repo → DatabaseProvider / structural</text>
+        <rect x="1650" y="0" width="90" height="14" rx="2" fill="#f0fdf4" stroke="#a7f3d0"/>
+        <text x="1654" y="11" class="legend">green tint = arrow routing corridor</text>
+      </g>
+
+      <!-- ARCHITECTURE CONSTRAINT NOTE -->
+      <text x="16" y="1100" class="legend">Architecture constraints: UI never encrypts or writes DB directly. Secure content held in @State only while note is open; cleared on navigate-away. secureTitleAlias is the sole search surrogate for secure notes. Plugin execute() has no UI entry point. AppSettings has exactly 2 Bool fields.</text>
+    </svg>
+  </div>
+
+  <section class="notes">
+    <h2>Key architecture facts reflected in this diagram</h2>
+    <ul>
+      <li><strong>AstraUI:</strong> <code>NotesWorkspaceView</code> is a single ~1,300-line composition root. There are no separate <code>WorkspaceTopBar</code>, <code>SubjectSidebarPane</code>, <code>NoteCollectionPane</code>, or <code>NoteEditorPane</code> types — all pane UI is inline.</li>
+      <li><strong>Session states:</strong> <code>AppCoordinator.SessionState</code> has exactly three cases: <code>firstLaunchSetup</code>, <code>locked</code>, <code>unlocked</code>. There is no expiration sweep, inactivity timeout, or lock-timeout setting.</li>
+      <li><strong>KeyManager:</strong> Key material is never persisted or restored from disk. Lockout doubles from 30 s to a maximum of 3,600 s. <code>changePassphrase</code> re-encrypts all secure notes atomically with a recoverable <code>pendingCredentialRotation</code> marker.</li>
+      <li><strong>NoteSearchService:</strong> <code>clearSecureCacheOnLock()</code> and <code>secureCacheCount()</code> are intentional no-ops — there is no decrypted-title cache.</li>
+      <li><strong>AppSettings:</strong> Contains exactly two <code>Bool</code> fields: <code>pluginsEnabled</code> and <code>biometricUnlockEnabled</code>. No <code>lockTimeoutSeconds</code>, <code>telemetryOptIn</code>, or any other field.</li>
+      <li><strong>EncryptionService:</strong> Exposes only <code>encrypt</code> and <code>decrypt</code>. No <code>reencrypt</code> method.</li>
+      <li><strong>Removed from diagram (non-existent in code):</strong> <code>AppState</code>, <code>SecureNotePolicyService</code>, <code>StorageProtection</code>, <code>NotificationService</code>, <code>SecureTitleCache</code>, separate pane view types, <code>expiresAtUtc</code>, <code>lockTimeoutSeconds</code>, <code>telemetryOptIn</code>, <code>oldKey</code> on <code>KeyMaterial</code>, <code>supportedAppVersion</code> on <code>PluginManifest</code>.</li>
+      <li><strong>Fixed in this revision:</strong> Added <code>Attachment.createdAt: Date</code> field (present in the struct but previously missing from this card); expanded <code>SettingsRepository</code> to show all 8 protocol methods including <code>loadCredentials</code>/<code>saveCredentials</code> and the UTC-guard pair; completed <code>SubjectServiceError</code> cases (<code>emptyName / duplicateName / notFound</code>, previously blank due to an empty SVG text node); added <code>NoteServiceError.titleRequired / recordNotFound</code>; added the remaining <code>PluginServiceError</code> cases (<code>pluginNotFound / disabled / handlerUnavailable</code>).</li>
+    </ul>
+  </section>
+</main>
 </body>
 </html>

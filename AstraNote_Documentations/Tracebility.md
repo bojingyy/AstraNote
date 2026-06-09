@@ -1,6 +1,9 @@
-## Full Traceability Matrix
+# Full Traceability Matrix
 
-Evidence sources:
+This matrix traces the finalized requirement set in `Requirement.md` to the current design documentation and finalized UML package. Coverage here is documentation-level: a requirement is marked `Fully Traced` when it is explicitly represented in the requirements and in one or more current design artifacts.
+
+## Evidence Sources
+
 - Requirements: [AstraNote_Documentations/Requirement.md](AstraNote_Documentations/Requirement.md)
 - Architecture: [AstraNote_Documentations/Architecture.md](AstraNote_Documentations/Architecture.md)
 - Use Case UML: [AstraNote_Documentations/UML_Package/UseCaseDiagram.html](AstraNote_Documentations/UML_Package/UseCaseDiagram.html)
@@ -10,116 +13,123 @@ Evidence sources:
 - Deployment UML: [AstraNote_Documentations/UML_Package/DeploymentDiagram.html](AstraNote_Documentations/UML_Package/DeploymentDiagram.html)
 - Non-Functional Verification: [AstraNote_Documentations/NonFunctionalVerification.md](AstraNote_Documentations/NonFunctionalVerification.md)
 
-Legend:
-- Coverage: Fully Traced or Partially Traced
-- Evidence tags: A=Architecture, U=Use Case, ACT=Activity, C=Class, O=Object, D=Deployment, NFV=Non-Functional Verification Artifact
+## Legend
 
-### Functional Requirements
+- Evidence tags:
+  - `R` = Requirements
+  - `A` = Architecture
+  - `U` = Use Case UML
+  - `ACT` = Activity UML
+  - `C` = Class UML
+  - `O` = Object UML
+  - `D` = Deployment UML
+  - `NFV` = Non-Functional Verification artifact
+- Coverage values:
+  - `Fully Traced` = explicitly represented in the finalized requirements and current design documentation
+  - `Partially Traced` = requirement exists but some intended design behavior is not yet explicit in the documentation set
 
-| ID | Coverage | Evidence | Gap Note |
+## Functional Requirements
+
+| ID | Coverage | Evidence | Design Trace Note |
 | --- | --- | --- | --- |
-| FR1.1 | Fully Traced | R, A, C, U, ACT | First-launch passphrase creation is now explicitly modeled as a dedicated initialization branch in requirements and architecture (section 5.1). |
-| FR1.2 | Fully Traced | A, U, ACT, C | Unlock path is explicitly modeled. |
-| FR1.3 | Fully Traced | A, U, ACT, C, D | Optional biometric enrollment is explicitly modeled. |
-| FR1.4 | Fully Traced | A, U, ACT, C, D | Biometric fallback threshold and passphrase fallback branch are explicit in activity behavior. |
-| FR1.5 | Fully Traced | A, ACT, C, D | Biometric unavailability fallback is explicit in activity decision logic. |
-| FR1.6 | Fully Traced | A, ACT, C | Biometric failure counter reset is explicit after successful biometric unlock. |
-| FR2.1 | Fully Traced | A, U, ACT, C, O | Create/edit/delete with optional attachments is represented. |
-| FR2.2 | Fully Traced | A, ACT, C, D | Plain-text save path is explicit. |
-| FR2.3 | Fully Traced | A, C, O | Stable note identity is represented by persistent note IDs. |
-| FR2.4 | Fully Traced | A, ACT, C, D | Atomic save and rollback semantics are represented. |
-| FR2.5 | Fully Traced | A, ACT, C, D | Single-transaction move with rollback path is explicit. |
-| FR3.1 | Fully Traced | A, U, ACT, C | Secure mode toggle is modeled. |
-| FR3.2 | Fully Traced | A, U, ACT | Secure mode saves immediately without any time-based policy fields. |
-| FR3.3 | Fully Traced | A, ACT, C, D | Encrypt-before-write path is explicit. |
-| FR3.4 | Fully Traced | A, C, O | Stable secure-note ID is represented by persistent note identity model. |
-| FR3.5 | Fully Traced | A, ACT, C, D | Atomic secure-write semantics are modeled. |
-| FR3.6 | Fully Traced | A, ACT, C, D | Decrypt verification failure branch preserves record and shows error. |
-| FR3.7 | Fully Traced | A, ACT, C, D | Secure delete routes encrypted note and attachments to trash in one flow. |
-| FR4.1 | Fully Traced | A, U, ACT, C | Secure notes remain active until deleted; no automatic expiration path exists. |
-| FR4.2 | Fully Traced | A, U, C, O | Secure-note load and save flows preserve retention without time-based policy checks. |
-| FR5.1 | Fully Traced | A, U, ACT, C | All deletes flow through protected trash. |
-| FR5.2 | Fully Traced | R, A, U, C, O | Trash listing behavior semantics are now explicitly detailed in requirements: normal notes show title+deletion-time; secure notes show deletion-time+lock-badge only. |
-| FR5.3 | Fully Traced | R, A, C, O | Lock-badge behavior and hidden title semantics are now explicitly modeled in requirements with user-visible locked preview message in architecture (section 5.5). |
-| FR5.4 | Fully Traced | A, U, ACT, C | Restore flow is explicit. |
-| FR5.5 | Fully Traced | A, ACT, C, O | Restore-block-when-locked branch is explicit. |
-| FR5.6 | Fully Traced | A, U, ACT, C | Permanent delete flow is explicit. |
-| FR5.7 | Fully Traced | A, ACT, C, D | Wipe path for secure record and attachments is explicit. |
-| FR6.1 | Fully Traced | A, U, ACT | Voice capture trigger is explicit. |
-| FR6.2 | Fully Traced | R, A, C, D | Protected-recording write operation is now explicitly specified in requirements: occurs after recording completes, before note linkage, with security-mode-dependent encryption inheritance. |
-| FR6.3 | Fully Traced | A, ACT | Voice size/duration rejection is explicit. |
-| FR7.1 | Fully Traced | A, U, ACT, C | Inactivity lock is explicit. |
-| FR7.2 | Fully Traced | A, U, ACT, C, D | Sleep/background lock trigger is explicit. |
-| FR7.3 | Fully Traced | R, A, C | Background operation non-reset behavior is now explicitly detailed in requirements: timer continues during background ops, lock proceeds immediately after operation completes if timer expires. |
-| FR7.4 | Fully Traced | A, U, ACT, C, O | Key clear on lock is explicit. |
-| FR7.5 | Fully Traced | A, ACT, C | Draft persistence before lock completion is explicit. |
-| FR8.1 | Fully Traced | A, U, ACT, C | Passphrase change flow is explicit. |
-| FR8.2 | Fully Traced | A, ACT, C | Re-encryption of secure notes and attachments is explicit. |
-| FR8.3 | Fully Traced | A, ACT, C, O | Old-key retention until completion is represented in model and flow. |
-| FR8.4 | Fully Traced | A, U, ACT, C | Detect partial migration, complete-first attempt, and rollback path are explicit. |
-| FR8.5 | Fully Traced | A, ACT, C | Identical-key rejection branch is explicit. |
-| FR8.6 | Fully Traced | A, ACT, C | Rotation flow targets secure records only. |
-| FR9.1 | Fully Traced | A, U, ACT, C, D | Encrypted, schema-tagged export is explicit. |
-| FR9.2 | Fully Traced | A, U, ACT, C | Schema compatibility gate with error path is explicit. |
-| FR9.3 | Fully Traced | A, ACT, C | ID-conflict reassignment is explicit. |
-| FR9.4 | Fully Traced | A, ACT, C, D | Atomic import with rollback-and-guidance path is explicit. |
-| FR10.1 | Fully Traced | A, U, ACT, C, O | Settings behavior and global plugin toggle update are explicit in use case and activity flows. |
-| FR10.2 | Fully Traced | A, ACT, C | Settings validation decision and user-visible validation error branch are explicit in activity. |
-| FR11.1 | Fully Traced | A, U, C, D | Install local plugin package use case is explicit. |
-| FR11.2 | Fully Traced | A, U, ACT, C, O | Plugin manifest validation now has explicit use case and activity behavior branches. |
-| FR11.3 | Fully Traced | A, U, C, O | Plugin management use case and state are represented. |
-| FR11.4 | Fully Traced | A, ACT, C | Plugin execution through host API is explicit. |
-| FR11.5 | Fully Traced | A, U, ACT, C, O | Plugin action is explicitly labeled and modeled as text-transform execution. |
-| FR11.6 | Fully Traced | A, ACT, C | Success path applies plugin result through save flow. |
-| FR11.7 | Fully Traced | A, ACT, C | Failure/timeout error path preserves note state. |
-| FR11.8 | Fully Traced | A, C, O, D | Plugin metadata persistence is structurally represented. |
-| FR12.1 | Fully Traced | A, U, ACT | Title search input and behavior are explicit. |
-| FR12.2 | Fully Traced | A, ACT, C | Normal-title search path is explicit. |
-| FR12.3 | Fully Traced | A, C, O, D | Secure titles encrypted at rest and non-indexed in storage are represented. |
-| FR12.4 | Fully Traced | A, ACT, C, O | Unlocked-only secure-title matching is explicit. |
-| FR12.5 | Fully Traced | A, ACT, C, O | Lock-time secure-title cache clearing is explicit. |
-| FR12.6 | Fully Traced | A, ACT | Locked search excludes secure titles via locked branch. |
-| FR13.1 | Fully Traced | A, U, ACT, C | Image attach use case and behavior are explicit. |
-| FR13.2 | Fully Traced | A, ACT, C, D | Image protection aligned with storage/security mode in flow and layers. |
-| FR13.3 | Fully Traced | A, ACT | Image size-limit rejection branch is explicit. |
-| FR14.1 | Fully Traced | A, U, ACT, C | Subject create with validation is explicit. |
-| FR14.2 | Fully Traced | A, ACT, C | Rename validation and save are explicit. |
-| FR14.3 | Fully Traced | A, ACT, C | Delete confirmation behavior is explicit. |
-| FR14.4 | Fully Traced | A, ACT, C, O | Ungroup-on-delete behavior is explicit. |
-| FR14.5 | Fully Traced | A, ACT, C, O | Assign/move between groups is represented in subject-management behavior. |
-| FR14.6 | Fully Traced | A, U, ACT, C, O | All Notes filter is explicitly represented in use case and activity behavior. |
+| FR1.1 | Fully Traced | R, A, U, ACT, C | First launch is a dedicated passphrase-setup branch that blocks other note work until credentials are created. |
+| FR1.2 | Fully Traced | R, A, U, ACT, C, O | Later launches route directly to the workspace; secure-note authentication happens only in context when key material is needed. |
+| FR1.3 | Fully Traced | R, A, U, ACT, C, D | Biometric authentication is modeled as an optional setting-backed alternative to passphrase entry. |
+| FR1.4 | Fully Traced | R, A, U, ACT, C, D | The secure-access prompt exposes passphrase entry and biometric action together, with same-prompt fallback. |
+| FR1.5 | Fully Traced | R, A, ACT, C, D | Biometric-unavailable and biometric-disabled paths are explicitly handled while keeping the passphrase path usable. |
+| FR2.1 | Fully Traced | R, A, U, ACT, C, O | Normal notes support create, edit, delete, plus optional image and recording attachments. |
+| FR2.2 | Fully Traced | R, A, ACT, C, D | Plaintext storage for normal-note title and content is explicit in data contracts and persistence topology. |
+| FR2.3 | Fully Traced | R, A, C, O | Stable note identity is modeled through persisted note IDs that survive edits. |
+| FR2.4 | Fully Traced | R, A, ACT, C, D | Normal-note writes are traced to atomic transactional storage with rollback on failure. |
+| FR2.5 | Fully Traced | R, A, ACT, C, D | Normal-note deletion moves the note and attachments to protected trash in one all-or-nothing transaction. |
+| FR3.1 | Fully Traced | R, A, U, ACT, C | Secure mode is represented as a per-note editor toggle in the save flow. |
+| FR3.2 | Fully Traced | R, A, U, ACT, C | Secure-mode enablement is immediate on save and carries no time-based policy fields. |
+| FR3.3 | Fully Traced | R, A, ACT, C, D | Secure-note title and content are encrypted before persistence; storage retains ciphertext, nonce, tag, salt, and alias only. |
+| FR3.4 | Fully Traced | R, A, C, O | Secure notes retain stable note IDs across edits. |
+| FR3.5 | Fully Traced | R, A, ACT, C, D | Secure-note writes are explicitly atomic and rollback-safe. |
+| FR3.6 | Fully Traced | R, A, ACT, C, D | Decryption/authentication failure preserves the stored record and surfaces a user-visible error. |
+| FR3.7 | Fully Traced | R, A, ACT, C, D | Secure-note deletion moves encrypted note data and attachments into protected trash as one transaction. |
+| FR3.8 | Fully Traced | R, A, U, ACT, C, O | Opening, saving, and continuing secure-note attachment work all step up to authentication and automatically resume on success. |
+| FR4.1 | Fully Traced | R, A, U, ACT, C | Secure notes remain in the active list until the user explicitly deletes them. |
+| FR4.2 | Fully Traced | R, A, U, C, O | The finalized design explicitly omits expiration, sweep, checkpoint, and expiry-notification behavior. |
+| FR5.1 | Fully Traced | R, A, U, ACT, C | All note deletes flow into protected trash rather than immediate destruction. |
+| FR5.2 | Fully Traced | R, A, U, ACT, C, O | Trash presentation differentiates normal-note title/time from secure-note locked presentation and deletion time. |
+| FR5.3 | Fully Traced | R, A, ACT, C, O | Secure trash items use the persisted `secureTitleAlias` and a fixed locked-preview explanation without decrypting note titles. |
+| FR5.4 | Fully Traced | R, A, U, ACT, C | Restore paths are explicit for trashed notes. |
+| FR5.5 | Fully Traced | R, A, ACT, C, O | Secure-note restore requires an unlocked session and fails clearly when key material is unavailable. |
+| FR5.6 | Fully Traced | R, A, U, ACT, C | Permanent delete is modeled as a separate trash action. |
+| FR5.7 | Fully Traced | R, A, ACT, C, D | Permanent deletion of a secure note wipes ciphertext-backed records and linked attachment files with no recovery path. |
+| FR6.1 | Fully Traced | R, A, U, ACT, C, D | Voice capture is a top-bar editor action backed by microphone permission and local recording. |
+| FR6.2 | Fully Traced | R, A, ACT, C, D | Audio is written after recording completes, then linked as an attachment with an `isEncrypted` bookkeeping flag only. |
+| FR6.3 | Fully Traced | R, A, ACT, C, O | Oversize voice attachments are rejected before storage with an explicit 50 MB limit path. |
+| FR13.1 | Fully Traced | R, A, U, ACT, C, D | Image attachment is modeled as local-file selection only, with no camera or remote URL source. |
+| FR13.2 | Fully Traced | R, A, ACT, C, D | Image bytes are stored as plain files with the same bookkeeping-only `isEncrypted` flag and disk-level confidentiality model as audio. |
+| FR13.3 | Fully Traced | R, A, ACT, C, O | Oversize image attachments are rejected before storage with an explicit 20 MB limit path. |
+| FR7.1 | Fully Traced | R, A, U, ACT, C, O, D | Relaunch begins in a locked state because in-memory key material is never persisted or restored from disk. |
+| FR7.2 | Fully Traced | R, A, U, ACT, C, D | Background and sleep are the immediate-lock triggers; foreground and interaction events are observed without triggering lock. |
+| FR7.3 | Fully Traced | R, A, ACT, C, O | Lock deferral while export or passphrase rotation is in flight is explicitly modeled, then applied after completion. |
+| FR7.4 | Fully Traced | R, A, U, ACT, C, O | Locking clears in-memory key material while leaving normal-note workspace usage intact and secure actions gated. |
+| FR8.1 | Fully Traced | R, A, U, ACT, C | Passphrase change is a settings-driven flow available while unlocked. |
+| FR8.2 | Fully Traced | R, A, ACT, C | Passphrase change re-encrypts every secure-note payload under the newly derived key. |
+| FR8.3 | Fully Traced | R, A, ACT, C, D | Rotation is represented as one atomic transaction that commits both re-encrypted notes and updated credentials together. |
+| FR8.4 | Fully Traced | R, A, ACT, C, O | Interrupted rotation leaves original credentials intact and clears the stale pending-rotation marker on next unlock. |
+| FR8.5 | Fully Traced | R, A, ACT, C | Identical derived-key/passphrase changes are explicitly rejected before any write occurs. |
+| FR8.6 | Fully Traced | R, A, ACT, C, D | Normal notes and attachment files are excluded from rotation because attachments are not app-layer encrypted. |
+| FR9.1 | Fully Traced | R, A, U, ACT, C, D | Export produces a schema-tagged encrypted archive after stripping runtime-only and sensitive fields. |
+| FR9.2 | Fully Traced | R, A, U, ACT, C | Import validates schema compatibility and rejects newer-archive versions with a mismatch error. |
+| FR9.3 | Fully Traced | R, A, ACT, C | Import conflict handling traces both fresh-ID regeneration and the stricter reject-on-collision mode. |
+| FR9.4 | Fully Traced | R, A, U, ACT, C, D | Import executes atomically and rolls back fully on decode, decrypt, or merge failure. |
+| FR10.1 | Fully Traced | R, A, U, ACT, C, O | Settings are intentionally limited to exactly two toggles: plugins enabled and biometric unlock enabled. |
+| FR10.2 | Fully Traced | R, A, ACT, C | Settings changes are validated before commit and reject invalid values with user-visible feedback. |
+| FR10.3 | Fully Traced | R, A, C, O | Workspace feedback is traced as transient toast-style pop-up notifications rather than inline editor messaging. |
+| FR11.1 | Fully Traced | R, A, U, ACT, C, D | Plugin installation comes from a user-selected local package file and its raw bundle bytes. |
+| FR11.2 | Fully Traced | R, A, U, ACT, C, O | Manifest-field validation, unreadable-bundle rejection, and duplicate-plugin-ID rejection are explicit. |
+| FR11.3 | Fully Traced | R, A, U, ACT, C, O | Plugin management covers install, enable, disable, and remove, with confirmation before removal. |
+| FR11.4 | Fully Traced | R, A, ACT, C | Plugins are constrained to the host API surface and never touch repositories directly. |
+| FR11.5 | Fully Traced | R, A, U, ACT, C | The gated execution surface exists at the service layer only; the finalized UI intentionally omits plugin execution controls. |
+| FR11.6 | Fully Traced | R, A, ACT, C, D | Timeout-guarded plugin execution surfaces typed failures, audit logs outcomes, and prevents host crashes or note corruption. |
+| FR11.7 | Fully Traced | R, A, C, O, D | Installed-plugin metadata and separately keyed bundle bytes are both explicit in the current data model and deployment view. |
+| FR12.1 | Fully Traced | R, A, U, ACT, C | Search input is represented in the workspace flow as title-based note filtering. |
+| FR12.2 | Fully Traced | R, A, ACT, C | Normal-note title search maps directly to `plainTitle`. |
+| FR12.3 | Fully Traced | R, A, ACT, C, O, D | Secure notes persist `secureTitleAlias` as the only searchable/displayable surrogate; plaintext secure titles are never stored. |
+| FR12.4 | Fully Traced | R, A, ACT, C, O | Secure-note title search uses case-insensitive alias matching only and does not hold decrypted titles in memory. |
+| FR12.5 | Fully Traced | R, A, ACT, C, O | Secure-note search availability is independent of lock state because matching never depends on decrypted title data. |
+| FR14.1 | Fully Traced | R, A, U, ACT, C | Subject creation requires a non-empty, unique name from the sidebar workflow. |
+| FR14.2 | Fully Traced | R, A, ACT, C | Subject rename applies the same non-empty and unique validation before commit. |
+| FR14.3 | Fully Traced | R, A, U, ACT, C | Subject deletion includes confirmation when notes are still assigned. |
+| FR14.4 | Fully Traced | R, A, ACT, C, O | Deleting a subject ungroups notes instead of deleting them. |
+| FR14.5 | Fully Traced | R, A, ACT, C, O | Note-to-subject assignment and movement between groups are represented in the service and workspace flows. |
+| FR14.6 | Fully Traced | R, A, U, ACT, C, O | The sidebar includes both subject groups and the `All Notes` filter. |
 
-### Non-Functional Requirements
+## Non-Functional Requirements
 
-| ID | Coverage | Evidence | Gap Note |
+| ID | Coverage | Evidence | Design Trace Note |
 | --- | --- | --- | --- |
-| NFR1.1 | Fully Traced | A, C, NFV | Benchmark protocol and <=1s unlock acceptance criteria are captured in the supplemental verification artifact. |
-| NFR1.2 | Fully Traced | A, C, NFV | 10k-note <=2s unlock benchmark acceptance criteria are captured in the supplemental verification artifact. |
-| NFR1.3 | Fully Traced | A, NFV | Measurement protocol explicitly excludes manual passphrase entry time in supplemental verification artifact. |
-| NFR2.1 | Fully Traced | A, ACT, C | Async transcription and plugin execution are explicit; heavy operations are service-based. |
-| NFR2.2 | Fully Traced | A, NFV | 60 FPS frame-time verification and acceptance criteria are explicitly captured in supplemental artifact. |
-| NFR3.1 | Fully Traced | A, C, D | Explicit confidentiality enforcement is now fully documented in architecture (section 4.1) with clear data flow assertions for all sinks: disk persistence stores ciphertext only, logs are sanitized, caches are in-memory only and cleared on lock, exports are encrypted, UI display is transient, and plugins receive content through controlled API only. |
-| NFR3.2 | Fully Traced | A, ACT, C, O, D | Memory-only secure-title cache plus lock-time clearing are explicit. |
-| NFR4.1 | Fully Traced | A, ACT, C | Authenticated decryption verification/failure behavior is explicit. |
-| NFR4.2 | Fully Traced | A, ACT, C | Verification failure error with preserved record is explicit. |
-| NFR5.1 | Fully Traced | A, ACT, C, D | ACID transaction boundary is explicit in repositories/import/delete flows. |
-| NFR5.2 | Fully Traced | A, ACT, C | Migration/import rollback semantics are explicit. |
-| NFR5.3 | Fully Traced | R, A, ACT, C | Recovery instructions now explicitly cover three corruption scenarios: (a) partial passphrase rotation with completion/rollback logic; (b) corrupted import with rollback and storage guidance; (c) database corruption with integrity checks and step-by-step recovery. |
-| NFR6.1 | Fully Traced | A, C, NFV | Exponential lockout progression verification is explicitly defined in supplemental artifact. |
-| NFR6.2 | Fully Traced | A, C, D, NFV | Lockout-event audit log verification is explicitly defined in supplemental artifact. |
-| NFR6.3 | Fully Traced | A, C, NFV | Auth/plugin failure audit logging and sensitive-content exclusion checks are explicitly defined in supplemental artifact. |
-| NFR7.1 | Fully Traced | A, C, O, NFV | Telemetry opt-in and non-sensitive metric scope checks are explicitly defined in supplemental artifact. |
-| NFR7.2 | Fully Traced | A, C, O, NFV | Telemetry payload exclusion checks for note/title/content-derived data are explicitly defined in supplemental artifact. |
-| NFR8.1 | Fully Traced | A, NFV | Accessibility verification procedure for keyboard and VoiceOver workflows is explicitly defined in supplemental artifact. |
-| NFR9.1 | Fully Traced | A, NFV | English-first packaging verification is explicitly defined in supplemental artifact. |
-| NFR9.2 | Fully Traced | A, NFV | Localization extensibility verification is explicitly defined in supplemental artifact. |
+| NFR1.1 | Fully Traced | R, A, C, NFV | PBKDF2-HMAC-SHA256 authentication performance is explicitly defined and paired with a target-hardware benchmark protocol. |
+| NFR1.2 | Fully Traced | R, A, C, NFV | Authentication latency is traced as independent of note count because there is no whole-app unlock path tied to dataset size. |
+| NFR1.3 | Fully Traced | R, NFV | The measurement method explicitly excludes manual passphrase entry time. |
+| NFR2.1 | Fully Traced | R, A, ACT, C, D | Encryption, database I/O, and plugin execution are all documented as actor-isolated asynchronous operations off the main UI thread. |
+| NFR2.2 | Fully Traced | R, A, NFV | UI responsiveness is tied to an explicit 60 FPS verification procedure during representative workflows. |
+| NFR3.1 | Fully Traced | R, A, C, D, NFV | The confidentiality boundary is explicit across persistence, logging, caching, and encrypted export: no decrypted secure-note content is written out. |
+| NFR3.2 | Fully Traced | R, A, ACT, C, O, NFV | Decrypted secure content is transient in memory only while needed, and title search never holds decrypted titles because it uses alias-only matching. |
+| NFR4.1 | Fully Traced | R, A, ACT, C, NFV | Authenticated encryption and explicit tamper detection are modeled and verification-tested through AES-GCM failure scenarios. |
+| NFR4.2 | Fully Traced | R, A, ACT, C, NFV | Verification failure is documented to preserve the stored record while surfacing a clear user error. |
+| NFR5.1 | Fully Traced | R, A, ACT, C, D, NFV | All high-impact writes are traced to ACID transaction boundaries that either commit fully or preserve the previous state. |
+| NFR5.2 | Fully Traced | R, A, ACT, C, NFV | Recovery paths are explicit for interrupted passphrase rotation and interrupted import rollback, including no-manual-intervention recovery. |
+| NFR6.1 | Fully Traced | R, A, C, NFV | Lockout escalation after repeated failed unlock attempts is explicit in both design and verification artifacts. |
+| NFR6.2 | Fully Traced | R, A, C, D, NFV | Lockout events are tied to the audit logger and to explicit audit-log verification. |
+| NFR6.3 | Fully Traced | R, A, C, D, NFV | Authentication, rotation, plugin lifecycle, and export/import audit events are all documented as sanitized, non-content logs only. |
+| NFR7.1 | Fully Traced | R, A, D, NFV | The local-first privacy model explicitly excludes telemetry and analytics collection or transmission of any kind. |
 
 ## Summary
 
-- Functional requirements: 76 total, 76 fully traced, 0 partially traced.
-- Non-functional requirements: 20 total, 20 fully traced, 0 partially traced.
-- **Total: 96 requirements, 96 fully traced, 0 partially traced. 100% coverage.**
+- Functional requirements traced: 68 of 68
+- Non-functional requirements traced: 15 of 15
+- Total requirements traced: 83 of 83
+- Coverage result: 83 `Fully Traced`, 0 `Partially Traced`
 
-## Remaining Gaps To Close
+## Alignment Corrections From The Previous Matrix
 
-All gaps have been closed. All 96 requirements (76 FR + 20 NFR) are now fully traced with explicit behavioral specifications in requirements and supporting evidence across architecture, UML diagrams, and verification artifacts.
+- Removed obsolete references to requirements that no longer exist in the finalized set, including old IDs such as `FR1.6`, `FR7.5`, `FR11.8`, `FR12.6`, `NFR7.2`, `NFR8.1`, `NFR9.1`, and `NFR9.2`.
+- Updated the requirement inventory from `96` entries to the finalized `83` entries now present in `Requirement.md`.
+- Realigned the matrix to the current UML/design scope, which explicitly excludes a later-launch whole-app unlock screen, secure-note expiration, expiry notifications, draft-persistence-on-lock behavior, telemetry settings, lock-timeout settings, plugin execution UI, transcription, secure-title caching, and SQLite-based persistence.
